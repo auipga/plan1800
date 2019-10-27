@@ -1,9 +1,20 @@
 import React, {Component} from 'react';
-import {Button, ButtonGroup, Col, Container, Input, InputGroup, InputGroupAddon, Row} from 'reactstrap';
+import {Button, ButtonGroup, Card, CardBody, Col, Container, Input, InputGroup, InputGroupAddon, Row} from 'reactstrap';
 import Media from "reactstrap/es/Media";
+import CardHeader from "reactstrap/es/CardHeader";
+import './App.css'
 // import Population from "./components/Population";
 // import Productions from "./components/Productions";
 // import PopulationItem from "./components/PopulationItem";
+
+const RGB_Linear_Blend=(p,c0,c1)=>{
+  var i=parseInt,r=Math.round,P=1-p,[a,b,c,d]=c0.split(","),[e,f,g,h]=c1.split(","),x=d||h,d=x?","+(!d?h:!h?d:r((parseFloat(d)*P+parseFloat(h)*p)*1000)/1000+")"):")";
+  return"rgb"+(x?"a(":"(")+r(i(a[3]=="a"?a.slice(5):a.slice(4))*P+i(e[3]=="a"?e.slice(5):e.slice(4))*p)+","+r(i(b)*P+i(f)*p)+","+r(i(c)*P+i(g)*p)+d;
+}
+const RGB_Log_Blend=(p,c0,c1)=>{
+  var i=parseInt,r=Math.round,P=1-p,[a,b,c,d]=c0.split(","),[e,f,g,h]=c1.split(","),x=d||h,d=x?","+(!d?h:!h?d:r((parseFloat(d)*P+parseFloat(h)*p)*1000)/1000+")"):")";
+  return"rgb"+(x?"a(":"(")+r((P*i(a[3]=="a"?a.slice(5):a.slice(4))**2+p*i(e[3]=="a"?e.slice(5):e.slice(4))**2)**0.5)+","+r((P*i(b)**2+p*i(f)**2)**0.5)+","+r((P*i(c)**2+p*i(g)**2)**0.5)+d;
+}
 
 class App extends Component {
   populationLevels = [
@@ -27,9 +38,7 @@ class App extends Component {
           0,
         ],
       },
-      buildings: {
-        Marketplace: 1
-      }
+      buildings: {}
     },
     newWorld: {
       name: 'Neue Insel (Neue Welt)',
@@ -39,8 +48,7 @@ class App extends Component {
           0,
         ],
       },
-      buildings: {
-      }
+      buildings: {}
     },
   }
   defaultState = {
@@ -273,6 +281,9 @@ class App extends Component {
     });
   }
   deleteIsland(islandKey) {
+    if (!window.confirm('Insel "'+this.state.islands[islandKey].name+'" ('+islandKey+') löschen?')) {
+      return;
+    }
     let islands = this.state.islands.slice(0, islandKey).concat(this.state.islands.slice(islandKey+1))
 
     this.setState(prevState => ({
@@ -282,22 +293,42 @@ class App extends Component {
       localStorage.setItem('state', JSON.stringify(this.state));
     });
   }
+  setBuildingCount = (islandKey, building, number) => {
+    let buildings = this.state.islands[islandKey].buildings;
+    buildings[building] = number ? Math.max(parseInt(number),0) : 0
+
+    this.setState(prevState => ({
+      ...prevState.buildings,
+      buildings: buildings
+    }), () => {
+      localStorage.setItem('state', JSON.stringify(this.state));
+    });
+  }
 
   render() {
     return (
       <div className="App">
         <Container fluid>
-          <h2 className='mb-3'>Plan1800</h2>
+          <h2 className='mb-3'>Plan1800
+            <Button onClick={this.reset} size='sm'>reset</Button>
+          </h2>
           {this.state.islands.map((island, islandKey) => (
-          <div>
-          <Input value={island.name} onChange={e => this.setIslandName(islandKey, e.target.value)} />
-          <h4>Population ({ island.population.level.reduce((prev, next) => prev + next, 0) }) <Button onClick={() => this.deleteIsland(islandKey)} size='sm'>löschen</Button></h4>
-          <Row className='mb-5'>
+          <Card className={'mb-3'}>
+            <CardHeader>
+              <Input value={island.name} onChange={e => this.setIslandName(islandKey, e.target.value)} style={{maxWidth: 300}} className={'d-inline-block mr-3'} />
+              <strong className={'d-inline-block mr-3'}>
+                <img src={"./icons/population/Population.png"} alt="" className={" rounded"} style={{height: 40, width: 40}}/>
+                { island.population.level.reduce((prev, next) => prev + next, 0) }
+              </strong>
+              <Button onClick={() => this.deleteIsland(islandKey)} size='sm'>löschen</Button>
+            </CardHeader>
             {/*<Population levels={this.populationLevels} />*/}
               {/*<PopulationItem populationLevel={levels[i]} i={i} />*/}
+            <CardHeader>
+              <Row>
             {this.populationLevels.map((populationLevel, tierKey) => (
-                <Col  xs={6} sm={6} md={4} lg={3} xl={2} key={tierKey}
-                      className={"align-content-center" + ((island.population.level[tierKey] > 0) ? ' bg-success': ' d-none-')}>
+                <Col xs={12} sm={6} md={4} lg={3} xl={''} key={tierKey}
+                      className={"align-content-center" + ((!tierKey || (island.population.level[tierKey] > 0)) ? ' bg-success-': ' d-none-')}>
                   <Row className={'align-items-end'}>
                     {/*<Col className={'col-auto' + ((tierKey === 0) ? ' bg-warning d-none': '')}>*/}
                     {/*  <ButtonGroup vertical size='sm'>*/}
@@ -337,68 +368,78 @@ class App extends Component {
                   </Row>
                 </Col>
             ))}
+              </Row>
+            </CardHeader>
 
             {/*<div className="w-100 m-3"></div>*/}
-            <Col className="align-content-center d-none-">
-              <img src={"./icons/population/Population.png"} alt="" className={"d-block mx-auto rounded"} style={{height: 40, width: 40}}/>
-              <InputGroup>
-                <Input value={'∑ ' + island.population.level.reduce((prev, next) => prev + next, 0)}
-                       style={{height: 62}}
-                       className={'text-center'}
-                       readOnly
-                />
-              </InputGroup>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col className='col-auto'>
-              <h4>Needs</h4>
+            <CardBody>
               <Row>
-                <Col sm={12}>
-                  {this.needs.filter(function (need) {
+                <Col sm={'auto'}>
+                  {this.needs.filter(function (need, t) {
                     let firstTierRequireCount = island.population.level[need.tier-1];
                     /** auf dieser insel */
                     let oneAboveRequirementExists = 0 < island.population.level[need.tier];
                     /** @todo requirement auf DIESER insel, baumöglichkeit auf IRGENDEINER insel*/
                     let anyAboveRequirementExists = 0 < island.population.level.slice(need.tier).reduce((prev, next) => prev + next, 0);
 
-                    return firstTierRequireCount >= need.requirement || oneAboveRequirementExists
+                    let needed = firstTierRequireCount >= need.requirement || oneAboveRequirementExists
                         || (firstTierRequireCount > 0                && anyAboveRequirementExists);
-                  }, this).map((need, key) => (
-                      <div key={key} className='my-3'>
+
+                    if (needed && isNaN(island.buildings[need.id])) {
+                      island.buildings[need.id] = 0;
+                    }
+                    return needed;
+                  }, this).map((need, needKey) => (
+                      <div key={needKey} className='my-1'>
                         <Media>
                           <Media left>
                             <Media object src={"./icons/goods/" + need.id + ".png"} alt={need.resourceName}
                                    middle style={{height: 30, width: 30}} className='mr-2'/>
                           </Media>
                           <Media body className='align-self-center'>
-                            <Media heading className={'d-none'}>
-                              {need.resourceName}
-                            </Media>
-                            Need: {Math.ceil(this.exactNeed(island.population.level, need))}
-                            {' '}({this.exactNeed(island.population.level, need).toFixed(this.precision)})
+                            <div className="mr-2 d-inline">
+                            {/*{Math.ceil(this.exactNeed(island.population.level, need))}*/}
+                            {/*{' '}*/}
+                            {this.exactNeed(island.population.level, need).toFixed(this.precision)}
+                            </div>
+                            <div className='mr-2 float-right'>
+                              <Input type='number' size='sm'
+                                // title={populationLevel}
+                                value={island.buildings[need.id]}
+                                style={{width: 62,
+                                  backgroundColor:
+                                    RGB_Log_Blend(
+                                      Math.min(Math.max(this.exactNeed(island.population.level, need).toFixed(this.precision) - island.buildings[need.id], 0),1),
+                                      'rgba(100,255,100,0.5)',
+                                      'rgba(255,50,50,0.5)',
+                                    ),
+                                }}
+                                className={'text-center px-1' + (this.exactNeed(island.population.level, need).toFixed(this.precision) > island.buildings[need.id] ? ' is-invalid' :'')}
+                                // readOnly
+                                onChange={e => this.setBuildingCount(islandKey, need.id, e.target.value)}
+                                // onWheel={e => this.handleWheel(e, islandKey, tierKey, -Math.sign(e.deltaY))}
+                              />
+                            </div>
                           </Media>
                         </Media>
                       </div>
                   ))}
                 </Col>
-              </Row>
-            </Col>
-            <Col className='col-auto'>
-              <h4>Buildings</h4>
               {/*<Productions productions={island.buildings} />*/}
-            </Col>
-          </Row>
-          </div>
+              </Row>
+            </CardBody>
+          </Card>
           ))}
 
-          <Row>
-            <Button onClick={() => this.addIsland("oldWorld")}>Neue Insel</Button>
-            <Button onClick={() => this.addIsland("oldWorld")}>Alte Welt</Button>
-            <Button onClick={() => this.addIsland("newWorld")}>Neue Welt</Button>
+          <Card className={'my-3'}>
+            <CardHeader>
+              <Button onClick={() => this.addIsland("oldWorld")} className={'mr-2'}>Neue Insel</Button>
+              <Button onClick={() => this.addIsland("oldWorld")} className={'mr-2'}>Alte Welt</Button>
+              <Button onClick={() => this.addIsland("newWorld")} className={'mr-2'}>Neue Welt</Button>
             {/*<Button onClick={() => this.addIsland("capTrelawny")}>Cap Trelawny</Button>*/}
-          </Row>
+            </CardHeader>
+          </Card>
+
         </Container>
       </div>
     );
