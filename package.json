@@ -2,6 +2,7 @@
   "name": "plan1800",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "bootstrap": "^4.2.1",
     "react": "^16.8.1",
