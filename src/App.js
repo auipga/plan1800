@@ -28,10 +28,11 @@ class App extends Component {
     {
       id: "Timber",
       tier: 1,
-      requirement: 1,
+      requirement: 0,
       buildingName: "Sägewerk",
       resourceName: "Bretter",
-      consumes: { "Wood": 1 },
+      productionTime: 15,
+      needs: [ "Wood" ],
     },
     {
       id: "Bricks",
@@ -39,9 +40,58 @@ class App extends Component {
       requirement: 1,
       buildingName: "Bricks Factory",
       resourceName: "Ziegel",
-      consumes: { "Clay": 1 },
+      productionTime: 60,
+      needs: [ "Clay" ],
     },
  ]
+  ressources_farms = [
+    {
+      id: "Wood",
+      tier: 1,
+      requirement: 0,
+      buildingName: "Holzfällerhütte",
+      resourceName: "Holz",
+      productionTime: 15,
+      provides: "Wood",
+    },
+    {
+      id: "Potato",
+      tier: 1,
+      requirement: 100,
+      buildingName: "Kartoffelacker",
+      resourceName: "Kartoffeln",
+      productionTime: 30,
+      provides: "Potato",
+    },
+    {
+      id: "Wool",
+      tier: 1,
+      requirement: 150,
+      buildingName: "Schaffarm",
+      resourceName: "Wolle",
+      productionTime: 30,
+      provides: "Wool",
+    },
+    {
+      id: "Clay",
+      tier: 2,
+      requirement: 1,
+      buildingName: "Lehmgrube",
+      resourceName: "Lehm",
+      productionTime: 30,
+      provides: "Clay",
+      max: 4
+    },
+    {
+      id: "Pigs",
+      tier: 2,
+      requirement: 1,
+      buildingName: "Schweinefarm",
+      resourceName: "Schweine",
+      productionTime: 30,
+      provides: "Pigs",
+    },
+  ]
 
   step = 50;
   precision = 2;
@@ -124,6 +174,8 @@ class App extends Component {
       influx: 0,
       happiness: [ 8, 4 ],
       income: [ 3, 7 ],
+      productionTime: 30,
+      needs: [ "Potato" ],
     },
     {
       id: "Working_clothes",
@@ -136,6 +188,8 @@ class App extends Component {
       influx: [ 2, 2 ],
       happiness: 0,
       income: [ 3, 7 ],
+      productionTime: 30,
+      needs: [ "Wool" ],
     },
     {
       id: "Pub",
@@ -160,6 +214,8 @@ class App extends Component {
       influx: [ 3, 6 ],
       happiness: 0,
       income: [ 5, 15 ],
+      productionTime: 30,
+      needs: [ "Pigs" ],
     },
     {
       id: "Bread",
@@ -172,6 +228,8 @@ class App extends Component {
       influx: [ 3, 6 ],
       happiness: 0,
       income: [ 5, 15 ],
+      productionTime: 30,
+      needs: [ "Grain" ],
     },
     {
       id: "Church",
@@ -196,6 +254,8 @@ class App extends Component {
       influx: [ 2, 4 ],
       happiness: 0,
       income: [ 5, 15 ],
+      productionTime: 30,
+      needs: [  ],
     },
     {
       id: "Beer",
@@ -208,6 +268,8 @@ class App extends Component {
       influx: 0,
       happiness: [ 3, 3 ],
       income: [ 12, 37 ],
+      productionTime: 30,
+      needs: [ "Grain", "Hepf" ],
     },
     {
       id: "School",
@@ -239,6 +301,25 @@ class App extends Component {
     // alert(JSON.stringify(need))
     // return 1;
     return need.provides.reduce((prev, next, i) => prev + population[i + need.tier - 1] / next, 0);
+    // return need.consumption.reduce((prev, next, i) => prev + next * population[i + need.tier - 1], 0);
+  }
+  exactConsumption = (buildings, ressource) => {
+    let provider = this.ressources_farms.find((farm) => this.isProvidingRessource(farm, ressource))
+    let consumers = ([...this.needs, ...this.ressources]).filter((farm) => this.isConsumingRessource(farm, ressource))
+    // let consumers = this.needs.filter((farm) => this.isConsumingRessource(farm, ressource))
+
+    let consumption = consumers.reduce((prev, next, i) => prev + buildings[next.id] * next.productionTime/provider.productionTime, 0)
+
+    // alert(JSON.stringify(buildings))
+    // console.log(ressource)
+    // console.log(consumers)
+    // console.log(consumption)
+    // alert(JSON.stringify(buildings[provider.provides]))
+
+    // return buildings[provider.id]
+    return consumption
+    // return 3
+    // return need.provides.reduce((prev, next, i) => prev + population[i + need.tier - 1] / next, 0);
     // return need.consumption.reduce((prev, next, i) => prev + next * population[i + need.tier - 1], 0);
   }
   changePopulationLevel = (islandKey, tierKey, direction, move = false, relativeTarget = 0) => {
@@ -324,6 +405,44 @@ class App extends Component {
     });
   }
 
+  isNeeded = (need, island) => {
+    let firstTierRequireCount = island.population.level[need.tier-1];
+    /** auf dieser insel */
+    let oneAboveRequirementExists = 0 < island.population.level[need.tier];
+    /** @todo requirement auf DIESER insel, baumöglichkeit auf IRGENDEINER insel*/
+    let anyAboveRequirementExists = 0 < island.population.level.slice(need.tier).reduce((prev, next) => prev + next, 0);
+
+    let needed = firstTierRequireCount >= need.requirement || oneAboveRequirementExists
+             || (firstTierRequireCount > 0                 && anyAboveRequirementExists);
+
+    if (needed && isNaN(island.buildings[need.id])) {
+      island.buildings[need.id] = 0;
+    }
+    return needed;
+  };
+  isUnlocked = (ressource, island) => {
+    let firstTierRequireCount = island.population.level[ressource.tier - 1];
+    let anyAboveRequirementExists = 0 < island.population.level.slice(ressource.tier).reduce((prev, next) => prev + next, 0);
+
+    let unlocked = firstTierRequireCount >= ressource.requirement || anyAboveRequirementExists;
+
+    if (unlocked && isNaN(island.buildings[ressource.id])) {
+      island.buildings[ressource.id] = 0;
+    }
+    return unlocked;
+  };
+  isProvidingRessource = (building, ressource) => {
+    return building.provides === ressource.id
+  };
+  isConsumingRessource = (building, ressource) => {
+    // console.log('finding '+ressource.id)//, building.needs.indexOf(ressource.id))
+    if (undefined === building.needs) {
+      return false;
+    }
+    // console.log(building.needs)
+    return -1 < building.needs.indexOf(ressource.id)
+  };
+
   render() {
     return (
       <div className="App">
@@ -332,7 +451,7 @@ class App extends Component {
             <Button onClick={this.reset} size='sm'>reset</Button>
           </h2>
           {this.state.islands.map((island, islandKey) => (
-          <Card className={'mb-3'}>
+          <Card className={'mb-3 bg-dark'}>
             <CardHeader>
               <Input value={island.name} onChange={e => this.setIslandName(islandKey, e.target.value)} style={{maxWidth: 300}} className={'d-inline-block mr-3'} />
               <strong className={'d-inline-block mr-3'}>
@@ -393,23 +512,14 @@ class App extends Component {
             {/*<div className="w-100 m-3"></div>*/}
             <CardBody>
               <Row>
-                <Col sm={'auto'}>
-                  {this.ressources.filter(function (ressource, t) {
-                    let firstTierRequireCount = island.population.level[ressource.tier-1];
-                    let anyAboveRequirementExists = 0 < island.population.level.slice(ressource.tier).reduce((prev, next) => prev + next, 0);
-
-                    let unlocked = firstTierRequireCount >= ressource.requirement || anyAboveRequirementExists;
-
-                    if (unlocked && isNaN(island.buildings[ressource.id])) {
-                      island.buildings[ressource.id] = 0;
-                    }
-                    return unlocked;
-                  }, this).map((ressource, ressourceKey) => (
-                    <div key={ressourceKey} className='my-1'>
+                <Col sm={'auto'} className='ml-auto'>
+                  {this.ressources.filter((ressource) => this.isUnlocked(ressource, island, this)).map((ressource, ressourceKey) => (
+                    <div key={ressource.id} className='my-1'>
                       <Media>
                         <Media left>
                           <Media object src={"./icons/goods/" + ressource.id + ".png"} alt={ressource.resourceName}
-                                 middle style={{height: 30, width: 30}} className='mr-2'/>
+                                 middle style={{height: 30, width: 30}} className='mr-2'
+                          />
                         </Media>
                         <Media body className='align-self-center form-inline'>
                           <span className="mr-2">
@@ -427,26 +537,15 @@ class App extends Component {
                     </div>
                   ))}
                   <hr/>
-                  {this.needs.filter(function (need, t) {
-                    let firstTierRequireCount = island.population.level[need.tier-1];
-                    /** auf dieser insel */
-                    let oneAboveRequirementExists = 0 < island.population.level[need.tier];
-                    /** @todo requirement auf DIESER insel, baumöglichkeit auf IRGENDEINER insel*/
-                    let anyAboveRequirementExists = 0 < island.population.level.slice(need.tier).reduce((prev, next) => prev + next, 0);
-
-                    let needed = firstTierRequireCount >= need.requirement || oneAboveRequirementExists
-                        || (firstTierRequireCount > 0                && anyAboveRequirementExists);
-
-                    if (needed && isNaN(island.buildings[need.id])) {
-                      island.buildings[need.id] = 0;
-                    }
-                    return needed;
-                  }, this).map((need, needKey) => (
-                      <div key={needKey} className='my-1'>
+                </Col>
+                <Col sm={'auto'}>
+                  {this.needs.filter((need) => this.isNeeded(need, island)).map((need, needKey) => (
+                      <div key={need.id} className='my-1'>
                         <Media>
                           <Media left>
                             <Media object src={"./icons/goods/" + need.id + ".png"} alt={need.resourceName}
-                                   middle style={{height: 30, width: 30}} className='mr-2'/>
+                                   middle style={{height: 30, width: 30}} className='mr-2'
+                            />
                           </Media>
                           <Media body className='align-self-center form-inline'>
                             <span className="mr-2">
@@ -474,13 +573,50 @@ class App extends Component {
                       </div>
                   ))}
                 </Col>
+                <Col sm={'auto'}>
+                    <hr/>
+                  {this.ressources_farms.filter((ressource) => this.isUnlocked(ressource, island, this)).map((ressource, ressourceKey) => (
+                      <div key={ressource.id} className='my-1'>
+                        <Media>
+                          <Media left>
+                            <Media object src={"./icons/goods/" + ressource.id + ".png"} alt={ressource.resourceName}
+                                   middle style={{height: 30, width: 30}} className='mr-2'
+                            />
+                          </Media>
+                          <Media body className='align-self-center form-inline'>
+                            <span className="mr-2">
+                            {island.buildings[ressource.id].toFixed(this.precision)}
+                            </span>
+                            <Input type='number' size='sm'
+                              // title={populationLevel}
+                              value={island.buildings[ressource.id]}
+                              max={ressource.max}
+                              style={{width: 62,
+                                backgroundColor:
+                                  RGB_Log_Blend(
+                                    Math.min(Math.max(this.exactConsumption(island.buildings, ressource) - island.buildings[ressource.id], 0),1),
+                                    // 'rgba(100,200,255,0.5)',
+                                    'rgba(100,255,100,0.5)',
+                                    'rgba(255,50,50,0.5)',
+                                  ),
+                              }}
+                              // className={'mr-2 text-center px-1'}
+                              className={'mr-2 text-center px-1' + (this.exactConsumption(island.buildings, ressource) > island.buildings[ressource.id] ? ' is-invalid' :'')}
+                              onChange={e => this.setBuildingCount(islandKey, ressource.id, e.target.value)}
+                            />
+                            {this.exactConsumption(island.buildings, ressource)}
+                          </Media>
+                        </Media>
+                      </div>
+                  ))}
+                </Col>
               {/*<Productions productions={island.buildings} />*/}
               </Row>
             </CardBody>
           </Card>
           ))}
 
-          <Card className={'my-3'}>
+          <Card className={'my-3 bg-dark'}>
             <CardHeader>
               <Button onClick={() => this.addIsland("oldWorld")} className={'mr-2'}>Neue Insel</Button>
               <Button onClick={() => this.addIsland("oldWorld")} className={'mr-2'}>Alte Welt</Button>
