@@ -24,6 +24,25 @@ class App extends Component {
     "Engineers",
     "Investors",
   ];
+  ressources = [
+    {
+      id: "Timber",
+      tier: 1,
+      requirement: 1,
+      buildingName: "Sägewerk",
+      resourceName: "Bretter",
+      consumes: { "Wood": 1 },
+    },
+    {
+      id: "Bricks",
+      tier: 2,
+      requirement: 1,
+      buildingName: "Bricks Factory",
+      resourceName: "Ziegel",
+      consumes: { "Clay": 1 },
+    },
+ ]
+
   step = 50;
   precision = 2;
   emptyIsland = {
@@ -375,6 +394,39 @@ class App extends Component {
             <CardBody>
               <Row>
                 <Col sm={'auto'}>
+                  {this.ressources.filter(function (ressource, t) {
+                    let firstTierRequireCount = island.population.level[ressource.tier-1];
+                    let anyAboveRequirementExists = 0 < island.population.level.slice(ressource.tier).reduce((prev, next) => prev + next, 0);
+
+                    let unlocked = firstTierRequireCount >= ressource.requirement || anyAboveRequirementExists;
+
+                    if (unlocked && isNaN(island.buildings[ressource.id])) {
+                      island.buildings[ressource.id] = 0;
+                    }
+                    return unlocked;
+                  }, this).map((ressource, ressourceKey) => (
+                    <div key={ressourceKey} className='my-1'>
+                      <Media>
+                        <Media left>
+                          <Media object src={"./icons/goods/" + ressource.id + ".png"} alt={ressource.resourceName}
+                                 middle style={{height: 30, width: 30}} className='mr-2'/>
+                        </Media>
+                        <Media body className='align-self-center form-inline'>
+                          <span className="mr-2">
+                            {island.buildings[ressource.id].toFixed(this.precision)}
+                          </span>
+                          <Input type='number' size='sm'
+                            // title={populationLevel}
+                                 value={island.buildings[ressource.id]}
+                                 style={{width: 62}}
+                                 className={'mr-2 text-center px-1' + (island.buildings[ressource.id] <= 0  && !islandKey ? ' is-invalid' :'')}
+                                 onChange={e => this.setBuildingCount(islandKey, ressource.id, e.target.value)}
+                          />
+                        </Media>
+                      </Media>
+                    </div>
+                  ))}
+                  <hr/>
                   {this.needs.filter(function (need, t) {
                     let firstTierRequireCount = island.population.level[need.tier-1];
                     /** auf dieser insel */
@@ -396,30 +448,27 @@ class App extends Component {
                             <Media object src={"./icons/goods/" + need.id + ".png"} alt={need.resourceName}
                                    middle style={{height: 30, width: 30}} className='mr-2'/>
                           </Media>
-                          <Media body className='align-self-center'>
-                            <div className="mr-2 d-inline">
+                          <Media body className='align-self-center form-inline'>
+                            <span className="mr-2">
                             {/*{Math.ceil(this.exactNeed(island.population.level, need))}*/}
                             {/*{' '}*/}
                             {this.exactNeed(island.population.level, need).toFixed(this.precision)}
-                            </div>
-                            <div className='mr-2 float-right'>
-                              <Input type='number' size='sm'
-                                // title={populationLevel}
-                                value={island.buildings[need.id]}
-                                style={{width: 62,
-                                  backgroundColor:
-                                    RGB_Log_Blend(
-                                      Math.min(Math.max(this.exactNeed(island.population.level, need).toFixed(this.precision) - island.buildings[need.id], 0),1),
-                                      'rgba(100,255,100,0.5)',
-                                      'rgba(255,50,50,0.5)',
-                                    ),
-                                }}
-                                className={'text-center px-1' + (this.exactNeed(island.population.level, need).toFixed(this.precision) > island.buildings[need.id] ? ' is-invalid' :'')}
-                                // readOnly
-                                onChange={e => this.setBuildingCount(islandKey, need.id, e.target.value)}
-                                // onWheel={e => this.handleWheel(e, islandKey, tierKey, -Math.sign(e.deltaY))}
-                              />
-                            </div>
+                            </span>
+                            <Input type='number' size='sm'
+                              // title={populationLevel}
+                              value={island.buildings[need.id]}
+                              style={{width: 62,
+                                backgroundColor:
+                                  RGB_Log_Blend(
+                                    Math.min(Math.max(this.exactNeed(island.population.level, need).toFixed(this.precision) - island.buildings[need.id], 0),1),
+                                    // 'rgba(100,200,255,0.5)',
+                                    'rgba(100,255,100,0.5)',
+                                    'rgba(255,50,50,0.5)',
+                                  ),
+                              }}
+                              className={'mr-2 text-center px-1' + (this.exactNeed(island.population.level, need).toFixed(this.precision) > island.buildings[need.id] ? ' is-invalid' :'')}
+                              onChange={e => this.setBuildingCount(islandKey, need.id, e.target.value)}
+                            />
                           </Media>
                         </Media>
                       </div>
