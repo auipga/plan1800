@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
+// import React, {Component, useState} from 'react';
 import {Button, ButtonGroup, Card, CardBody, Col, Container, Input, InputGroup, InputGroupAddon, Row} from 'reactstrap';
+// import {Button, ButtonGroup, Card, CardBody, CardText, CardTitle, Col, Container, Input, InputGroup, InputGroupAddon, Nav, NavItem, NavLink, Row, TabContent, TabPane} from 'reactstrap';
 import Media from "reactstrap/es/Media";
 import CardHeader from "reactstrap/es/CardHeader";
 import './App.css'
@@ -11,7 +13,12 @@ import needs from "./data/game/needs";
 import farms from "./data/game/farms";
 import ressources from "./data/game/ressources";
 import * as config from "./data/app/config";
+import ButtonDropdown from "reactstrap/es/ButtonDropdown";
+import DropdownToggle from "reactstrap/es/DropdownToggle";
+import DropdownMenu from "reactstrap/es/DropdownMenu";
+import DropdownItem from "reactstrap/es/DropdownItem";
 
+// const [activeWorld, setActiveWorld] = useState(worlds.find((w) => w.id===1).key);
 
 class App extends Component {
   step = 50;
@@ -30,14 +37,14 @@ class App extends Component {
     let oldState = localStorage.getItem('state');
     this.state = JSON.parse(oldState ? oldState : JSON.stringify((config.defaultState)))
     if (!this.state.islands.length) {
-      this.addIsland('oldWorld')
+      this.addIsland(1)
     }
   }
 
   reset = () => {
     localStorage.clear();
     this.setState(config.defaultState, () => {
-      this.addIsland('oldWorld')
+      this.addIsland(1)
     });
   }
   exactNeed = (population, need) => {
@@ -65,9 +72,9 @@ class App extends Component {
     // return need.provides.reduce((prev, next, i) => prev + population[i + need.tier - 1] / next, 0);
     // return need.consumption.reduce((prev, next, i) => prev + next * population[i + need.tier - 1], 0);
   }
-  changePopulationLevel = (islandKey, tierKey, direction, move = false, relativeTarget = 0) => {
+  changePopulationLevel = (id, tierKey, direction, move = false, relativeTarget = 0) => {
     let number = direction * this.step
-    let population = this.state.islands[islandKey].population.level;
+    let population = this.state.islands.find((i) => i.id === id).population.level;
     let NewValue = (isNaN(population[tierKey]) ? 0 : population[tierKey]) + number;
     let NewValueButMinimum0 = Math.max(NewValue, 0);
     population[tierKey] = NewValueButMinimum0;
@@ -87,8 +94,8 @@ class App extends Component {
       localStorage.setItem('state', JSON.stringify(this.state));
     });
   }
-  setPopulationLevel = (islandKey, tierKey, number) => {
-    let population = this.state.islands[islandKey].population.level;
+  setPopulationLevel = (id, tierKey, number) => {
+    let population = this.state.islands.find((i) => i.id === id).population.level;
     population[tierKey] = number ? parseInt(number) : 0
 
     this.setState(prevState => ({
@@ -103,7 +110,7 @@ class App extends Component {
   }
   setIslandName = (id, name) => {
     let islands = this.state.islands
-    islands[id].name = name
+    islands.find((i) => i.id === id).name = name
 
     this.setState(prevState => ({
       ...prevState,
@@ -112,20 +119,22 @@ class App extends Component {
       localStorage.setItem('state', JSON.stringify(this.state));
     });
   }
-  addIsland(worldKey) {
+  addIsland(worldId) {
     let islands = this.state.islands
-    islands.push(JSON.parse(JSON.stringify({...config.emptyIsland[worldKey], id: islands.length })))
+    let newId = islands.reduce((prev, next, i) => Math.max(prev, next.id), 0)+1;
+    islands.push(JSON.parse(JSON.stringify({...config.emptyIsland.find((i) => i.world === worldId), id: newId })))
 
     this.setState(prevState => ({
       ...prevState,
       islands: islands
     }), () => {
       localStorage.setItem('state', JSON.stringify(this.state));
+      this.switchIsland(newId)
     });
   }
-  unlockWorld(worldKey) {
+  unlockWorld(worldId) {
     let worlds = this.state.worlds
-    worlds.push(worldKey)
+    worlds.push(worldId)
 
     this.setState(prevState => ({
       ...prevState,
@@ -134,11 +143,11 @@ class App extends Component {
       localStorage.setItem('state', JSON.stringify(this.state));
     });
   }
-  deleteIsland(islandKey) {
-    if (!window.confirm('Insel "'+this.state.islands[islandKey].name+'" ('+islandKey+') löschen?')) {
-      return;
-    }
-    let islands = this.state.islands.slice(0, islandKey).concat(this.state.islands.slice(islandKey+1))
+  deleteIsland(islandId) {
+    // if (!window.confirm('Insel "'+this.state.islands[islandKey].name+'" ('+islandKey+') löschen?')) {
+    //   return;
+    // }
+    let islands = this.state.islands.filter((i) => i.id !== islandId)
 
     this.setState(prevState => ({
       ...prevState,
@@ -159,7 +168,7 @@ class App extends Component {
     });
   }
 
-  isNeeded = (need, island) => {
+  isNeeded = (need, island, world) => {
     let firstTierRequireCount = island.population.level[need.tier-1];
     /** auf dieser insel */
     let oneAboveRequirementExists = 0 < island.population.level[need.tier];
@@ -197,39 +206,115 @@ class App extends Component {
     return -1 < building.needs.indexOf(ressource.id)
   };
 
+  switchWorld = (worldKey) => {
+    let activeWorld = this.state.activeWorld
+    activeWorld = worldKey
+
+    this.setState(prevState => ({
+      ...prevState,
+      activeWorld: activeWorld
+    }), () => {
+      localStorage.setItem('state', JSON.stringify(this.state));
+    });
+  }
+  switchIsland = (id) => {
+    let activeIslands = this.state.activeIslands
+    activeIslands[this.state.activeWorld] = id
+
+    this.setState(prevState => ({
+      ...prevState,
+      activeIslands: activeIslands
+    }), () => {
+      localStorage.setItem('state', JSON.stringify(this.state));
+    });
+  }
+
   render() {
     return (
-      <div className="App">
+      <div className="App mt-3">
         <Container fluid>
-          <h2 className='mb-3'>Plan1800
+          <Card className={'my-3 bg-dark-'}>
+            <CardHeader>
+              {worlds.filter(w => this.state.worlds.indexOf(w.id) >= 0).map((world, worldKey) => (
+                <Button title={trans(world)} className={'mr-2 '}
+                        active={this.state.activeWorld === world.id}
+                        disabled={0 > this.state.worlds.indexOf(world.id)}
+                        onClick={() => this.switchWorld(world.id)}>
+                  <img src={'./icons/worlds/' + world.id + '.png'} alt={world} style={{width: 40, height: 40}}/>
+                  {trans(world)}
+                </Button>
+              ))}
+              {worlds.filter(w => this.state.worlds.indexOf(w.id) < 0).map((world, worldKey) => (
+                <ButtonDropdown isOpen={true} className={'mr-2 '}>
+                  <Button title={trans(world)}
+                          active={this.state.activeWorld === world.id}
+                          disabled={0 > this.state.worlds.indexOf(world.id)}
+                          onClick={() => this.switchWorld(world.id)}>
+                    <img src={'./icons/worlds/' + world.id + '.png'} alt={world} style={{width: 40, height: 40}}/>
+                    {trans(world)}
+                  </Button>
+                  <DropdownToggle caret color="secondary"/>
+                  <DropdownMenu right={true}>
+                    <DropdownItem onClick={() => alert(world.id)}
+                      disabled={this.state.islands.length && this.state.islands.find(() => true).population.level[world.id] >= 50}>Expedition planen</DropdownItem>
+                    <DropdownItem onClick={() => alert(world.id)}
+                      disabled={this.state.islands.length && this.state.islands.find(() => true).population.level[world.id] >= 200}>Expedition starten</DropdownItem>
+                    <DropdownItem onClick={() => this.unlockWorld(world.id)}
+                      disabled={this.state.islands.length && this.state.islands.find(() => true).population.level[world.id]}>freischalten</DropdownItem>
+                  </DropdownMenu>
+                </ButtonDropdown>
+                ))}
+              <Button onClick={this.reset} className='mr-2 btn-warning'>
+                <img src={'./icons/Icon_traderoutes.png'} alt='reset' style={{width: 40, height: 40}}/>
+                reset
+              </Button>
+            </CardHeader>
+            <CardBody>
+              {this.state.islands.filter((island) => {return island.world === this.state.activeWorld}).map((island, islandKey) => (
+               <Button title={island.name}
+                       className={'mr-2 '}
+                       active={this.state.activeIslands[this.state.activeWorld] === island.id}
+                       onClick={() => this.switchIsland(island.id)}
+               >
+                 {island.name} ({island.id})
+               </Button>
+              ))}
+              <Button onClick={() => this.addIsland(this.state.activeWorld)} className={'px-1 py-0'}>
+                <img src={'./icons/Icon_plus.png'} alt='Hinzufügen' style={{width: 36, height: 36}}/>
+              </Button>
+            </CardBody>
+          </Card>
+          <h2 className='mb-3 d-none'>Plan1800
             <Button onClick={this.reset} size='sm'>reset</Button>
           </h2>
-          {this.state.worlds.map((world, worldKey) => (
+          {/*{this.state.worlds.map((world, worldKey) => (*/}
+          {/*  <Nav tabs>*/}
+          {/*  {this.state.islands.filter((island) => {return island.world === world}).map((island, islandKey) => (*/}
+          {/*      <NavItem><NavLink>{worldKey}-{islandKey}-{island.id} {island.name}</NavLink></NavItem>*/}
+          {/*    ))}*/}
+          {/*  </Nav>*/}
+          {/*))}*/}
+          {this.state.worlds.filter((worldId) => worldId === this.state.activeWorld).map((world, worldKey) => (
             <div>
-          {this.state.islands.filter((island) => {return island.world === world}).map((island, islandKey) => (
-          <Card className={'mb-3 bg-dark'}>
+          {this.state.islands.filter((island) => {return island.id === this.state.activeIslands[this.state.activeWorld]}).map((island, islandKey) => (
+          <Card className={'mb-3 bg-dark-'}>
             <CardHeader>
               <Input value={island.name} onChange={e => this.setIslandName(island.id, e.target.value)} style={{maxWidth: 300}} className={'d-inline-block mr-3'} />
               <strong className={'d-inline-block mr-3'}>
                 <img src={"./icons/population/Population.png"} alt="" className={" rounded"} style={{height: 40, width: 40}}/>
                 { island.population.level.reduce((prev, next) => prev + next, 0) }
               </strong>
-              <Button onClick={() => this.deleteIsland(island.id)} size='sm'>löschen</Button>
+              <Button onClick={() => this.deleteIsland(island.id)} size='sm' className='float-right'>&times;</Button>
             </CardHeader>
             {/*<Population levels={this.populationLevels} />*/}
               {/*<PopulationItem populationLevel={levels[i]} i={i} />*/}
             <CardHeader>
               <Row>
-                {tiers.filter((tier) => { return worlds.find(w => { return w.key === world}).socialClassIDs.find(tierID => tierID === tier.id)} ).map((tier, tierKey) => (
+                {tiers.filter((tier) => { return worlds.find(w => { return w.id === island.world}).socialClassIDs.find(tierID => tierID === tier.id)} ).map((tier, tierKey) => (
                 <Col xs={12} sm={6} md={4} lg={3} xl={''} key={tierKey}
+                     style={{maxWidth: '20%'}}
                       className={"align-content-center" + ((!tierKey || (island.population.level[tierKey] > 0)) ? ' bg-success-': ' d-none-')}>
                   <Row className={'align-items-end'}>
-                    {/*<Col className={'col-auto' + ((tierKey === 0) ? ' bg-warning d-none': '')}>*/}
-                    {/*  <ButtonGroup vertical size='sm'>*/}
-                    {/*    <Button onClick={() => this.changePopulationLevel(tierKey-1, -1) + this.changePopulationLevel(tierKey, +1)} color='primary'>&raquo;</Button>*/}
-                    {/*    <Button onClick={() => this.changePopulationLevel(tierKey, -1) + this.changePopulationLevel(tierKey-1, +1)} color='warning'>&lsaquo;</Button>*/}
-                    {/*  </ButtonGroup>*/}
-                    {/*</Col>*/}
                     <Col className=''>
                       <img src={"./icons/population/Workforce_" + (tier.key) + ".png"} alt="" className="d-block mx-auto rounded" style={{height: 40, width: 40}}/>
                       {/*<Col xs={12} sm={10} md={6} lg={4} key={tierKey}>*/}
@@ -251,7 +336,7 @@ class App extends Component {
                         </InputGroupAddon>
                       </InputGroup>
                     </Col>
-                    <Col className={'col-auto '+ ((tier.id === worlds.find(w => { return w.key === world}).socialClassIDs.slice(-1)[0]) ? ' bg-warning d-none': '')}
+                    <Col className={'col-auto '+ ((tier.id === worlds.find(w => { return w.id === island.world}).socialClassIDs.slice(-1)[0]) ? ' bg-warning d-none': '')}
                          onWheel={e => this.handleWheel(e, island.id, tierKey+(Math.sign(e.deltaY)>0 ? 1 : 0), -1, true, -Math.sign(e.deltaY))}
                     >
                       <ButtonGroup vertical size='sm'>
@@ -268,7 +353,7 @@ class App extends Component {
             {/*<div className="w-100 m-3"></div>*/}
             <CardBody>
               <Row>
-                <Col sm={'auto'} className='ml-auto'>
+                <Col sm={'auto'} className='ml-auto-'>
                   {ressources.filter((ressource) => this.isUnlocked(ressource, island, this)).map((ressource, ressourceKey) => (
                     <div key={ressource.id} className='my-1'>
                       <Media>
@@ -295,7 +380,7 @@ class App extends Component {
                   <hr/>
                 </Col>
                 <Col sm={'auto'}>
-                  {needs.filter((need) => this.isNeeded(need, island)).map((need, needKey) => (
+                  {needs.filter((need) => this.isNeeded(need, island, world)).map((need, needKey) => (
                       <div key={need.id} className='my-1'>
                         <Media>
                           <Media left>
@@ -373,16 +458,6 @@ class App extends Component {
           ))}
             </div>
           ))}
-
-          <Card className={'my-3 bg-dark'}>
-            <CardHeader>
-              <Button onClick={() => this.addIsland("oldWorld")} className={'mr-2'}>Neue Insel</Button>
-              <Button onClick={() => this.addIsland("oldWorld")} className={'mr-2'}>Alte Welt</Button>
-              <Button onClick={() => this.addIsland("newWorld")} className={'mr-2'} disabled={!this.state.worlds.find((w) => w === "newWorld")}>Neue Welt</Button>
-              <Button onClick={() => this.unlockWorld("newWorld")} className={'mr-2'} disabled={this.state.worlds.find((w) => w === "newWorld")}>Neue Welt freischalten</Button>
-            {/*<Button onClick={() => this.addIsland("capTrelawny")}>Cap Trelawny</Button>*/}
-            </CardHeader>
-          </Card>
 
         </Container>
       </div>

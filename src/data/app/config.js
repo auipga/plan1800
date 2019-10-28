@@ -1,26 +1,35 @@
-export var emptyIsland = {
-  oldWorld: {
-    world: 'oldWorld',
-    name: 'Alte Welt Insel',
+export var emptyIsland = [
+  {
+    world: 1,
+    name: 'Alte ',
     population: {
       level: [0, 0, 0, 0, 0],
     },
     buildings: {}
   },
-  newWorld: {
-    world: 'newWorld',
-    name: 'Neue Welt Insel',
+  {
+    world: 2,
+    key: 'newWorld',
+    name: 'Neue ',
     population: {
       level: [0, 0],
     },
     buildings: {}
   },
-}
+  {
+    world: 3,
+    key: 'capTrelawny',
+    name: 'Kap ',
+    population: {
+      level: [0, 0, 0, 0, 0],
+    },
+    buildings: {}
+  },
+]
 
 export var defaultState = {
-  "islands": [],
-  "worlds": [
-    'oldWorld'
-  ],
-
+  islands: [],
+  worlds: [1],
+  activeWorld: 1,
+  activeIslands: {},
 }
