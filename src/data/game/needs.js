@@ -1,7 +1,7 @@
 export default [
   {
     id: "Marketplace",
-    tier: 1,
+    tierId: 1,
     requirement: 0,//1 oder sonderregelung
     buildingName: "Martplatz",
     resourceName: "Markt",
@@ -13,7 +13,7 @@ export default [
   },
   {
     id: "Fish",
-    tier: 1,
+    tierId: 1,
     requirement: 50,
     buildingName: "Fischer",
     resourceName: "Fisch",
@@ -25,7 +25,7 @@ export default [
   },
   {
     id: "Schnapps",
-    tier: 1,
+    tierId: 1,
     requirement: 100,
     buildingName: "Schnapsbrennerei",
     resourceName: "Schnaps",
@@ -39,7 +39,7 @@ export default [
   },
   {
     id: "Working_clothes",
-    tier: 1,
+    tierId: 1,
     requirement: 150,
     buildingName: "Weberei",
     resourceName: "Arbeitskleidung",
@@ -53,7 +53,7 @@ export default [
   },
   {
     id: "Pub",
-    tier: 1,
+    tierId: 1,
     requirement: 150,
     buildingName: "Wirtshaus",
     resourceName: "-_-",
@@ -65,7 +65,7 @@ export default [
   },
   {
     id: "Sausages",
-    tier: 2,
+    tierId: 2,
     requirement: 1,
     buildingName: "Metzger",
     resourceName: "Wurst",
@@ -79,7 +79,7 @@ export default [
   },
   {
     id: "Bread",
-    tier: 2,
+    tierId: 2,
     requirement: 150,
     buildingName: "Bäckerei",
     resourceName: "Brot",
@@ -93,7 +93,7 @@ export default [
   },
   {
     id: "Church",
-    tier: 2,
+    tierId: 2,
     requirement: 150,
     buildingName: "Kirche",
     resourceName: "-_- Glaube",
@@ -105,7 +105,7 @@ export default [
   },
   {
     id: "Soap",
-    tier: 2,
+    tierId: 2,
     requirement: 300,
     buildingName: "Seiferei",
     resourceName: "Seife",
@@ -119,7 +119,7 @@ export default [
   },
   {
     id: "Beer",
-    tier: 2,
+    tierId: 2,
     requirement: 500,
     buildingName: "Brauerei",
     resourceName: "Bier",
@@ -133,7 +133,7 @@ export default [
   },
   {
     id: "School",
-    tier: 2,
+    tierId: 2,
     requirement: 750,
     buildingName: "Schule",
     resourceName: "-_- Bildung",

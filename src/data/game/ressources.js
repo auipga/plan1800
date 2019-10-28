@@ -1,7 +1,8 @@
 export default [
   {
-    id: "Timber",
-    tier: 1,
+    id: 1,
+    key: "Timber",
+    tierId: 1,
     requirement: 0,
     buildingName: "Sägewerk",
     resourceName: "Bretter",
@@ -9,8 +10,9 @@ export default [
     needs: ["Wood"],
   },
   {
-    id: "Bricks",
-    tier: 2,
+    id: 2,
+    key: "Bricks",
+    tierId: 2,
     requirement: 1,
     buildingName: "Bricks Factory",
     resourceName: "Ziegel",

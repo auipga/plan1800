@@ -1,7 +1,8 @@
 export default [
     {
       id: "Wood",
-      tier: 1,
+      key: "Wood",
+      tierId: 1,
       requirement: 0,
       buildingName: "Holzfällerhütte",
       resourceName: "Holz",
@@ -10,7 +11,8 @@ export default [
     },
     {
       id: "Potato",
-      tier: 1,
+      key: "Potato",
+      tierId: 1,
       requirement: 100,
       buildingName: "Kartoffelacker",
       resourceName: "Kartoffeln",
@@ -19,7 +21,8 @@ export default [
     },
     {
       id: "Wool",
-      tier: 1,
+      key: "Wool",
+      tierId: 1,
       requirement: 150,
       buildingName: "Schaffarm",
       resourceName: "Wolle",
@@ -28,7 +31,19 @@ export default [
     },
     {
       id: "Clay",
-      tier: 2,
+      key: "Clay",
+      tierId: 2,
+      requirement: 1,
+      buildingName: "Lehmgrube",
+      resourceName: "Lehm",
+      productionTime: 30,
+      provides: "Clay",
+      max: 4
+    },
+    {
+      id: "Clay",
+      key: "Clay",
+      tierId: 7,
       requirement: 1,
       buildingName: "Lehmgrube",
       resourceName: "Lehm",
@@ -38,7 +53,8 @@ export default [
     },
     {
       id: "Pigs",
-      tier: 2,
+      key: "Pigs",
+      tierId: 2,
       requirement: 1,
       buildingName: "Schweinefarm",
       resourceName: "Schweine",

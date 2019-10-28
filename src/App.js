@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-// import React, {Component, useState} from 'react';
-import {Button, ButtonGroup, Card, CardBody, Col, Container, Input, InputGroup, InputGroupAddon, Row} from 'reactstrap';
+import {UncontrolledButtonDropdown, Badge, DropdownToggle, DropdownMenu, DropdownItem, Button, ButtonGroup, Card, CardBody, Col, Container, Input, InputGroup, InputGroupAddon, Row} from 'reactstrap';
 // import {Button, ButtonGroup, Card, CardBody, CardText, CardTitle, Col, Container, Input, InputGroup, InputGroupAddon, Nav, NavItem, NavLink, Row, TabContent, TabPane} from 'reactstrap';
 import Media from "reactstrap/es/Media";
 import CardHeader from "reactstrap/es/CardHeader";
@@ -13,12 +12,7 @@ import needs from "./data/game/needs";
 import farms from "./data/game/farms";
 import ressources from "./data/game/ressources";
 import * as config from "./data/app/config";
-import ButtonDropdown from "reactstrap/es/ButtonDropdown";
-import DropdownToggle from "reactstrap/es/DropdownToggle";
-import DropdownMenu from "reactstrap/es/DropdownMenu";
-import DropdownItem from "reactstrap/es/DropdownItem";
 
-// const [activeWorld, setActiveWorld] = useState(worlds.find((w) => w.id===1).key);
 
 class App extends Component {
   step = 50;
@@ -50,8 +44,8 @@ class App extends Component {
   exactNeed = (population, need) => {
     // alert(JSON.stringify(need))
     // return 1;
-    return need.provides.reduce((prev, next, i) => prev + population[i + need.tier - 1] / next, 0);
-    // return need.consumption.reduce((prev, next, i) => prev + next * population[i + need.tier - 1], 0);
+    return need.provides.reduce((prev, next, i) => prev + population[i + need.tierId - 1] / next, 0);
+    // return need.consumption.reduce((prev, next, i) => prev + next * population[i + need.tierId - 1], 0);
   }
   exactConsumption = (buildings, ressource) => {
     let provider = farms.find((farm) => this.isProvidingRessource(farm, ressource))
@@ -69,8 +63,8 @@ class App extends Component {
     // return buildings[provider.id]
     return consumption
     // return 3
-    // return need.provides.reduce((prev, next, i) => prev + population[i + need.tier - 1] / next, 0);
-    // return need.consumption.reduce((prev, next, i) => prev + next * population[i + need.tier - 1], 0);
+    // return need.provides.reduce((prev, next, i) => prev + population[i + need.tierId - 1] / next, 0);
+    // return need.consumption.reduce((prev, next, i) => prev + next * population[i + need.tierId - 1], 0);
   }
   changePopulationLevel = (id, tierKey, direction, move = false, relativeTarget = 0) => {
     let number = direction * this.step
@@ -156,8 +150,8 @@ class App extends Component {
       localStorage.setItem('state', JSON.stringify(this.state));
     });
   }
-  setBuildingCount = (islandKey, building, number) => {
-    let buildings = this.state.islands[islandKey].buildings;
+  setBuildingCount = (islandId, building, number) => {
+    let buildings = this.state.islands.find((i) => i.id === islandId).buildings;
     buildings[building] = number ? Math.max(parseInt(number),0) : 0
 
     this.setState(prevState => ({
@@ -168,12 +162,19 @@ class App extends Component {
     });
   }
 
-  isNeeded = (need, island, world) => {
-    let firstTierRequireCount = island.population.level[need.tier-1];
+  isNeeded = (need, island) => {
+    // NW ist id 6 und 7 statt 0 und 1
+    let keys = worlds.find(w => w.id === island.world).socialClassIDs
+    let relativePopulationLevel = []
+    for (let i = 0; i < keys.length; i++) {
+      relativePopulationLevel[keys[i]-1] = island.population.level[i]
+    }
+
+    let firstTierRequireCount = relativePopulationLevel[need.tierId-1];
     /** auf dieser insel */
-    let oneAboveRequirementExists = 0 < island.population.level[need.tier];
+    let oneAboveRequirementExists = 0 < relativePopulationLevel[need.tierId];
     /** @todo requirement auf DIESER insel, baumöglichkeit auf IRGENDEINER insel*/
-    let anyAboveRequirementExists = 0 < island.population.level.slice(need.tier).reduce((prev, next) => prev + next, 0);
+    let anyAboveRequirementExists = 0 < relativePopulationLevel.slice(need.tierId).reduce((prev, next) => prev + next, 0);
 
     let needed = firstTierRequireCount >= need.requirement || oneAboveRequirementExists
              || (firstTierRequireCount > 0                 && anyAboveRequirementExists);
@@ -184,8 +185,15 @@ class App extends Component {
     return needed;
   };
   isUnlocked = (ressource, island) => {
-    let firstTierRequireCount = island.population.level[ressource.tier - 1];
-    let anyAboveRequirementExists = 0 < island.population.level.slice(ressource.tier).reduce((prev, next) => prev + next, 0);
+    // NW ist id 6 und 7 statt 0 und 1
+    let keys = worlds.find(w => w.id === island.world).socialClassIDs
+    let relativePopulationLevel = []
+    for (let i = 0; i < keys.length; i++) {
+      relativePopulationLevel[keys[i]-1] = island.population.level[i]
+    }
+
+    let firstTierRequireCount = relativePopulationLevel[ressource.tierId - 1];
+    let anyAboveRequirementExists = 0 < relativePopulationLevel.slice(ressource.tierId).reduce((prev, next) => prev + next, 0);
 
     let unlocked = firstTierRequireCount >= ressource.requirement || anyAboveRequirementExists;
 
@@ -234,6 +242,7 @@ class App extends Component {
       <div className="App mt-3">
         <Container fluid>
           <Card className={'my-3 bg-dark-'}>
+            {/*Welt auswahl*/}
             <CardHeader>
               {worlds.filter(w => this.state.worlds.indexOf(w.id) >= 0).map((world, worldKey) => (
                 <Button title={trans(world)} className={'mr-2 '}
@@ -241,35 +250,36 @@ class App extends Component {
                         disabled={0 > this.state.worlds.indexOf(world.id)}
                         onClick={() => this.switchWorld(world.id)}>
                   <img src={'./icons/worlds/' + world.id + '.png'} alt={world} style={{width: 40, height: 40}}/>
-                  {trans(world)}
+                  {/*{trans(world)}*/}
                 </Button>
               ))}
               {worlds.filter(w => this.state.worlds.indexOf(w.id) < 0).map((world, worldKey) => (
-                <ButtonDropdown isOpen={true} className={'mr-2 '}>
+                <UncontrolledButtonDropdown className={'mr-2 '}>
                   <Button title={trans(world)}
                           active={this.state.activeWorld === world.id}
                           disabled={0 > this.state.worlds.indexOf(world.id)}
                           onClick={() => this.switchWorld(world.id)}>
                     <img src={'./icons/worlds/' + world.id + '.png'} alt={world} style={{width: 40, height: 40}}/>
-                    {trans(world)}
+                    {/*{trans(world)}*/}
                   </Button>
                   <DropdownToggle caret color="secondary"/>
-                  <DropdownMenu right={true}>
-                    <DropdownItem onClick={() => alert(world.id)}
-                      disabled={this.state.islands.length && this.state.islands.find(() => true).population.level[world.id] >= 50}>Expedition planen</DropdownItem>
-                    <DropdownItem onClick={() => alert(world.id)}
-                      disabled={this.state.islands.length && this.state.islands.find(() => true).population.level[world.id] >= 200}>Expedition starten</DropdownItem>
+                  <DropdownMenu right={0}>
                     <DropdownItem onClick={() => this.unlockWorld(world.id)}
-                      disabled={this.state.islands.length && this.state.islands.find(() => true).population.level[world.id]}>freischalten</DropdownItem>
+                      disabled={this.state.islands.length && this.state.islands.find(() => true).population.level[2]}>freischalten</DropdownItem>
+                    <DropdownItem divider/>
+                    <DropdownItem onClick={() => alert(world.id)}
+                      disabled={this.state.islands.length && this.state.islands.find(() => true).population.level[2] < 50}>Expedition planen <Badge color='secondary'>later</Badge></DropdownItem>
+                    <DropdownItem onClick={() => alert(world.id)}
+                      disabled={this.state.islands.length && this.state.islands.find(() => true).population.level[2] < 200}>Expedition starten <Badge color='secondary'>later</Badge></DropdownItem>
                   </DropdownMenu>
-                </ButtonDropdown>
+                </UncontrolledButtonDropdown>
                 ))}
-              <Button onClick={this.reset} className='mr-2 btn-warning'>
+              <Button onClick={this.reset} className='btn-warning float-right'>
                 <img src={'./icons/Icon_traderoutes.png'} alt='reset' style={{width: 40, height: 40}}/>
-                reset
               </Button>
             </CardHeader>
-            <CardBody>
+            {/*Insel auswahl*/}
+            <CardBody className={'overflow-auto text-nowrap'}>
               {this.state.islands.filter((island) => {return island.world === this.state.activeWorld}).map((island, islandKey) => (
                <Button title={island.name}
                        className={'mr-2 '}
@@ -287,22 +297,15 @@ class App extends Component {
           <h2 className='mb-3 d-none'>Plan1800
             <Button onClick={this.reset} size='sm'>reset</Button>
           </h2>
-          {/*{this.state.worlds.map((world, worldKey) => (*/}
-          {/*  <Nav tabs>*/}
-          {/*  {this.state.islands.filter((island) => {return island.world === world}).map((island, islandKey) => (*/}
-          {/*      <NavItem><NavLink>{worldKey}-{islandKey}-{island.id} {island.name}</NavLink></NavItem>*/}
-          {/*    ))}*/}
-          {/*  </Nav>*/}
-          {/*))}*/}
-          {this.state.worlds.filter((worldId) => worldId === this.state.activeWorld).map((world, worldKey) => (
-            <div>
+          {/*{this.state.worlds.filter((worldId) => worldId === this.state.activeWorld).map((world, worldKey) => (*/}
+          {/*  <div>*/}
           {this.state.islands.filter((island) => {return island.id === this.state.activeIslands[this.state.activeWorld]}).map((island, islandKey) => (
           <Card className={'mb-3 bg-dark-'}>
             <CardHeader>
               <Input value={island.name} onChange={e => this.setIslandName(island.id, e.target.value)} style={{maxWidth: 300}} className={'d-inline-block mr-3'} />
               <strong className={'d-inline-block mr-3'}>
                 <img src={"./icons/population/Population.png"} alt="" className={" rounded"} style={{height: 40, width: 40}}/>
-                { island.population.level.reduce((prev, next) => prev + next, 0) }
+                {/*{ island.population.level.reduce((prev, next) => prev + next, 0) }*/}
               </strong>
               <Button onClick={() => this.deleteIsland(island.id)} size='sm' className='float-right'>&times;</Button>
             </CardHeader>
@@ -312,8 +315,8 @@ class App extends Component {
               <Row>
                 {tiers.filter((tier) => { return worlds.find(w => { return w.id === island.world}).socialClassIDs.find(tierID => tierID === tier.id)} ).map((tier, tierKey) => (
                 <Col xs={12} sm={6} md={4} lg={3} xl={''} key={tierKey}
-                     style={{maxWidth: '20%'}}
-                      className={"align-content-center" + ((!tierKey || (island.population.level[tierKey] > 0)) ? ' bg-success-': ' d-none-')}>
+                     // style={{maxWidth: '20%'}}
+                      className={"align-content-center" + ((!tierKey || (island.population.level[tierKey] > 0)) ? ' bg-success-': ' d-none')}>
                   <Row className={'align-items-end'}>
                     <Col className=''>
                       <img src={"./icons/population/Workforce_" + (tier.key) + ".png"} alt="" className="d-block mx-auto rounded" style={{height: 40, width: 40}}/>
@@ -336,7 +339,7 @@ class App extends Component {
                         </InputGroupAddon>
                       </InputGroup>
                     </Col>
-                    <Col className={'col-auto '+ ((tier.id === worlds.find(w => { return w.id === island.world}).socialClassIDs.slice(-1)[0]) ? ' bg-warning d-none': '')}
+                    <Col className={'col-auto '+ ((tier.id === worlds.find(w => { return w.id === island.world}).socialClassIDs.slice(-1)[0]) ? ' bg-warning invisible': '')}
                          onWheel={e => this.handleWheel(e, island.id, tierKey+(Math.sign(e.deltaY)>0 ? 1 : 0), -1, true, -Math.sign(e.deltaY))}
                     >
                       <ButtonGroup vertical size='sm'>
@@ -358,7 +361,7 @@ class App extends Component {
                     <div key={ressource.id} className='my-1'>
                       <Media>
                         <Media left>
-                          <Media object src={"./icons/goods/" + ressource.id + ".png"} alt={ressource.resourceName}
+                          <Media object src={"./icons/goods/" + ressource.key + ".png"} alt={trans(ressource)} title={trans(ressource)}
                                  middle style={{height: 30, width: 30}} className='mr-2'
                           />
                         </Media>
@@ -378,9 +381,9 @@ class App extends Component {
                     </div>
                   ))}
                   <hr/>
-                </Col>
-                <Col sm={'auto'}>
-                  {needs.filter((need) => this.isNeeded(need, island, world)).map((need, needKey) => (
+                {/*</Col>*/}
+                {/*<Col sm={'auto'}>*/}
+                  {needs.filter((need) => this.isNeeded(need, island)).map((need, needKey) => (
                       <div key={need.id} className='my-1'>
                         <Media>
                           <Media left>
@@ -413,8 +416,8 @@ class App extends Component {
                         </Media>
                       </div>
                   ))}
-                </Col>
-                <Col sm={'auto'}>
+                {/*</Col>*/}
+                {/*<Col sm={'auto'}>*/}
                     <hr/>
                   {farms.filter((ressource) => this.isUnlocked(ressource, island, this)).map((ressource, ressourceKey) => (
                       <div key={ressource.id} className='my-1'>
@@ -456,8 +459,8 @@ class App extends Component {
             </CardBody>
           </Card>
           ))}
-            </div>
-          ))}
+            {/*</div>*/}
+          {/*))}*/}
 
         </Container>
       </div>
