@@ -18,6 +18,6 @@ export default [
     key: "capTrelawny",
     i10n: {en: "Cap Trelawny", de: "Kap Trelawny"},
     img: "cap-trelawny.png",
-    socialClassIDs: [6, 7]
+    socialClassIDs: [1, 2, 3, 4, 5]
   },
 ]
