@@ -87,14 +87,15 @@ class App extends Component {
     //   .filter((l,lKey) => islandTierKey.indexOf(lKey) > -1)
     //   .reduce((prev, next, i) => prev + island.population.level[needTierKey[i]] / next, 0);
   }
-  exactConsumption = (buildings, ressourceKey) => {
-    let provider = producers.find((producer) => this.isProvidingRessource(producer, ressourceKey))
-    // d(ressourceKey, buildings)
+  exactConsumption = (buildings, resourceKey) => {
+    let provider = producers
+      .find(producer => producer.key === resourceKey) // isProvidingResource
+    // d(resourceKey)
     // d("provider", provider)
     let consumers = producers
-      // .filter((farm) => () => buildings.indexOf(farm.key))
-      .filter((producer) => this.isConsumingRessource(producer, ressourceKey))
-    // let consumers = this.needs.filter((farm) => this.isConsumingRessource(farm, ressourceKey))
+      .filter(producer => buildings[producer.key] !== undefined) // noch nie gebaut
+      .filter(producer => producer.needs.includes(resourceKey)) // isConsumingResource
+    // let consumers = this.needs.filter((farm) => this.isConsumingResource(farm, resourceKey))
     // d("consumers",consumers)
 
     let consumption = consumers.reduce((prev, next, i) => prev + buildings[next.key] * provider.productionTime / next.productionTime, 0)
@@ -192,6 +193,16 @@ class App extends Component {
       buildings: buildings
     }), this.persistState);
   }
+  setResourceWantCount = (islandId, buildingKey, number) => {
+    let resourceWant = this.state.islands.find((i) => i.id === islandId).resourceWant;
+    resourceWant = resourceWant ? resourceWant : {}
+    resourceWant[buildingKey] = number ? Math.max(parseInt(number), 0) : 0
+
+    this.setState(prevState => ({
+      ...prevState.resourceWant,
+      resourceWant: resourceWant
+    }), this.persistState);
+  }
 
   isNeeded = (need, island) => {
     let keys = worlds.find(w => w.id === island.world).socialClassIDs
@@ -217,39 +228,28 @@ class App extends Component {
     /** @todo requirement auf DIESER insel, baumöglichkeit auf IRGENDEINER insel*/
     return needed;
   };
-  isUnlocked = (ressource, island) => {
+  isUnlocked = (resource, island) => {
     let unlocked = false
 
-    let islandTierKey = worlds.find(w => w.id === island.world).socialClassIDs.indexOf(ressource.tierId);
+    let islandTierKey = worlds.find(w => w.id === island.world).socialClassIDs.indexOf(resource.tierId);
     if (islandTierKey <= -1) {
       return unlocked
     }
 
     if (!unlocked) {
       let firstTierRequireCount = island.population.level[islandTierKey];
-      unlocked = firstTierRequireCount >= ressource.requirement
+      unlocked = firstTierRequireCount >= resource.requirement
     }
     if (!unlocked) {
       let anyAboveCount = island.population.level.slice(islandTierKey+1).reduce((prev, next) => prev + next, 0);
       unlocked = anyAboveCount > 0;
     }
 
-    if (unlocked && isNaN(island.buildings[ressource.key])) {
-      island.buildings[ressource.key] = 0;
+    if (unlocked && isNaN(island.buildings[resource.key])) {
+      island.buildings[resource.key] = 0;
+      island.resourceWant[resource.key] = 0;
     }
     return unlocked;
-  };
-  isProvidingRessource = (building, ressourceKey) => {
-    return building.key === ressourceKey
-    // return building.provides === ressourceKey
-  };
-  isConsumingRessource = (building, ressourceKey) => {
-    // d('finding '+ressource.id)//, building.needs.indexOf(ressource.id))
-    if (undefined === building.needs) {
-      return false;
-    }
-    // d(building.needs)
-    return building.needs.includes(ressourceKey)
   };
 
   switchWorld = (worldKey) => {
@@ -363,7 +363,7 @@ class App extends Component {
                             </InputGroupAddon>
                             <Input placeholder={trans(tier)} title={trans(tier)}
                                    value={island.population.level[tierKey]}
-                                   style={{height: 62}}
+                                   style={{height: 50}}
                                    className={'text-center'}
                               // readOnly
                                    onChange={e => this.setPopulationLevel(island.id, tierKey, e.target.value)}
@@ -395,30 +395,43 @@ class App extends Component {
                 <Row>
                   <Col sm={'auto'} className='ml-auto-'>
                     {/*   Ressourcen - Baumaterial   */}
-                    {producers.filter(ressource => ressource.type === "Baumaterial" && this.isUnlocked(ressource, island)).map((ressource, ressourceKey) => (
-                      <div key={ressource.key} className='my-1'>
+                    {producers.filter(resource => resource.type === "Baumaterial" && this.isUnlocked(resource, island)).map((resource, resourceKey) => (
+                      <div key={resource.key} className='my-1'>
                         <Media>
                           <Media left>
-                            <Media object src={"./icons/goods/" + ressource.key + ".png"} alt={trans(ressource)} title={trans(ressource)}
+                            <Media object src={"./icons/goods/" + resource.key + ".png"} alt={trans(resource)} title={trans(resource)}
                                    middle style={{height: 30, width: 30}} className='mr-2'
                             />
                           </Media>
                           <Media body className='align-self-center form-inline'>
-                            <span className="mr-2">
-                              {island.buildings[ressource.key].toFixed(this.precision)}
-                            </span>
                             <Input type='number' bsSize='sm'
-                                   style={{width: 62}}
-                                   className={'mr-2 text-center px-1' + (island.buildings[ressource.key] <= 0 && island.id === 1 ? ' is-invalid' : '')}
-                                   value={island.buildings[ressource.key]}
-                                   onChange={e => this.setBuildingCount(island.id, ressource.key, e.target.value)}
+                                   max={99}
+                                   style={{width: 31}}
+                                   className={'mr-2 text-center px-1' + (island.resourceWant[resource.key] <= 0 && island.id === 1 ? ' is-invalid' : '')}
+                                   value={island.resourceWant[resource.key]}
+                                   onChange={e => this.setResourceWantCount(island.id, resource.key, e.target.value)}
+                            />
+                            <Input type='number' bsSize='sm'
+                                   max={99}
+                                   style={{width: 50,
+                                     backgroundColor:
+                                       RGB_Log_Blend(
+                                         Math.min(Math.max(island.resourceWant[resource.key] - island.buildings[resource.key], 0), 1),
+                                         // 'rgba(100,200,255,0.5)',
+                                         'rgba(100,255,100,0.5)',
+                                         'rgba(255,50,50,0.5)',
+                                       ),
+                                   }}
+                                   className={'mr-2 text-center px-1' + (island.buildings[resource.key] < island.resourceWant[resource.key] ? ' is-invalid' : '')}
+                                   value={island.buildings[resource.key]}
+                                   onChange={e => this.setBuildingCount(island.id, resource.key, e.target.value)}
                             />
                           </Media>
                         </Media>
                       </div>
                     ))}
-                    {/*</Col><Col sm={'auto'}>*/}
                     <hr/>
+                  </Col><Col sm={'auto'}>
                     {/*   Ressourcen - Bedürfnisse   */}
                     {needs.filter((need) => this.isNeeded(need, island)).map((need, needKey) => (
                       <div key={need.id} className='my-1'>
@@ -433,7 +446,8 @@ class App extends Component {
                               {this.exactNeed(need, island).toFixed(this.precision)}
                             </span>
                             <Input type='number' bsSize='sm'
-                                   style={{width: 62,
+                                   max={99}
+                                   style={{width: 50,
                                      backgroundColor:
                                        RGB_Log_Blend(
                                          Math.min(Math.max(this.exactNeed(need, island).toFixed(this.precision) - island.buildings[need.key], 0), 1),
@@ -450,10 +464,10 @@ class App extends Component {
                         </Media>
                       </div>
                     ))}
-                    {/*</Col><Col sm={'auto'}>*/}
                     <hr/>
+                  </Col><Col sm={'auto'}>
                     {/*   Ressourcen - Farmen   */}
-                    {producers.filter(producer => !(["Baumaterial", "Konsumgüter"].includes(producer.type)) && this.isUnlocked(producer, island)).map((producer, ressourceKey) => (
+                    {producers.filter(producer => !(["Baumaterial", "Konsumgüter"].includes(producer.type)) && this.isUnlocked(producer, island)).map((producer, resourceKey) => (
                       <div key={producer.key} className='my-1'>
                         <Media>
                           <Media left>
@@ -467,9 +481,9 @@ class App extends Component {
                             </span>
                             <Input type='number' bsSize='sm'
                                    value={island.buildings[producer.key]}
-                                   max={producer.max}
+                                   max={producer.max ? producer.max : 99}
                                    style={{
-                                     width: 62,
+                                     width: 50,
                                      backgroundColor:
                                        RGB_Log_Blend(
                                          Math.min(Math.max(this.exactConsumption(island.buildings, producer.key) - island.buildings[producer.key], 0), 1),
@@ -486,7 +500,8 @@ class App extends Component {
                         </Media>
                       </div>
                     ))}
-                  </Col>
+                    <hr/>
+                    </Col>
                 </Row>
               </CardBody>
             </Card>

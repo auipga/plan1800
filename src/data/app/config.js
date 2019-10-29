@@ -5,7 +5,8 @@ export var emptyIsland = [
     population: {
       level: [0, 0, 0, 0, 0],
     },
-    buildings: {}
+    buildings: {},
+    resourceWant: {}
   },
   {
     world: 2,
@@ -14,7 +15,8 @@ export var emptyIsland = [
     population: {
       level: [0, 0],
     },
-    buildings: {}
+    buildings: {},
+    resourceWant: {}
   },
   {
     world: 3,
@@ -23,7 +25,8 @@ export var emptyIsland = [
     population: {
       level: [0, 0, 0, 0, 0],
     },
-    buildings: {}
+    buildings: {},
+    resourceWant: {}
   },
 ]
 

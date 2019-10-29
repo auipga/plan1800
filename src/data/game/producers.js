@@ -15,6 +15,22 @@ export default [
     type: "Baumaterial",
     needs: ["Wood"],
   },
+  // {
+  //   key: "Wood",
+  //   tierId: 6,
+  //   requirement: 0,
+  //   productionTime: 15,
+  //   type: "Rohmaterial",
+  //   needs: [],
+  // },
+  // {
+  //   key: "Timber",
+  //   tierId: 6,
+  //   requirement: 0,
+  //   productionTime: 15,
+  //   type: "Baumaterial",
+  //   needs: ["Wood"],
+  // },
   {
     key: "Fish",
     tierId: 1,
@@ -134,7 +150,7 @@ export default [
     requirement: 500,
     productionTime: 90,
     type: "Landwirtschaftliche Produkte",
-    needs: [],
+    needs: ["fertility"],
   },
   {
     key: "Malt",
