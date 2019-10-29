@@ -64,7 +64,7 @@ export default [
     needs: [],
   },
   {
-    key: "Working_clothes",
+    key: "Work_clothes",
     tierId: 1,
     requirement: 150,
     productionTime: 30,
@@ -194,5 +194,38 @@ export default [
     productionTime: 30,
     type: "Konsumgüter",
     needs: ["Plantains", "Fish_Oil"],
+  },
+
+  {
+    key: "Sugar_cane",
+    tierId: 6,
+    requirement: 100,
+    productionTime: 30,
+    type: "Landwirtschaftliche Produkte",
+    needs: ["fertility"],
+  },
+  {
+    key: "Rum",
+    tierId: 6,
+    requirement: 100,
+    productionTime: 30,
+    type: "Konsumgüter",
+    needs: ["Wood", "Sugar_cane"],
+  },
+  {
+    key: "Alpaca_wool",
+    tierId: 6,
+    requirement: 200,
+    productionTime: 30,
+    type: "Landwirtschaftliche Produkte",
+    needs: ["harbour"],
+  },
+  {
+    key: "Ponchos",
+    tierId: 6,
+    requirement: 200,
+    productionTime: 30,
+    type: "Konsumgüter",
+    needs: ["Alpaca_wool"],
   },
 ]
