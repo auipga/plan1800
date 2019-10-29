@@ -1,6 +1,6 @@
 export default [
     {
-      id: "Wood",
+      id: 1,
       key: "Wood",
       tierId: 1,
       requirement: 0,
@@ -10,7 +10,7 @@ export default [
       provides: "Wood",
     },
     {
-      id: "Potato",
+      id: 2,
       key: "Potato",
       tierId: 1,
       requirement: 100,
@@ -20,7 +20,7 @@ export default [
       provides: "Potato",
     },
     {
-      id: "Wool",
+      id: 3,
       key: "Wool",
       tierId: 1,
       requirement: 150,
@@ -30,7 +30,7 @@ export default [
       provides: "Wool",
     },
     {
-      id: "Clay",
+      id: 4,
       key: "Clay",
       tierId: 2,
       requirement: 1,
@@ -41,7 +41,7 @@ export default [
       max: 4
     },
     {
-      id: "Clay",
+      id: 5,
       key: "Clay",
       tierId: 7,
       requirement: 1,
@@ -52,13 +52,53 @@ export default [
       max: 4
     },
     {
-      id: "Pigs",
+      id: 6,
       key: "Pigs",
       tierId: 2,
       requirement: 1,
       buildingName: "Schweinefarm",
       resourceName: "Schweine",
-      productionTime: 30,
+      productionTime: 60,
       provides: "Pigs",
+    },
+    {
+      id: 7,
+      key: "Grain",
+      tierId: 2,
+      requirement: 150,
+      buildingName: "Getreidefeld",
+      resourceName: "Getreide",
+      productionTime: 60,
+      provides: "Grain",
+    },
+    {
+      id: 8,
+      key: "Hops",
+      tierId: 2,
+      requirement: 500,
+      buildingName: "Hopfenfarm",
+      resourceName: "Hopfen",
+      productionTime: 90,
+      provides: "Hops",
+    },
+    {
+      id: 9,
+      key: "Plantains",
+      tierId: 6,
+      requirement: 50,
+      buildingName: "Plantains Plantain",
+      resourceName: "Plantains",
+      productionTime: 30,
+      provides: "Plantains",
+    },
+    {
+      id: 10,
+      key: "Fish_Oil",
+      tierId: 6,
+      requirement: 50,
+      buildingName: "Fish Oil Factory",
+      resourceName: "Fish Oil",
+      productionTime: 30,
+      provides: "Fish_Oil",
     },
   ]
