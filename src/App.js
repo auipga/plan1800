@@ -9,8 +9,7 @@ import {trans} from "./functions/translation";
 import tiers from "./data/game/tiers";
 import worlds from "./data/game/worlds";
 import needs from "./data/game/needs";
-import farms from "./data/game/farms";
-import ressources from "./data/game/ressources";
+import producers from "./data/game/producers";
 import * as config from "./data/app/config";
 
 const debugEnabled = true
@@ -88,14 +87,17 @@ class App extends Component {
     //   .filter((l,lKey) => islandTierKey.indexOf(lKey) > -1)
     //   .reduce((prev, next, i) => prev + island.population.level[needTierKey[i]] / next, 0);
   }
-  exactConsumption = (buildings, ressource) => {
-    let provider = farms.find((farm) => this.isProvidingRessource(farm, ressource))
-    let consumers = ([...needs, ...ressources])
+  exactConsumption = (buildings, ressourceKey) => {
+    let provider = producers.find((producer) => this.isProvidingRessource(producer, ressourceKey))
+    // d(ressourceKey, buildings)
+    // d("provider", provider)
+    let consumers = producers
       // .filter((farm) => () => buildings.indexOf(farm.key))
-      .filter((farm) => this.isConsumingRessource(farm, ressource))
-    // let consumers = this.needs.filter((farm) => this.isConsumingRessource(farm, ressource))
+      .filter((producer) => this.isConsumingRessource(producer, ressourceKey))
+    // let consumers = this.needs.filter((farm) => this.isConsumingRessource(farm, ressourceKey))
+    // d("consumers",consumers)
 
-    let consumption = consumers.reduce((prev, next, i) => prev + buildings[next.key] * next.productionTime / provider.productionTime, 0)
+    let consumption = consumers.reduce((prev, next, i) => prev + buildings[next.key] * provider.productionTime / next.productionTime, 0)
 
     return consumption
   }
@@ -237,16 +239,17 @@ class App extends Component {
     }
     return unlocked;
   };
-  isProvidingRessource = (building, ressource) => {
-    return building.provides === ressource.key
+  isProvidingRessource = (building, ressourceKey) => {
+    return building.key === ressourceKey
+    // return building.provides === ressourceKey
   };
-  isConsumingRessource = (building, ressource) => {
+  isConsumingRessource = (building, ressourceKey) => {
     // d('finding '+ressource.id)//, building.needs.indexOf(ressource.id))
     if (undefined === building.needs) {
       return false;
     }
     // d(building.needs)
-    return -1 < building.needs.indexOf(ressource.key)
+    return building.needs.includes(ressourceKey)
   };
 
   switchWorld = (worldKey) => {
@@ -392,7 +395,7 @@ class App extends Component {
                 <Row>
                   <Col sm={'auto'} className='ml-auto-'>
                     {/*   Ressourcen - Baumaterial   */}
-                    {ressources.filter((ressource) => this.isUnlocked(ressource, island)).map((ressource, ressourceKey) => (
+                    {producers.filter(ressource => ressource.type === "Baumaterial" && this.isUnlocked(ressource, island)).map((ressource, ressourceKey) => (
                       <div key={ressource.key} className='my-1'>
                         <Media>
                           <Media left>
@@ -450,34 +453,34 @@ class App extends Component {
                     {/*</Col><Col sm={'auto'}>*/}
                     <hr/>
                     {/*   Ressourcen - Farmen   */}
-                    {farms.filter(ressource => this.isUnlocked(ressource, island)).map((ressource, ressourceKey) => (
-                      <div key={ressource.key} className='my-1'>
+                    {producers.filter(producer => !(["Baumaterial", "Konsumgüter"].includes(producer.type)) && this.isUnlocked(producer, island)).map((producer, ressourceKey) => (
+                      <div key={producer.key} className='my-1'>
                         <Media>
                           <Media left>
-                            <Media object src={"./icons/goods/" + ressource.key + ".png"} alt={ressource.resourceName}
+                            <Media object src={"./icons/goods/" + producer.key + ".png"} title={producer.key} alt={producer.key}
                                    middle style={{height: 30, width: 30}} className='mr-2'
                             />
                           </Media>
                           <Media body className='align-self-center form-inline'>
                             <span className="mr-2">
-                              {this.exactConsumption(island.buildings, ressource).toFixed(this.precision)}
+                              {this.exactConsumption(island.buildings, producer.key).toFixed(this.precision)}
                             </span>
                             <Input type='number' bsSize='sm'
-                                   value={island.buildings[ressource.key]}
-                                   max={ressource.max}
+                                   value={island.buildings[producer.key]}
+                                   max={producer.max}
                                    style={{
                                      width: 62,
                                      backgroundColor:
                                        RGB_Log_Blend(
-                                         Math.min(Math.max(this.exactConsumption(island.buildings, ressource) - island.buildings[ressource.key], 0), 1),
+                                         Math.min(Math.max(this.exactConsumption(island.buildings, producer.key) - island.buildings[producer.key], 0), 1),
                                          // 'rgba(100,200,255,0.5)',
                                          'rgba(100,255,100,0.5)',
                                          'rgba(255,50,50,0.5)',
                                        ),
                                    }}
                               // className={'mr-2 text-center px-1'}
-                                   className={'mr-2 text-center px-1' + (this.exactConsumption(island.buildings, ressource) > island.buildings[ressource.key] ? ' is-invalid' : '')}
-                                   onChange={e => this.setBuildingCount(island.id, ressource.key, e.target.value)}
+                                   className={'mr-2 text-center px-1' + (this.exactConsumption(island.buildings, producer.key) > island.buildings[producer.key] ? ' is-invalid' : '')}
+                                   onChange={e => this.setBuildingCount(island.id, producer.key, e.target.value)}
                             />
                           </Media>
                         </Media>
