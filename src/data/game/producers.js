@@ -5,6 +5,7 @@ export default [
     requirement: 0,
     productionTime: 15,
     type: "Rohmaterial",
+    provides: "Wood",
     needs: [],
   },
   {
@@ -13,30 +14,34 @@ export default [
     requirement: 0,
     productionTime: 15,
     type: "Baumaterial",
+    provides: "Timber",
     needs: ["Wood"],
   },
-  // {
-  //   key: "Wood",
-  //   tierId: 6,
-  //   requirement: 0,
-  //   productionTime: 15,
-  //   type: "Rohmaterial",
-  //   needs: [],
-  // },
-  // {
-  //   key: "Timber",
-  //   tierId: 6,
-  //   requirement: 0,
-  //   productionTime: 15,
-  //   type: "Baumaterial",
-  //   needs: ["Wood"],
-  // },
+  {
+    key: "Wood_2",
+    tierId: 6,
+    requirement: 0,
+    productionTime: 15,
+    type: "Rohmaterial",
+    provides: "Wood",
+    needs: [],
+  },
+  {
+    key: "Timber_2",
+    tierId: 6,
+    requirement: 0,
+    productionTime: 15,
+    type: "Baumaterial",
+    provides: "Timber",
+    needs: ["Wood"],
+  },
   {
     key: "Fish",
     tierId: 1,
     requirement: 50,
     productionTime: 15,
     type: "Konsumgüter",
+    provides: "Fish",
     needs: [],
   },
   {
@@ -45,6 +50,7 @@ export default [
     requirement: 100,
     productionTime: 30,
     type: "Landwirtschaftliche Produkte",
+    provides: "Potato",
     needs: ["fertility"],
   },
   {
@@ -53,6 +59,7 @@ export default [
     requirement: 100,
     productionTime: 30,
     type: "Konsumgüter",
+    provides: "Schnapps",
     needs: ["Potato"],
   },
   {
@@ -61,6 +68,7 @@ export default [
     requirement: 150,
     productionTime: 30,
     type: "Landwirtschaftliche Produkte",
+    provides: "Wool",
     needs: [],
   },
   {
@@ -69,6 +77,7 @@ export default [
     requirement: 150,
     productionTime: 30,
     type: "Konsumgüter",
+    provides: "Work_clothes",
     needs: ["Wool"],
   },
   {
@@ -77,6 +86,7 @@ export default [
     requirement: 1,
     productionTime: 30,
     type: "Rohmaterial",
+    provides: "Clay",
     needs: [],
     max: 4
   },
@@ -86,6 +96,7 @@ export default [
     requirement: 1,
     productionTime: 60,
     type: "Baumaterial",
+    provides: "Bricks",
     needs: ["Clay"],
   },
   {
@@ -94,6 +105,7 @@ export default [
     requirement: 1,
     productionTime: 60,
     type: "Landwirtschaftliche Produkte",
+    provides: "Pigs",
     needs: [],
   },
   {
@@ -102,6 +114,7 @@ export default [
     requirement: 1,
     productionTime: 60,
     type: "Konsumgüter",
+    provides: "Sausages",
     needs: ["Pigs"],
   },
   {
@@ -110,6 +123,7 @@ export default [
     requirement: 150,
     productionTime: 60,
     type: "Landwirtschaftliche Produkte",
+    provides: "Grain",
     needs: ["fertility"],
   },
   {
@@ -118,6 +132,7 @@ export default [
     requirement: 150,
     productionTime: 30,
     type: "Baumaterial",
+    provides: "Sails",
     needs: ["Wool"],
   },
   {
@@ -126,6 +141,7 @@ export default [
     requirement: 150,
     productionTime: 30,
     type: "Zwischenprodukte",
+    provides: "Flour",
     needs: ["Grain"],
   },
   {
@@ -134,6 +150,7 @@ export default [
     requirement: 150,
     productionTime: 60,
     type: "Konsumgüter",
+    provides: "Bread",
     needs: ["Flour"],
   },
   {
@@ -142,6 +159,7 @@ export default [
     requirement: 300,
     productionTime: 15,
     type: "Rohmaterial",
+    provides: "Iron",
     needs: [],
     max: 3 //todo dynamic
   },
@@ -151,6 +169,16 @@ export default [
     requirement: 300,
     productionTime: 30,
     type: "Rohmaterial",
+    provides: "Coal",
+    needs: [],
+  },
+  {
+    key: "Coal",
+    tierId: 3,
+    requirement: 250,
+    productionTime: 15,
+    type: "Rohmaterial",
+    provides: "Coal",
     needs: [],
   },
   {
@@ -159,7 +187,8 @@ export default [
     requirement: 300,
     productionTime: 30,
     type: "Zwischenprodukte",
-    needs: ["Iron", "Charcoal_kiln"],
+    provides: "Furnace",
+    needs: ["Iron", "Coal"],
   },
   {
     key: "Steel_beams",
@@ -167,6 +196,7 @@ export default [
     requirement: 300,
     productionTime: 45,
     type: "Baumaterial",
+    provides: "Steel_beams",
     needs: ["Furnace"],
   },
   {
@@ -175,6 +205,7 @@ export default [
     requirement: 300,
     productionTime: 90,
     type: "Baumaterial",
+    provides: "Weapons",
     needs: ["Furnace"],
   },
   {
@@ -183,6 +214,7 @@ export default [
     requirement: 300,
     productionTime: 60,
     type: "Zwischenprodukte",
+    provides: "Tallow",
     needs: ["Pigs"],
   },
   {
@@ -191,6 +223,7 @@ export default [
     requirement: 300,
     productionTime: 30,
     type: "Konsumgüter",
+    provides: "Soap",
     needs: ["Tallow"],
   },
   {
@@ -199,6 +232,7 @@ export default [
     requirement: 500,
     productionTime: 90,
     type: "Landwirtschaftliche Produkte",
+    provides: "Hops",
     needs: ["fertility"],
   },
   {
@@ -207,14 +241,17 @@ export default [
     requirement: 500,
     productionTime: 30,
     type: "Zwischenprodukte",
+    provides: "Malt",
     needs: ["Grain"],
   },
+
   {
     key: "Beer",
     tierId: 2,
     requirement: 500,
     productionTime: 60,
     type: "Konsumgüter",
+    provides: "Beer",
     needs: ["Malt", "Hops"],
   },
 
@@ -226,6 +263,7 @@ export default [
     requirement: 50,
     productionTime: 30,
     type: "Landwirtschaftliche Produkte",
+    provides: "Plantains",
     needs: ["fertility"],
   },
   {
@@ -234,6 +272,7 @@ export default [
     requirement: 50,
     productionTime: 30,
     type: "Landwirtschaftliche Produkte",
+    provides: "Fish_Oil",
     needs: ["harbour"],
   },
   {
@@ -242,6 +281,7 @@ export default [
     requirement: 50,
     productionTime: 30,
     type: "Konsumgüter",
+    provides: "Fried_plantains",
     needs: ["Plantains", "Fish_Oil"],
   },
 
@@ -251,6 +291,7 @@ export default [
     requirement: 100,
     productionTime: 30,
     type: "Landwirtschaftliche Produkte",
+    provides: "Sugar_cane",
     needs: ["fertility"],
   },
   {
@@ -259,6 +300,7 @@ export default [
     requirement: 100,
     productionTime: 30,
     type: "Konsumgüter",
+    provides: "Rum",
     needs: ["Wood", "Sugar_cane"],
   },
   {
@@ -267,7 +309,8 @@ export default [
     requirement: 200,
     productionTime: 30,
     type: "Landwirtschaftliche Produkte",
-    needs: ["harbour"],
+    provides: "Alpaca_wool",
+    needs: [],
   },
   {
     key: "Ponchos",
@@ -275,6 +318,7 @@ export default [
     requirement: 200,
     productionTime: 30,
     type: "Konsumgüter",
+    provides: "Ponchos",
     needs: ["Alpaca_wool"],
   },
 ]

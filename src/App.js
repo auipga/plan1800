@@ -87,15 +87,15 @@ class App extends Component {
     //   .filter((l,lKey) => islandTierKey.indexOf(lKey) > -1)
     //   .reduce((prev, next, i) => prev + island.population.level[needTierKey[i]] / next, 0);
   }
-  exactConsumption = (buildings, resourceKey) => {
+  exactConsumption = (buildings, resource) => {
     let provider = producers
-      .find(producer => producer.key === resourceKey) // isProvidingResource
-    // d(resourceKey)
+      .find(producer => producer.provides === resource) // isProvidingResource
+    // d(resource)
     // d("provider", provider)
     let consumers = producers
       .filter(producer => buildings[producer.key] !== undefined) // noch nie gebaut
-      .filter(producer => producer.needs.includes(resourceKey)) // isConsumingResource
-    // let consumers = this.needs.filter((farm) => this.isConsumingResource(farm, resourceKey))
+      .filter(producer => producer.needs.includes(resource)) // isConsumingResource
+    // let consumers = this.needs.filter((farm) => this.isConsumingResource(farm, resource))
     // d("consumers",consumers)
 
     let consumption = consumers.reduce((prev, next, i) => prev + buildings[next.key] * provider.productionTime / next.productionTime, 0)
@@ -320,12 +320,12 @@ class App extends Component {
                 <img src={'./icons/Icon_plus.png'} alt='Hinzufügen' style={{width: 36, height: 36}}/>
               </Button>
               {this.state.islands.filter(island => island.world === this.state.activeWorld).map((island, islandKey) => (
-               <Button key={island.id} title={island.name}
+               <Button key={island.id} title={island.name + " (" + island.id + ")"}
                        className={'mr-2 '}
                        active={this.state.activeIslands[this.state.activeWorld] === island.id}
                        onClick={() => this.switchIsland(island.id)}
                >
-                 {island.name} ({island.id})
+                 {island.name}
                </Button>
               ))}
               {dd(jst(this.state.activeIslands[this.state.activeWorld]), " ",
@@ -456,7 +456,11 @@ class App extends Component {
                                          'rgba(255,50,50,0.5)',
                                        ),
                                    }}
-                                   className={'mr-2 text-center px-1' + (this.exactNeed(need, island).toFixed(this.precision) > island.buildings[need.key] ? ' is-invalid' : '')}
+                                   className={
+                                     'mr-2 text-center px-1'
+                                     + (this.exactNeed(need, island).toFixed(this.precision) > island.buildings[need.key] ? ' is-invalid' : '')
+                                     + (this.exactNeed(need, island).toFixed(this.precision) < island.buildings[need.key] ? ' border-primary' : '')
+                                   }
                                    onChange={e => this.setBuildingCount(island.id, need.key, e.target.value)}
                                    value={island.buildings[need.key]}
                             />
@@ -477,23 +481,27 @@ class App extends Component {
                           </Media>
                           <Media body className='align-self-center form-inline'>
                             <span className="mr-2">
-                              {this.exactConsumption(island.buildings, producer.key).toFixed(this.precision)}
+                              {this.exactConsumption(island.buildings, producer.provides).toFixed(this.precision)}
                             </span>
                             <Input type='number' bsSize='sm'
                                    value={island.buildings[producer.key]}
                                    max={producer.max ? producer.max : 99}
                                    style={{
                                      width: 50,
-                                     backgroundColor:
+                                      backgroundColor:
                                        RGB_Log_Blend(
-                                         Math.min(Math.max(this.exactConsumption(island.buildings, producer.key) - island.buildings[producer.key], 0), 1),
+                                         Math.min(Math.max(this.exactConsumption(island.buildings, producer.provides) - island.buildings[producer.key], 0), 1),
                                          // 'rgba(100,200,255,0.5)',
                                          'rgba(100,255,100,0.5)',
                                          'rgba(255,50,50,0.5)',
                                        ),
                                    }}
                               // className={'mr-2 text-center px-1'}
-                                   className={'mr-2 text-center px-1' + (this.exactConsumption(island.buildings, producer.key) > island.buildings[producer.key] ? ' is-invalid' : '')}
+                                   className={
+                                     'mr-2 text-center px-1'
+                                     + (this.exactConsumption(island.buildings, producer.provides) > island.buildings[producer.key] ? ' is-invalid' : '')
+                                     + (this.exactConsumption(island.buildings, producer.provides) < island.buildings[producer.key] ? ' border-primary' : '')
+                                   }
                                    onChange={e => this.setBuildingCount(island.id, producer.key, e.target.value)}
                             />
                           </Media>
