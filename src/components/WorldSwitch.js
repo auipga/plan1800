@@ -22,13 +22,15 @@ export default class WorldSwitch extends Component {
       return elemWorldButton
     }
 
+    let unlockCondition = worlds.find(w => w.id === world.id).unlock
     let firstIsland = islands.find(() => true);
     let planable, startable, unlockable = false
 
     if (firstIsland) {
+      let number = firstIsland.population.level[unlockCondition[0]-1]
       planable = false
       startable = false
-      unlockable = true
+      unlockable = islands.length && number >= unlockCondition[1]
     }
 
     return (
