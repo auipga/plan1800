@@ -19,9 +19,9 @@ const jst = JSON.stringify
 const jpa = JSON.parse
 const jcl = foo => jpa(jst(foo)) // clone function
 const cl = console.log
+// eslint-disable-next-line
 const d = debugEnabled ? cl : () => null
 const dd = debugEnabled ? (...foo) => <div className='d-inline-block font-italic text-break'>{foo}</div> : () => null
-const dst = foo => d(jst(foo))
 
 class App extends Component {
   step = 50;
@@ -222,7 +222,7 @@ class App extends Component {
     let anyAboveRequirementExists = 0 < island.population.level.slice(islandTierKey[1]).reduce((prev, next) => prev + next, 0);
 
     let needed = firstTierRequireCount >= need.requirement || oneAboveRequirementExists
-             || (firstTierRequireCount > 0                 && anyAboveRequirementExists);
+      ||        (firstTierRequireCount > 0                 && anyAboveRequirementExists);
 
     if (needed && isNaN(island.buildings[need.key])) {
       island.buildings[need.key] = 0;
@@ -255,9 +255,9 @@ class App extends Component {
     return unlocked;
   };
 
-  switchWorld = (worldKey) => {
+  switchWorld = (worldId) => {
     let activeWorld = this.state.activeWorld
-    activeWorld = worldKey
+    activeWorld = worldId
 
     this.setState(prevState => ({
       ...prevState,
@@ -338,7 +338,8 @@ class App extends Component {
                       />
                     ))}
                     <hr/>
-                  </Col><Col sm={'auto'}>
+                  </Col>
+                  <Col sm={'auto'}>
                     {/*   Ressourcen - Bedürfnisse   */}
                     {needs.filter((need) => this.isNeeded(need, island)).map((need, needKey) => (
                       <IslandNeeds
@@ -349,7 +350,8 @@ class App extends Component {
                       />
                     ))}
                     <hr/>
-                  </Col><Col sm={'auto'}>
+                  </Col>
+                  <Col sm={'auto'}>
                     {/*   Ressourcen - Farmen   */}
                     {producers.filter(producer => !(["Baumaterial", "Konsumgüter"].includes(producer.type)) && this.isUnlocked(producer, island)).map((producer, resourceKey) => (
                       <Producer
@@ -360,12 +362,11 @@ class App extends Component {
                       />
                     ))}
                     <hr/>
-                    </Col>
+                  </Col>
                 </Row>
               </CardBody>
             </Card>
           ))}
-
         </Container>
       </div>
     );
