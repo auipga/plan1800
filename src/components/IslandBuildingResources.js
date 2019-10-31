@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types/';
 import {Input} from "reactstrap";
 import GoodItem from "./GoodItem";
-import {RGB_Log_Blend} from "../functions/color";
+import BuildingInput from "./BuildingInput";
 
 export default class IslandBuildingResources extends Component {
   render() {
@@ -18,21 +18,13 @@ export default class IslandBuildingResources extends Component {
           value={island.resourceWant[resource.key]}
           onChange={e => fnSetResourceWantCount(island.id, resource.key, e.target.value)}
         />
-        <Input
-          type='number' bsSize='sm'
-          max={99}
-          style={{width: 50,
-            backgroundColor:
-              RGB_Log_Blend(
-                Math.min(Math.max(island.resourceWant[resource.key] - island.buildings[resource.key], 0), 1),
-                // 'rgba(100,200,255,0.5)',
-                'rgba(100,255,100,0.5)',
-                'rgba(255,50,50,0.5)',
-              ),
-          }}
-          className={'mr-2 text-center px-1' + (island.buildings[resource.key] < island.resourceWant[resource.key] ? ' is-invalid' : '')}
-          onChange={e => fnSetBuildingCount(island.id, resource.key, e.target.value)}
-          value={island.buildings[resource.key]}
+        <BuildingInput
+          blend={island.resourceWant[resource.key] - island.buildings[resource.key]}
+          // max={1}
+          buildingCount={island.buildings[resource.key]}
+          buildingKey={resource.key}
+          islandId={island.id}
+          fnSetBuildingCount={fnSetBuildingCount}
         />
       </GoodItem>
     )
