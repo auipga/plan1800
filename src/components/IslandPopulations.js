@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types/';
 import {Button, ButtonGroup, Col, Input, InputGroup, InputGroupAddon, Row} from "reactstrap";
 import tiers from "../data/game/tiers";

@@ -8,11 +8,9 @@ export default class IslandNeeds extends Component {
   render() {
     const { need, island, exactNeed, fnSetBuildingCount } = this.props;
 
-    let exactNeedF = exactNeed.toFixed(2)
-
     return (
       <GoodItem resource={need}>
-        <span className="mr-2">{exactNeedF}</span>
+        <span className="mr-2">{exactNeed.toFixed(2)}</span>
 
         <Input
           type='number' bsSize='sm'

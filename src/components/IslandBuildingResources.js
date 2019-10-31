@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types/';
 import {Input} from "reactstrap";
 import GoodItem from "./GoodItem";
@@ -12,9 +12,9 @@ export default class IslandBuildingResources extends Component {
       <GoodItem resource={resource}>
         <Input
           type='number' bsSize='sm'
-          max={99}
           style={{width: 31}}
           className={'mr-2 text-center px-1' + (island.resourceWant[resource.key] <= 0 && island.id === 1 ? ' is-invalid' : '')}
+          max={99}
           value={island.resourceWant[resource.key]}
           onChange={e => fnSetResourceWantCount(island.id, resource.key, e.target.value)}
         />

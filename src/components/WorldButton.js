@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {Button} from "reactstrap/es";
 import {trans} from "../functions/translation";
 import PropTypes from 'prop-types/';
