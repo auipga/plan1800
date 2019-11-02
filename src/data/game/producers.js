@@ -39,7 +39,7 @@ export default [
     key: "Fish",
     tierId: 1,
     requirement: 50,
-    productionTime: 15,
+    productionTime: 30,
     type: "Konsumgüter",
     provides: "Fish",
     needs: [],
@@ -173,15 +173,6 @@ export default [
     needs: [],
   },
   {
-    key: "Coal",
-    tierId: 3,
-    requirement: 250,
-    productionTime: 15,
-    type: "Rohmaterial",
-    provides: "Coal",
-    needs: [],
-  },
-  {
     key: "Furnace",
     tierId: 2,
     requirement: 300,
@@ -244,7 +235,6 @@ export default [
     provides: "Malt",
     needs: ["Grain"],
   },
-
   {
     key: "Beer",
     tierId: 2,
@@ -253,6 +243,16 @@ export default [
     type: "Konsumgüter",
     provides: "Beer",
     needs: ["Malt", "Hops"],
+  },
+
+  {
+    key: "Coal",
+    tierId: 3,
+    requirement: 250,
+    productionTime: 15,
+    type: "Rohmaterial",
+    provides: "Coal",
+    needs: [],
   },
 
 

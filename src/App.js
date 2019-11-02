@@ -13,7 +13,6 @@ import IslandPopulations from "./components/IslandPopulations";
 import Producer from "./components/Producer";
 import IslandNeeds from "./components/IslandNeeds";
 import IslandBuildingResources from "./components/IslandBuildingResources";
-import DarkModeButton from "./components/DarkModeButton";
 
 const debugEnabled = true
 const jst = JSON.stringify
@@ -342,7 +341,7 @@ class App extends Component {
               ))}
               {dd(jst(this.state.activeWorld), " ", jst(this.state.worlds),)}
               <ResetButton resetFunction={this.reset}/>
-              <DarkModeButton fnToggleDarkMode={this.toggleDarkMode} />
+              <Button onClick={this.toggleDarkMode} className='btn-success float-right mr-3'>Dark</Button>
             </CardHeader>
             {/*   Insel auswahl   */}
             <CardBody className={'overflow-auto text-nowrap'}>
@@ -380,8 +379,8 @@ class App extends Component {
               <CardBody>
                 {dd(jst(this.state.islands.find(i => i.id === this.state.activeIslands[this.state.activeWorld]).buildings))}
                 <Row>
+                  {/*   Ressourcen - Baumaterial   */}
                   <Col sm={'auto'} className='ml-auto-'>
-                    {/*   Ressourcen - Baumaterial   */}
                     {producers.filter(resource => resource.type === "Baumaterial" && this.isUnlocked(resource, island)).map((resource, resourceKey) => (
                       <IslandBuildingResources
                         island={island}
@@ -392,8 +391,8 @@ class App extends Component {
                     ))}
                     <hr/>
                   </Col>
+                  {/*   Ressourcen - Bedürfnisse   */}
                   <Col sm={'auto'}>
-                    {/*   Ressourcen - Bedürfnisse   */}
                     {needs.filter((need) => this.isNeeded(need, island)).map((need, needKey) => (
                       <IslandNeeds
                         island={island}
@@ -405,8 +404,8 @@ class App extends Component {
                     ))}
                     <hr/>
                   </Col>
+                  {/*   Ressourcen - Farmen   */}
                   <Col sm={'auto'}>
-                    {/*   Ressourcen - Farmen   */}
                     {producers.filter(producer => !(["Baumaterial", "Konsumgüter"].includes(producer.type)) && this.isUnlocked(producer, island)).map((producer, resourceKey) => (
                       <Producer
                         island={island}
