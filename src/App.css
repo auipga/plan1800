@@ -1,3 +1,6 @@
 .form-control.is-invalid, .was-validated .form-control:invalid {
     background-image: none !important;
 }
+body.bg-secondary {
+    color: #ffffff !important;
+}

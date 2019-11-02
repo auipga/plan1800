@@ -13,6 +13,7 @@ import IslandPopulations from "./components/IslandPopulations";
 import Producer from "./components/Producer";
 import IslandNeeds from "./components/IslandNeeds";
 import IslandBuildingResources from "./components/IslandBuildingResources";
+import DarkModeButton from "./components/DarkModeButton";
 
 const debugEnabled = true
 const jst = JSON.stringify
@@ -46,6 +47,8 @@ class App extends Component {
     if (!this.state.islands.length) {
       this.addIsland(1)
     }
+    // initialise darkMode in index.html
+    document.getElementsByTagName('body')[0].classList.toggle('bg-secondary', this.state.darkMode)
   }
 
   reset = () => {
@@ -61,6 +64,17 @@ class App extends Component {
     this.saveLogic.timeout = setTimeout(() => {
       localStorage.setItem('state', jst(this.state));
     }, this.saveLogic.waitMs)
+  }
+
+  toggleDarkMode = () => {
+    let darkMode = !this.state.darkMode
+
+    document.getElementsByTagName('body')[0].classList.toggle('bg-secondary', darkMode)
+
+    this.setState(prevState => ({
+      ...prevState,
+      darkMode: darkMode
+    }), this.persistState);
   }
 
   exactNeed = (need, island) => {
@@ -278,7 +292,7 @@ class App extends Component {
     return (
       <div className="App">
         <Container fluid>
-          <Card className={'my-3 bg-dark-'}>
+          <Card className={'my-3' + (this.state.darkMode ? ' bg-dark' : '')}>
             {/*   Welt auswahl   */}
             <CardHeader>
               {worlds.map((world, worldKey) => (
@@ -294,6 +308,7 @@ class App extends Component {
               ))}
               {dd(jst(this.state.activeWorld), " ", jst(this.state.worlds),)}
               <ResetButton resetFunction={this.reset}/>
+              <DarkModeButton fnToggleDarkMode={this.toggleDarkMode} />
             </CardHeader>
             {/*   Insel auswahl   */}
             <CardBody className={'overflow-auto text-nowrap'}>
@@ -308,7 +323,7 @@ class App extends Component {
             </CardBody>
           </Card>
           {this.state.islands.filter(island => island.id === this.state.activeIslands[this.state.activeWorld]).map((island, islandKey) => (
-            <Card key={island.id} className={'mb-3 bg-dark-'}>
+            <Card key={island.id} className={'my-3' + (this.state.darkMode ? ' bg-dark' : '')}>
               {/*   Inselname & Bevölkerung   */}
               <CardHeader>
                 <Input value={island.name} onChange={e => this.setIslandName(island.id, e.target.value)} style={{maxWidth: 300}} className={'d-inline-block mr-3'}/>
