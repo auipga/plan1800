@@ -75,37 +75,6 @@ class App extends Component {
     }), this.persistState);
   }
 
-  /**
-   * @todo remove?
-   * @deprecated
-   */
-  exactNeed = (need, island) => {
-    // [1,2,3,4,5]
-    // [6,7]
-    let keys = worlds.find(w => w.id === island.world).socialClassIDs
-
-    // [0,1]
-    let islandTierKey = [];
-    let needTierKey = [];
-
-    // need.tierIDs = [1, 2, 6, 7]
-    for (let b in need.tierIDs) {
-      let a = keys.indexOf(need.tierIDs[b]);
-      // d(b, a, need.tierIDs[b])
-      if (a > -1) {
-        islandTierKey.push(a)
-        needTierKey.push(b)
-      }
-    }
-
-    return island.population.level
-      .filter((l,lKey) => islandTierKey.indexOf(lKey) > -1)
-      .reduce((prev, next, i) => prev + ((next / need.consumption_denominator[needTierKey[i]])), 0);
-    // return need.consumption_denominator
-    //   .filter((l,lKey) => islandTierKey.indexOf(lKey) > -1)
-    //   .reduce((prev, next, i) => prev + island.population.level[needTierKey[i]] / next, 0);
-  }
-
   populationWithTierIDs = (worldId, population) => {
     let socialClassIDs = worlds.find(w => w.id === worldId).socialClassIDs
     return population.reduce((prev, next, i) => ({...prev, [parseInt(socialClassIDs[i])]: next}), {});
@@ -134,23 +103,6 @@ class App extends Component {
     )
   }
 
-  /** @deprecated*/
-  exactConsumption = (buildings, producer) => {
-    let resource = producer.provides
-    let provider = producers
-      .find(producer => producer.provides === resource) // isProvidingResource
-    // d(resource)
-    // d("provider", provider)
-    let consumers = producers
-      .filter(producer => buildings[producer.key] !== undefined) // noch nie gebaut
-      .filter(producer => producer.needs.includes(resource)) // isConsumingResource
-    // let consumers = this.needs.filter((farm) => this.isConsumingResource(farm, resource))
-    // d("consumers",consumers)
-
-    let consumption = consumers.reduce((prev, next, i) => prev + buildings[next.key] * provider.productionTime / next.productionTime, 0)
-
-    return consumption
-  }
   changePopulationLevel = (id, tierKey, direction, move = false, relativeTarget = 0) => {
     let number = direction * this.step
     let population = this.state.islands.find((i) => i.id === id).population.level;
@@ -396,7 +348,6 @@ class App extends Component {
                       <Building
                         island={island}
                         needOrProducer={need}
-                        consumption={this.exactNeed(need, island)/** @todo remove? */}
                         balance={this.calculateBalance(need.key, island.buildings, this.populationWithTierIDs(island.world, island.population.level))}
                         fnSetBuildingCount={this.setBuildingCount}
                       />
@@ -409,7 +360,6 @@ class App extends Component {
                       <Building
                         island={island}
                         needOrProducer={producer}
-                        consumption={this.exactConsumption(island.buildings, producer)}
                         balance={this.calculateBalance(producer.provides, island.buildings)}
                         fnSetBuildingCount={this.setBuildingCount}
                       />
