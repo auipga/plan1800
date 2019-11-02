@@ -77,6 +77,10 @@ class App extends Component {
     }), this.persistState);
   }
 
+  /**
+   * @todo remove?
+   * @deprecated
+   */
   exactNeed = (need, island) => {
     // [1,2,3,4,5]
     // [6,7]
@@ -103,6 +107,36 @@ class App extends Component {
     //   .filter((l,lKey) => islandTierKey.indexOf(lKey) > -1)
     //   .reduce((prev, next, i) => prev + island.population.level[needTierKey[i]] / next, 0);
   }
+
+  populationWithTierIDs = (worldId, population) => {
+    let socialClassIDs = worlds.find(w => w.id === worldId).socialClassIDs
+    return population.reduce((prev, next, i) => ({...prev, [parseInt(socialClassIDs[i])]: next}), {});
+  }
+  productionPerTick = (resource, buildings) => {
+    return producers
+      .filter(p => buildings[p.key] !== undefined) // omit buildings not (yet) built
+      .filter(p => p.provides === resource)        // only providers of that resource
+      .reduce((prev, next, i) => prev + buildings[next.key] * 60 / next.productionTime, 0)
+  }
+  consumptionThroughBuildingsPerTick = (resource, buildings) => {
+    return producers
+      .filter(p => buildings[p.key] !== undefined) // noch nie gebaut
+      .filter(p => p.needs.includes(resource)) // isConsumingResource
+      .reduce((prev, next, i) => prev + buildings[next.key] * 60 / next.productionTime, 0)
+  }
+  consumptionThroughPopulationPerTick = (resource, population) => {
+    let need = needs.find(n => n.key === resource)
+    return need.tierIDs.filter(id => population[id] !== undefined).reduce((prev, next, i) => prev + population[next] * need.consumption[i], 0)
+  }
+  calculateBalance = (resource, buildings, population = false) => {
+    return (
+      + this.productionPerTick(resource, buildings)
+      - this.consumptionThroughBuildingsPerTick(resource, buildings)
+      - (false === population ? 0 : this.consumptionThroughPopulationPerTick(resource, population))
+    )
+  }
+
+  /** @deprecated*/
   exactConsumption = (buildings, producer) => {
     let resource = producer.provides
     let provider = producers
@@ -336,7 +370,11 @@ class App extends Component {
               </CardHeader>
               {/*   Bevölkerungsstufen   */}
               <IslandPopulations
-                island={island} fnChangePopulationLevel={this.changePopulationLevel} fnHandleWheel={this.handleWheel} fnSetPopulationLevel={this.setPopulationLevel} />
+                island={island}
+                fnChangePopulationLevel={this.changePopulationLevel}
+                fnHandleWheel={this.handleWheel}
+                fnSetPopulationLevel={this.setPopulationLevel}
+              />
 
               {/*   Zeug auf der Insel   */}
               <CardBody>
@@ -360,7 +398,8 @@ class App extends Component {
                       <IslandNeeds
                         island={island}
                         need={need}
-                        exactNeed={this.exactNeed(need, island)}
+                        exactNeed={this.exactNeed(need, island)/** @todo remove? */}
+                        balance={this.calculateBalance(need.key, island.buildings, this.populationWithTierIDs(island.world, island.population.level))}
                         fnSetBuildingCount={this.setBuildingCount}
                       />
                     ))}
@@ -373,6 +412,7 @@ class App extends Component {
                         island={island}
                         producer={producer}
                         consumption={this.exactConsumption(island.buildings, producer)}
+                        balance={this.calculateBalance(producer.provides, island.buildings)}
                         fnSetBuildingCount={this.setBuildingCount}
                       />
                     ))}

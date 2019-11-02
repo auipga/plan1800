@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types/';
 import GoodItem from "./GoodItem";
 import BuildingInput from "./BuildingInput";
+import Chart from "./Chart";
 
 export default class IslandNeeds extends Component {
   render() {
-    const { need, island, exactNeed, fnSetBuildingCount } = this.props;
+    const { need, island, exactNeed, balance, fnSetBuildingCount } = this.props;
 
     return (
       <GoodItem resource={need}>
@@ -18,6 +19,9 @@ export default class IslandNeeds extends Component {
           islandId={island.id}
           fnSetBuildingCount={fnSetBuildingCount}
         />
+            <span className="mr-2"><Chart balance={island.buildings[need.key] - exactNeed}/></span>{/** @todo remove? */}
+            {/*<span className="mr-2"><Chart balance={balance*producer.productionTime/60}/></span>/!** @todo remove? *!/*/}
+            <span className="mr-2"><Chart balance={balance} max={3}/></span>
       </GoodItem>
     )
   }
@@ -26,6 +30,7 @@ export default class IslandNeeds extends Component {
 IslandNeeds.propTypes = {
   need: PropTypes.object.required,
   island: PropTypes.object.required,
-  exactNeed: PropTypes.int,
+  exactNeed: PropTypes.int,/** @todo remove? */
+  balance: PropTypes.int, //.required,
   fnSetBuildingCount: PropTypes.func.required,
 };

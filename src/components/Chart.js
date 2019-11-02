@@ -1,26 +1,25 @@
 import React from 'react';
-import {RGB_Log_Blend} from "../functions/color";
+import PropTypes from 'prop-types/';
 import ReactMinimalPieChart from "react-minimal-pie-chart";
 
 export default class Chart extends React.Component {
 
   render() {
-    const { consumption } = this.props;
+    const { balance, max } = this.props;
+
+    const much = Math.abs(balance) >=10;
+    const value = balance.toFixed(much ? 0 : 1)
+
     return (
       <ReactMinimalPieChart
         data={[
           {
-            color: RGB_Log_Blend(
-              Math.min(Math.max(-consumption, 0), 1),
-              // 'rgba(100,200,255,0.5)',
-              'rgba(100,255,100,0.5)',
-              'rgba(255,50,50,0.5)',
-            ),
-            value: consumption.toPrecision(2)
+            color: balance < 0 ? 'rgba(255,50,50,0.5)' : 'rgba(100,255,100,0.5)',
+            value: value
           }
         ]}
-        background={consumption === 0 ? 'rgba(100,200,255,0.3)' : ''}
-        totalValue={12}
+        background={balance !== 0 ? 'rgba(255,255,75,0.2)' : 'rgba(255,255,75,0.2)'}
+        totalValue={max !== undefined ? max : 5}
         startAngle={-90}
         label={'2'}
         labelPosition={0}
@@ -30,7 +29,8 @@ export default class Chart extends React.Component {
         }}
         lineWidth={100}
         style={{
-          height: '30px'
+          height: '30px',
+          width: '30px',
         }}
       />
     );
@@ -38,3 +38,7 @@ export default class Chart extends React.Component {
 };
 
 
+Chart.propTypes = {
+  balance: PropTypes.int, //.required,
+  max: PropTypes.int,
+};
