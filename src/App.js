@@ -10,8 +10,7 @@ import ResetButton from "./components/ResetButton";
 import WorldSwitch from "./components/WorldSwitch";
 import IslandButton from "./components/IslandButton";
 import IslandPopulations from "./components/IslandPopulations";
-import Producer from "./components/Producer";
-import IslandNeeds from "./components/IslandNeeds";
+import Building from "./components/Building";
 import IslandBuildingResources from "./components/IslandBuildingResources";
 
 const debugEnabled = true
@@ -394,10 +393,10 @@ class App extends Component {
                   {/*   Ressourcen - Bedürfnisse   */}
                   <Col sm={'auto'}>
                     {needs.filter((need) => this.isNeeded(need, island)).map((need, needKey) => (
-                      <IslandNeeds
+                      <Building
                         island={island}
-                        need={need}
-                        exactNeed={this.exactNeed(need, island)/** @todo remove? */}
+                        needOrProducer={need}
+                        consumption={this.exactNeed(need, island)/** @todo remove? */}
                         balance={this.calculateBalance(need.key, island.buildings, this.populationWithTierIDs(island.world, island.population.level))}
                         fnSetBuildingCount={this.setBuildingCount}
                       />
@@ -407,9 +406,9 @@ class App extends Component {
                   {/*   Ressourcen - Farmen   */}
                   <Col sm={'auto'}>
                     {producers.filter(producer => !(["Baumaterial", "Konsumgüter"].includes(producer.type)) && this.isUnlocked(producer, island)).map((producer, resourceKey) => (
-                      <Producer
+                      <Building
                         island={island}
-                        producer={producer}
+                        needOrProducer={producer}
                         consumption={this.exactConsumption(island.buildings, producer)}
                         balance={this.calculateBalance(producer.provides, island.buildings)}
                         fnSetBuildingCount={this.setBuildingCount}
