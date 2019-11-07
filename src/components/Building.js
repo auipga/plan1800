@@ -17,10 +17,18 @@ export default class Building extends Component {
     }
 
     let buildingBalance, recommendedCount, recommendedAdd = 0
+    let max = undefined
     if (producer) {
       buildingBalance = balance*producer.productionTime/60
       recommendedCount = Math.ceil(island.buildings[producer.key] - buildingBalance);
       recommendedAdd = recommendedCount - island.buildings[needOrProducer.key];
+
+      if (producer.needs.includes("deposit")) {
+        max = island.regionalResources[producer.key] ? island.regionalResources[producer.key] : 0
+      }
+      if (producer.needs.includes("fertility")) {
+        max = island.fertilities.includes(producer.provides) ? 99 : 0
+      }
     }
 
     return (
@@ -42,12 +50,14 @@ export default class Building extends Component {
               buildingKey={producer.key}
               islandId={island.id}
               fnSetBuildingCount={fnSetBuildingCount}
-              max={producer.max}
+              max={max}
             />
 
             <span className="mr-2"><Chart balance={buildingBalance}/></span>{/** @todo remove? */}
             <span className="mr-2"><Chart balance={balance} max={3}/></span>
+            {max === 0 ? '' :
             <RecommendedAddButton add={recommendedAdd} newValue={recommendedCount} action={() => fnSetBuildingCount(island.id, producer.key, recommendedCount)} />
+            }
           </>
         }
       </GoodItem>

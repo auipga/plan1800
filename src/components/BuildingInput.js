@@ -7,6 +7,19 @@ export default class BuildingInput extends Component {
   render() {
     const { blend, islandId, buildingCount, buildingKey, max, fnSetBuildingCount } = this.props;
 
+    if (max === 0) {
+      return (
+        <Input id={"input_" + buildingKey}
+               type='text'
+               bsSize='sm'
+               style={{width: 50}}
+               className={'mr-2 text-center px-1'}
+               value='&#10060;' // emoji :-(
+               disabled={true}
+        />
+      )
+    }
+
     return (
       <Input id={"input_"+buildingKey}
         type='number'
@@ -26,7 +39,7 @@ export default class BuildingInput extends Component {
           + (blend > 0 ? ' is-invalid' : '')
           + (blend < 0 ? ' border-primary' : '')
         }
-        max={max ? max : 99}
+        max={max !== undefined ? max : 99}
         value={buildingCount}
         onChange={e => fnSetBuildingCount(islandId, buildingKey, e.target.value)}
       />

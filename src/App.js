@@ -12,6 +12,7 @@ import IslandButton from "./components/IslandButton";
 import IslandPopulations from "./components/IslandPopulations";
 import Building from "./components/Building";
 import IslandBuildingResources from "./components/IslandBuildingResources";
+import Fertilities from "./components/Fertilities";
 
 const debugEnabled = true
 const jst = JSON.stringify
@@ -143,6 +144,22 @@ class App extends Component {
       ...prevState,
       islands: islands
     }), this.persistState);
+  }
+  setFertilities = (islandId, fertilities) => {
+    const islands = this.state.islands
+    islands.find((i) => i.id === islandId).fertilities = fertilities
+
+    this.setState(prevState => ({
+      ...prevState,
+      islands: islands
+    }), this.persistState);
+  }
+  setResourceCount = (islandId, resource, addend) => {
+    const islands = this.state.islands
+    let resources = islands.find((i) => i.id === islandId).regionalResources
+    resources[resource] = Math.max(0,(resources[resource] ? parseInt(resources[resource]) : 0) + addend)
+
+    this.setState(resources, this.persistState);
   }
   addIsland(worldId) {
     let islands = this.state.islands
@@ -313,7 +330,7 @@ class App extends Component {
           </Card>
           {this.state.islands.filter(island => island.id === this.state.activeIslands[this.state.activeWorld]).map((island, islandKey) => (
             <Card key={island.id} className={'my-3' + (this.state.darkMode ? ' bg-dark' : '')}>
-              {/*   Inselname & Bevölkerung   */}
+              {/*   Inselname & Bevölkerung & Fruchtbarkeiten  */}
               <CardHeader>
                 <Input value={island.name} onChange={e => this.setIslandName(island.id, e.target.value)} style={{maxWidth: 300}} className={'d-inline-block mr-3'}/>
                 <strong className={'d-inline-block mr-3'}>
@@ -321,6 +338,14 @@ class App extends Component {
                   { island.population.level.reduce((prev, next) => prev + next, 0) }
                 </strong>
                 {dd(jst(this.state.islands.find(i => i.id === this.state.activeIslands[this.state.activeWorld]).population.level))}
+
+                <Fertilities
+                  island={island}
+                  forceEdit={!island.fertilities.length && !Object.keys(island.regionalResources).reduce((prev, next, i) => prev + island.regionalResources[next], 0)}
+                  fnSetFertilities={this.setFertilities}
+                  fnSetResourceCount={this.setResourceCount}
+                />
+
                 <Button onClick={() => this.deleteIsland(island.id)} size='sm' className='float-right'>&times;</Button>
               </CardHeader>
               {/*   Bevölkerungsstufen   */}

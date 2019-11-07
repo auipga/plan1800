@@ -6,7 +6,9 @@ export var emptyIsland = [
       level: [0, 0, 0, 0, 0],
     },
     buildings: {},
-    resourceWant: {}
+    resourceWant: {},
+    fertilities: [],
+    regionalResources: {},
   },
   {
     world: 2,
@@ -16,7 +18,9 @@ export var emptyIsland = [
       level: [0, 0],
     },
     buildings: {},
-    resourceWant: {}
+    resourceWant: {},
+    fertilities: [],
+    regionalResources: {},
   },
   {
     world: 3,
@@ -26,7 +30,9 @@ export var emptyIsland = [
       level: [0, 0, 0, 0, 0],
     },
     buildings: {},
-    resourceWant: {}
+    resourceWant: {},
+    fertilities: [],
+    regionalResources: {},
   },
 ]
 
