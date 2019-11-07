@@ -147,7 +147,12 @@ class App extends Component {
   addIsland(worldId) {
     let islands = this.state.islands
     let newId = islands.reduce((prev, next, i) => Math.max(prev, next.id), 0) + 1;
-    islands.push(jcl({...config.emptyIsland.find((i) => i.world === worldId), id: newId}))
+    let newIsland = config.emptyIsland.find((i) => i.world === worldId);
+    if (!newIsland) {
+      alert("worldId '"+worldId+"' not found")
+      return
+    }
+    islands.push(jcl({...newIsland, id: newId}))
 
     this.setState(prevState => ({
       ...prevState,
