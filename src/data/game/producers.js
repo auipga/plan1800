@@ -418,7 +418,7 @@ export default [
     productionTime: 120,
     type: "Rohmaterial",
     provides: "Saltpeter",
-    needs: ["coastline", "nitre_deposit/fertility"],//
+    needs: ["coastline", "nitre_deposit-fertility"],//
   },
   {
     key: "Dynamite",
@@ -679,7 +679,7 @@ export default [
     productionTime: 90,
     type: "Landwirtschaftliche Produkte",//
     provides: "Pearls",
-    needs: ["coastline", "pearl_abundance/fertility"],//
+    needs: ["coastline", "pearl_abundance-fertility"],//
   },
 
   /**
