@@ -24,9 +24,11 @@ export default class Building extends Component {
     }
 
     return (
-      <GoodItem resource={needOrProducer}>
+      <label htmlFor={"input_"+needOrProducer.key} className='d-block mb-0'>
+      <GoodItem resource={needOrProducer} producer={producer}>
         {!producer ?
           <Input
+            id={"input_"+needOrProducer.key}
             type='checkbox'
             checked={island.buildings[needOrProducer.key]}
             onChange={e => fnSetBuildingCount(island.id, needOrProducer.key, e.target.checked ? 1 : 0)}
@@ -49,6 +51,7 @@ export default class Building extends Component {
           </>
         }
       </GoodItem>
+      </label>
     )
   }
 }

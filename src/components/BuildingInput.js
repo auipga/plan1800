@@ -8,7 +8,7 @@ export default class BuildingInput extends Component {
     const { blend, islandId, buildingCount, buildingKey, max, fnSetBuildingCount } = this.props;
 
     return (
-      <Input
+      <Input id={"input_"+buildingKey}
         type='number'
         bsSize='sm'
         style={{
