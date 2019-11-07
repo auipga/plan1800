@@ -17,7 +17,7 @@ export default [
     socialClassIDs: [6, 7],
     unlock: [3, 1],// 1 of tier 3
     fertilities: ["Plantains", "Sugar_cane", "Cotton", "Caoutchouc", "Corn", "Coffee", "Pearls", "Tobacco", "Cocoa"],
-    regionalResources: ["Clay", "Gold_ore", "Oil"],
+    regionalResources: ["Clay_6", "Gold_ore", "Oil_6"],
   },
   {
     id: 3,

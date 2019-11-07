@@ -55,8 +55,8 @@ export default class Building extends Component {
 
             <span className="mr-2"><Chart balance={buildingBalance}/></span>{/** @todo remove? */}
             <span className="mr-2"><Chart balance={balance} max={3}/></span>
-            {max === 0 ? '' :
-            <RecommendedAddButton add={recommendedAdd} newValue={recommendedCount} action={() => fnSetBuildingCount(island.id, producer.key, recommendedCount)} />
+            {max === 0 || recommendedCount > max ? '' :
+            <RecommendedAddButton add={recommendedAdd} action={() => fnSetBuildingCount(island.id, producer.key, recommendedCount)} />
             }
           </>
         }

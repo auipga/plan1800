@@ -86,7 +86,7 @@ export default [
     productionTime: 30,
     type: "Rohmaterial",
     provides: "Clay",
-    needs: ["clay_deposit"],
+    needs: ["deposit"],
   },
   {
     key: "Bricks",
@@ -158,7 +158,7 @@ export default [
     productionTime: 15,
     type: "Rohmaterial",
     provides: "Iron",
-    needs: ["iron_deposit"],
+    needs: ["deposit"],
   },
   {
     key: "Charcoal_kiln",
@@ -315,7 +315,7 @@ export default [
     productionTime: 15,
     type: "Rohmaterial",
     provides: "Coal",
-    needs: ["coal_deposit"],
+    needs: ["deposit"],
   },
   {
     key: "Sewing_machines",
@@ -355,7 +355,7 @@ export default [
     productionTime: 30,
     type: "Rohmaterial",
     provides: "Cement",
-    needs: ["limestone_deposit"],
+    needs: ["deposit"],
   },
   {
     key: "Reinforced_concrete",
@@ -373,7 +373,7 @@ export default [
     productionTime: 30,
     type: "Rohmaterial",
     provides: "Copper",
-    needs: ["copper_deposit"],
+    needs: ["deposit"],
   },
   {
     key: "Zinc",
@@ -382,7 +382,7 @@ export default [
     productionTime: 30,
     type: "Rohmaterial",
     provides: "Zinc",
-    needs: ["zinc_deposit"],
+    needs: ["deposit"],
   },
   {
     key: "Brass",
@@ -692,7 +692,7 @@ export default [
     productionTime: 30,
     type: "Rohmaterial",
     provides: "Clay",
-    needs: ["clay_deposit"],
+    needs: ["deposit"],
   },
   {
     key: "Bricks_6",
@@ -755,7 +755,7 @@ export default [
     productionTime: 150,
     type: "Rohmaterial",
     provides: "Gold_ore",
-    needs: ["gold_deposit"],
+    needs: ["deposit"],
   },
   {
     key: "Felt",
