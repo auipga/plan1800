@@ -4,12 +4,14 @@ import GoodItem from "./GoodItem";
 import BuildingInput from "./BuildingInput";
 import Chart from "./Chart";
 import RecommendedAddButton from "./RecommendedAddButton";
+import Trading from "./Trading";
 import producers from "../data/game/producers";
-import Input from "reactstrap/es/Input";
+import {Input} from "reactstrap";
 
 export default class Building extends Component {
   render() {
     const {needOrProducer, island, balance, fnSetBuildingCount} = this.props
+    const {trades, fnTrade} = this.props
 
     let producer = producers.find(p => p.key === needOrProducer.key)
     if (!producer && needOrProducer.provides !== undefined) {
@@ -31,8 +33,8 @@ export default class Building extends Component {
       }
     }
 
-    return (
-      <label htmlFor={"input_"+needOrProducer.key} className='d-block mb-0'>
+    return (<div className={'my-1'}>
+      <label htmlFor={"input_"+needOrProducer.key} className='d-inline-block mb-0 mr-1'>
       <GoodItem resource={needOrProducer} producer={producer}>
         {!producer ?
           <Input
@@ -62,6 +64,17 @@ export default class Building extends Component {
         }
       </GoodItem>
       </label>
+        {producer ?
+          <Trading
+            island={island}
+            good={producer.provides}
+            balance={balance}
+            trades={trades.filter(r => r.good === producer.provides && (r.from === island.id || r.to === island.id || r.from === null || r.to === null))}
+            fnTrade={fnTrade}
+          />
+          : (<></>)
+        }
+        </div>
     )
   }
 }
@@ -71,4 +84,6 @@ Building.propTypes = {
   island: PropTypes.object.required,
   balance: PropTypes.int, //.required,
   fnSetBuildingCount: PropTypes.func.required,
+  trades: PropTypes.object.required,
+  fnTrade: PropTypes.func.required,
 };

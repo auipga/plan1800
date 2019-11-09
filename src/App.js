@@ -96,6 +96,12 @@ class App extends Component {
     let need = needs.find(n => n.key === resource)
     return need.tierIDs.filter(id => population[id] !== undefined).reduce((prev, next, i) => prev + population[next] * need.consumption[i], 0)
   }
+  calculateTradeBalance = (islandId, good) => {
+    const trades = this.state.trades.filter(t => t.good === good);
+    const loading  = trades.filter(t => t.from === islandId && t.to   !== null).reduce((sum, that) => sum + that.amount, 0);
+    const dropping = trades.filter(t => t.to   === islandId && t.from !== null).reduce((sum, that) => sum + that.amount, 0);
+    return dropping - loading
+  }
   calculateBalance = (resource, buildings, population = false) => {
     return (
       + this.productionPerTick(resource, buildings)
@@ -225,6 +231,26 @@ class App extends Component {
       ...prevState.resourceWant,
       resourceWant: resourceWant
     }), this.persistState);
+  }
+  setTrade = (oldTrade, newTrade) => {
+    // d(from, to, good, amount)
+    let trades = this.state.trades;
+    // remove possibly existing trade
+    if (oldTrade) {
+      // trades = trades.filter(r => !(r.from === oldTrade.from && r.to === oldTrade.to && r.good === oldTrade.good))
+      trades = trades.filter(r => r !== oldTrade)
+    }
+    if (newTrade) {
+    // if (!isNaN(newTrade.amount)) {
+    //   if (newTrade.amount > 0) {
+    //     newTrade.amount = newTrade.amount
+    //   }
+    // }
+      // add new trade / re-add changed trade
+      trades = [...trades, newTrade]
+    }
+
+    this.setState({trades: trades}, this.persistState)
   }
 
   isNeeded = (need, island) => {
@@ -378,8 +404,10 @@ class App extends Component {
                       <Building
                         island={island}
                         needOrProducer={need}
-                        balance={this.calculateBalance(need.key, island.buildings, this.populationWithTierIDs(island.world, island.population.level))}
+                        balance={this.calculateBalance(need.key, island.buildings, this.populationWithTierIDs(island.world, island.population.level)) + this.calculateTradeBalance(island.id, need.key)}
                         fnSetBuildingCount={this.setBuildingCount}
+                        trades={this.state.trades}
+                        fnTrade={this.setTrade}
                       />
                     ))}
                     <hr/>
@@ -390,8 +418,10 @@ class App extends Component {
                       <Building
                         island={island}
                         needOrProducer={producer}
-                        balance={this.calculateBalance(producer.provides, island.buildings)}
+                        balance={this.calculateBalance(producer.provides, island.buildings) + this.calculateTradeBalance(island.id, producer.provides)}
                         fnSetBuildingCount={this.setBuildingCount}
+                        trades={this.state.trades}
+                        fnTrade={this.setTrade}
                       />
                     ))}
                     <hr/>

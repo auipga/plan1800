@@ -59,7 +59,7 @@ export default class GoodItem extends Component {
       ))
     }
     return (
-      <Media key={resource.key} className={'my-1 ' + classes}
+      <Media key={resource.key} className={classes}
              onMouseEnter={() => this.highlight(resource.key)}
              onMouseLeave={() => this.highlight(null)}
       >

@@ -41,4 +41,5 @@ export var defaultState = {
   worlds: [1],
   activeWorld: 1,
   activeIslands: {},
+  trades: [],
 }
