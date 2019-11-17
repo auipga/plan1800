@@ -21,17 +21,18 @@ export default class BuildingInput extends Component {
     }
 
     return (
-      <Input id={"input_"+buildingKey}
+      <Input
+        id={"input_"+buildingKey}
         type='number'
         bsSize='sm'
         // style={{
-          // backgroundColor:
-          //   RGB_Log_Blend(
-          //     Math.min(Math.max(blend, 0), 1),
-          //     // 'rgba(100,200,255,0.5)',
-          //     'rgba(100,255,100,0.5)',
-          //     'rgba(255,50,50,0.5)',
-          //   ),
+        //   backgroundColor:
+        //     RGB_Log_Blend(
+        //       Math.min(Math.max(blend, 0), 1),
+        //       // 'rgba(100,200,255,0.5)',
+        //       'rgba(100,255,100,0.5)',
+        //       'rgba(255,50,50,0.5)',
+        //     ),
         // }}
         className={
           'BuildingInput mr-2 text-center pr-0'

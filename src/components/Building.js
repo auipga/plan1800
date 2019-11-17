@@ -32,28 +32,28 @@ export default class Building extends Component {
       <label htmlFor={"input_"+producer.key} className='d-block mb-1'
              onContextMenu={(e) => {fnSetBuildingCount(island, producer, null); e.preventDefault()}}
       >
-      <GoodItem producer={producer}>
-            <BuildingInput
-              blend={-buildingBalance}
-              buildingCount={island.buildings[producer.key]}
-              buildingKey={producer.key}
-              islandId={island.id}
-              fnSetBuildingCount={number => fnSetBuildingCount(island, producer, number)}
-              max={max}
-            />
+        <GoodItem producer={producer}>
+          <BuildingInput
+            blend={-buildingBalance}
+            buildingCount={island.buildings[producer.key]}
+            buildingKey={producer.key}
+            islandId={island.id}
+            fnSetBuildingCount={number => fnSetBuildingCount(island, producer, number)}
+            max={max}
+          />
 
-            <span className="mr-2"><Chart balance={balance} max={3}/></span>
-            {max === 0 || recommendedCount > max ? '' :
-              <RecommendedAddButton add={recommendedAdd} action={() => fnSetBuildingCount(island, producer, recommendedCount)} />
-            }
-        <Trading
-          island={island}
-          good={producer.provides}
-          balance={balance}
-          trades={trades.filter(r => r.good === producer.provides && (r.from === island.id || r.to === island.id || r.from === null || r.to === null))}
-          fnTrade={this.props.fnTrade}
-        />
-      </GoodItem>
+          <span className="mr-2"><Chart balance={balance} max={3}/></span>
+          {max === 0 || recommendedCount > max ? '' :
+            <RecommendedAddButton add={recommendedAdd} action={() => fnSetBuildingCount(island, producer, recommendedCount)} />
+          }
+          <Trading
+            island={island}
+            good={producer.provides}
+            balance={balance}
+            trades={trades.filter(r => r.good === producer.provides && (r.from === island.id || r.to === island.id || r.from === null || r.to === null))}
+            fnTrade={this.props.fnTrade}
+          />
+        </GoodItem>
       </label>
     )
   }

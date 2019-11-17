@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types/'
-import {Input, Button, ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap"
+import {Button, ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle, Input} from "reactstrap"
 
 export default class Trading extends Component {
   constructor(props) {
@@ -44,7 +44,7 @@ export default class Trading extends Component {
           toggle={() => { this.setState({ btnDropright: !this.state.btnDropright }) }}
         >
           <DropdownToggle caret className={{'px-1 py-0 mr-2': true, 'text-danger': highlight, 'text-light': inUse}}
-            disabled={!enabled}>
+                          disabled={!enabled}>
             <img src={'./icons/Icon_traderoutes.png'} alt='+' style={{width: 18, height: 18}}/>
           </DropdownToggle>
 

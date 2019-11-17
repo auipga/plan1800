@@ -7,7 +7,8 @@ export default class ResourceBadge extends Component {
     const editMode = fnChangeResourceCount !== undefined
 
     return (
-      <span className='badge badge-secondary badge-pill mr-2'
+      <span
+        className='badge badge-secondary badge-pill mr-2'
         onClick={(e) => {if (editMode) { fnChangeResourceCount(1) }}}
         onWheel={(e) => {if (editMode) { fnChangeResourceCount(Math.sign(-e.deltaY)); e.preventDefault() }}}
         onContextMenu={(e) => {if (editMode) {fnChangeResourceCount(-1)} e.preventDefault()}}

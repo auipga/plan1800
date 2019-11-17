@@ -371,7 +371,7 @@ class App extends Component {
                   fnChangePopulation={this.changePopulation}
                   fnSetPopulation={this.setPopulation}
                   fnSetProhibitedNeeds={this.setProhibitedNeeds}
-              />
+                />
               </CardHeader>
 
               {/*   Zeug auf der Insel   */}
