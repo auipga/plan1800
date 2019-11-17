@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Badge, Button} from "reactstrap";
 import PropTypes from 'prop-types/';
-import worlds from "../data/game/worlds";
+import worlds from "../data/worlds";
 import ResourceBadge from "./ResourceBadge";
 import FertilitySwitch from "./FertilitySwitch";
 
@@ -16,9 +16,9 @@ export default class Fertilities extends Component {
   }
 
   render() {
-    const {island, forceEdit, fnSetFertilities, fnSetResourceCount} = this.props;
+    const {island, forceEdit, fnSetFertilities, fnChangeResourceCount} = this.props;
 
-    const world = worlds.find(w => w.id === island.world);
+    const world = worlds.find(w => w.id === island.worldId);
     const possibleFertilities = world.fertilities
     const possibleResources = world.regionalResources
 
@@ -31,7 +31,7 @@ export default class Fertilities extends Component {
                 key={fertility}
                 fertility={fertility}
                 islandFertilities={island.fertilities}
-                fnSetFertilities={(fertilities) => fnSetFertilities(island.id, fertilities)}
+                fnSetFertilities={(fertilities) => fnSetFertilities(island, fertilities)}
               />
             ))}
 
@@ -40,7 +40,7 @@ export default class Fertilities extends Component {
                 key={resource}
                 resource={resource}
                 count={island.regionalResources[resource]}
-                fnSetResourceCount={(count) => fnSetResourceCount(island.id, resource, count)}
+                fnChangeResourceCount={(count) => fnChangeResourceCount(island, resource, count)}
               />
             ))}
             <Button
@@ -48,13 +48,13 @@ export default class Fertilities extends Component {
               className={'py-1 mr-1'}
               color={'info'}
               onClick={this.toggleEdit}
-            >&#10004;</Button>
+            >&#10004;{/*icon-check*/}</Button>
           </>
           : <>
             <Badge color={'secondary'} className={'mr-2 px-2'}>
-            {possibleFertilities.filter(key => island.fertilities.includes(key)).map(fertility => (<>
+            {possibleFertilities.filter(key => island.fertilities.includes(key)).map(fertility => (<React.Fragment key={fertility}>
               <img src={"./icons/goods/" + fertility + ".png"} alt={fertility} title={fertility} style={{width: 22, height: 22}} className={'mx-1'}/>
-            </>))}
+            </React.Fragment>))}
             </Badge>
 
             {possibleResources.filter(key => island.regionalResources[key]).map(resource => (
@@ -64,7 +64,7 @@ export default class Fertilities extends Component {
                 count={island.regionalResources[resource]}
               />
             ))}
-            <Button className={'p-0 mr-1'} color={'transparent'} onClick={this.toggleEdit}>&#9999;</Button>
+            <Button className={'p-0 mr-1'} color={'transparent'} onClick={this.toggleEdit}>&#9999;{/*icon-edit/pencil*/}</Button>
           </>
         }
       </span>
@@ -73,8 +73,8 @@ export default class Fertilities extends Component {
 }
 
 Fertilities.propTypes = {
-  island: PropTypes.object,//.required,
-  forceEdit: PropTypes.boolean,//.required,
-  fnSetFertilities: PropTypes.func,//.required,
-  fnSetResourceCount: PropTypes.func,//.required,
+  island: PropTypes.object.isRequired,
+  forceEdit: PropTypes.bool,
+  fnSetFertilities: PropTypes.func.isRequired,
+  fnChangeResourceCount: PropTypes.func.isRequired,
 };

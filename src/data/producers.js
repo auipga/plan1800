@@ -1,14 +1,4 @@
 export default [
-  {
-    types: [
-      "Konsumgüter",
-      "Baumaterial",
-      "Rohmaterial",
-      "Landwirtschaftliche Produkte",
-      "Zwischenprodukte",
-    ]
-  },
-
   /**
    * Farmers
    */

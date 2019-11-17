@@ -13,5 +13,5 @@ export default class ResetButton extends Component {
 }
 
 ResetButton.propTypes = {
-  resetFunction: PropTypes.func.required,
+  resetFunction: PropTypes.func.isRequired,
 };

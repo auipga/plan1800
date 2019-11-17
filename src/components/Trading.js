@@ -24,11 +24,13 @@ export default class Trading extends Component {
     const {island, good, trades, fnTrade, balance} = this.props
 
     const canSend = balance > 0
+    // eslint-disable-next-line
     const canWant = balance < 0
 
     const loadings  = trades.filter(t => t.from === island.id                       )
     const droppings = trades.filter(t => t.from !== null      && t.to === island.id )
     const droppable = trades.filter(t => t.from !== island.id && t.to === null      )
+    // eslint-disable-next-line
     const wanted    = trades.filter(t => t.from === null      && t.to !== island.id )
 
     const highlight = droppable.length
@@ -49,7 +51,7 @@ export default class Trading extends Component {
           <DropdownMenu>
             {/*canSend*/}
             <DropdownItem toggle={false} disabled={!canSend} className={'form-inline py-0'}>
-              &#10150;
+              &#10150;{/*icon-send/load*/}
               <Input
                 type='number'
                 bsSize='sm'
@@ -63,29 +65,32 @@ export default class Trading extends Component {
                 onMouseEnter={e => e.target.focus()}
               />
               <Button onClick={() => fnTrade(null, this.createTradeObject(island.id, null, good, this.state.sendAmount)) }
-                      className={'px-1 py-0 '} size={'sm'}><span>&#10004;</span></Button>
+                      className={'px-1 py-0 '} size={'sm'}><span>&#10004;{/*icon-check*/}</span></Button>
             </DropdownItem>
 
-            {droppings.map(trade => (
-              <DropdownItem toggle={false}>
-                <span className={'mr-2'}>&#10133;</span>
+            {droppings.map((trade, key) => (
+              <DropdownItem key={key} toggle={false}>
+                {/*eslint-disable-next-line*/}
+                <span className={'mr-2'}>&#10133;{/*icon-plus*/}</span>
                 <span className={'mr-2'}>{trade.amount.toFixed(2)} from {trade.from}</span>
                 <Button onClick={() => fnTrade(trade, this.createTradeObject(trade.from, null, good, trade.amount))}
-                        className={'px-1 py-0 '} size={'sm'}><span>&#10006;</span></Button>
+                        className={'px-1 py-0 '} size={'sm'}><span>&#10006;{/*icon-X*/}</span></Button>
               </DropdownItem>
             ))}
 
-            {droppable.map(trade => (
-              <DropdownItem toggle={false} onClick={() => fnTrade(trade, this.createTradeObject(trade.from, island.id, good, trade.amount)) }>
-                <span className={'mr-2'}>&#10067;</span>
+            {droppable.map((trade, key) => (
+              <DropdownItem key={key} toggle={false} onClick={() => fnTrade(trade, this.createTradeObject(trade.from, island.id, good, trade.amount)) }>
+                {/*eslint-disable-next-line*/}
+                <span className={'mr-2'}>&#10067;{/*icon-question-mark*/}</span>
                 <span className={'mr-2'}>{trade.amount.toFixed(2)} from {trade.from}</span>
-                <span className={'mr-2'}>&#10004;</span>
+                <span className={'mr-2'}>&#10004;{/*icon-check*/}</span>
               </DropdownItem>
             ))}
 
 
-            {/*{wanted.map(trade => (*/}
-            {/*  <DropdownItem toggle={false} onClick={() => fnTrade(trade, this.createTradeObject(island.id, trade.to, good, trade.amount)) }>*/}
+            {/*{wanted.map((trade, key) => (*/}
+            {/*  <DropdownItem key=key
+            toggle={false} onClick={() => fnTrade(trade, this.createTradeObject(island.id, trade.to, good, trade.amount)) }>*/}
             {/*    load {trade.amount.toFixed(2)} for ({trade.to})*/}
             {/*  </DropdownItem>*/}
             {/*))}*/}
@@ -93,10 +98,11 @@ export default class Trading extends Component {
             {/*{canWant ?*/}
             {/*  <DropdownItem toggle={false} onClick={() => fnTrade(null, this.createTradeObject(null, island.id, good, -balance)) }>want {(-balance).toFixed(2)}</DropdownItem>*/}
             {/*: <></>}*/}
-            {loadings.map(trade => (
-              <DropdownItem toggle={false}>
-                <span className={'mr-2'}>&#10134;</span>
-                <span className={'mr-2'}>{trade.amount.toFixed(2)} to {trade.to ? trade.to : <>&#10031;</>}</span>
+            {loadings.map((trade, key) => (
+              <DropdownItem key={key} toggle={false}>
+                {/*eslint-disable-next-line*/}
+                <span className={'mr-2'}>&#10134;{/*icon-minus*/}</span>
+                <span className={'mr-2'}>{trade.amount.toFixed(2)} to {trade.to ? trade.to : <>&#10031;{/*icon-star*/}</>}</span>
                 <Button onClick={() => fnTrade(trade, null) }
                         className={'px-1 py-0 '} size={'sm'}><span>&#10006;</span></Button>
               </DropdownItem>
@@ -110,9 +116,9 @@ export default class Trading extends Component {
 }
 
 Trading.propTypes = {
-  island: PropTypes.object.required,
-  good: PropTypes.string.required,
-  balance: PropTypes.int,//.required,
-  trades: PropTypes.object.required,
-  fnTrade: PropTypes.func.required,
+  island: PropTypes.object.isRequired,
+  good: PropTypes.string.isRequired,
+  balance: PropTypes.number.isRequired,
+  trades: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fnTrade: PropTypes.func.isRequired,
 }

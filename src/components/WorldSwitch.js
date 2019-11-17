@@ -2,13 +2,11 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types/';
 import {Badge, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown} from "reactstrap";
 import WorldButton from "./WorldButton";
-import worlds from "../data/game/worlds";
+import worlds from "../data/worlds";
 
 export default class WorldSwitch extends Component {
   render() {
-    const {world, activeWorld, fnSwitchWorld, unlockedWorlds, fnUnlockWorld, islands} = this.props;
-
-    const unlocked = unlockedWorlds.includes(world.id);
+    const {world, activeWorld, fnSwitchWorld, unlocked, fnUnlockWorld, islands} = this.props;
 
     const elemWorldButton =
       <WorldButton
@@ -23,14 +21,13 @@ export default class WorldSwitch extends Component {
     }
 
     let unlockCondition = worlds.find(w => w.id === world.id).unlock
-    let firstIsland = islands.find(() => true);
+    let firstIsland = islands.find(() => true)
     let planable, startable, unlockable = false
 
     if (firstIsland) {
-      let number = firstIsland.population.level[unlockCondition[0]-1]
       planable = false
       startable = false
-      unlockable = islands.length && number >= unlockCondition[1]
+      unlockable = islands.length && firstIsland.population.ofTier(unlockCondition[0]) >= unlockCondition[1]
     }
 
     return (
@@ -63,13 +60,10 @@ export default class WorldSwitch extends Component {
 }
 
 WorldSwitch.propTypes = {
-  // ...WorldButton.PropTypes,
-  world: PropTypes.object.required,
-  activeWorld: PropTypes.int,
-  unlocked: PropTypes.bool.required,
-  fnSwitchWorld: PropTypes.func.required,
-
-  unlockedWorlds: PropTypes.arrayOf(PropTypes.int),
-  islands: PropTypes.arrayOf(PropTypes.object),
-  fnUnlockWorld: PropTypes.func.required,
+  world: PropTypes.object.isRequired,
+  activeWorld: PropTypes.number,
+  unlocked: PropTypes.bool.isRequired,
+  fnSwitchWorld: PropTypes.func.isRequired,
+  islands: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fnUnlockWorld: PropTypes.func.isRequired,
 };

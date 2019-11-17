@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types/';
 import {Input} from "reactstrap";
-import {RGB_Log_Blend} from "../functions/color";
+// import {RGB_Log_Blend} from "../functions/color";
 
 export default class BuildingInput extends Component {
   render() {
-    const { blend, islandId, buildingCount, buildingKey, max, fnSetBuildingCount } = this.props;
+    const { blend, buildingCount, buildingKey, max, fnSetBuildingCount } = this.props;
 
     if (max === 0) {
       return (
@@ -14,7 +14,7 @@ export default class BuildingInput extends Component {
                bsSize='sm'
                style={{width: 50}}
                className={'mr-2 text-center px-1'}
-               value='&#10060;' // emoji :-(
+               value='&#10060;' // icon-red-X
                disabled={true}
         />
       )
@@ -24,34 +24,35 @@ export default class BuildingInput extends Component {
       <Input id={"input_"+buildingKey}
         type='number'
         bsSize='sm'
-        style={{
-          width: 50,
-          backgroundColor:
-            RGB_Log_Blend(
-              Math.min(Math.max(blend, 0), 1),
-              // 'rgba(100,200,255,0.5)',
-              'rgba(100,255,100,0.5)',
-              'rgba(255,50,50,0.5)',
-            ),
-        }}
+        // style={{
+          // backgroundColor:
+          //   RGB_Log_Blend(
+          //     Math.min(Math.max(blend, 0), 1),
+          //     // 'rgba(100,200,255,0.5)',
+          //     'rgba(100,255,100,0.5)',
+          //     'rgba(255,50,50,0.5)',
+          //   ),
+        // }}
         className={
-          'mr-2 text-center px-1'
+          'BuildingInput mr-2 text-center pr-0'
           + (blend > 0 ? ' is-invalid' : '')
-          + (blend < 0 ? ' border-primary' : '')
+          // + (blend < 0 ? ' border-primary' : '')
         }
         max={max !== undefined ? max : 99}
         value={buildingCount}
-        onChange={e => fnSetBuildingCount(islandId, buildingKey, e.target.value)}
+        onChange={e => fnSetBuildingCount(e.target.value)}
+        onMouseEnter={e => e.target.focus()}
+        onMouseLeave={e => e.target.blur()}
       />
     )
   }
 }
 
 BuildingInput.propTypes = {
-  blend: PropTypes.int,
-  islandId: PropTypes.int,
-  buildingCount: PropTypes.int,
+  blend: PropTypes.number,
+  islandId: PropTypes.number,
+  buildingCount: PropTypes.number,
   buildingKey: PropTypes.string,
-  max: PropTypes.int,
+  max: PropTypes.number,
   fnSetBuildingCount: PropTypes.func,
 };

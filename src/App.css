@@ -9,19 +9,52 @@ body.bg-secondary {
     /* same duration for highlight for fade-out */
     transition: all .2s ease-out;
 }
-.hi-neededBy {
+.GoodItem.hi-neededBy {
     box-shadow: inset 0 0 2px #98f9c5, 0 0 5px #98f9c5;
     /*background-color: #98f9c5;*/
     /*transition: all 1s ease-in-out;*/
     transition: all .1s ease-out; /*debug only*/
 }
-.hi-needs {
+.GoodItem.hi-needs {
     box-shadow: inset 0 0 2px #f98e44, 0 0 5px #f98e44;
     /*background-color: #f98e44;*/
     /*transition: all 1s ease-in;*/
     transition: all .1s ease-out; /*debug only*/
 }
-.hi-self {
+.GoodItem.hi-self {
     box-shadow: inset 0 0 5px 0 #a4b7f9;
     transition: all .1s ease-out;
+}
+
+.form-inline .form-control.BuildingInput {
+    /*background-color: rgba(190,190,190,0.2);*/
+    background-color: rgba(255,255,75,0.2);
+    width: 50px;
+}
+body.bg-secondary .form-inline .form-control.BuildingInput {
+    /*color: rgb(164, 169, 175);*/
+    color: rgb(33, 37, 41);
+}
+
+.need {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+.need.prohibited {
+    filter: sepia(1) saturate(300%) hue-rotate(-50deg) drop-shadow(0 0 1px red);
+    /*filter: grayscale(90%) drop-shadow(0px 1px 2px #ff5f42);*/
+}
+.producer.locked,
+.need.locked {
+    cursor: inherit;
+    /*filter: blur(1px) grayscale(90%);*/
+    filter: grayscale(100%);
+    opacity: 0.5;
+}
+@-moz-document url-prefix() {
+    .producer.locked,
+    .need.locked {
+        /*filter: blur(0.5px) grayscale(90%);*/
+    }
 }

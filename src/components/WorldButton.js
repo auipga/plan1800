@@ -26,8 +26,8 @@ export default class WorldButton extends Component {
 }
 
 WorldButton.propTypes = {
-  world: PropTypes.object.required,
-  activeWorld: PropTypes.int,
-  unlocked: PropTypes.bool.required,
-  fnSwitchWorld: PropTypes.func.required,
+  world: PropTypes.object.isRequired,
+  activeWorld: PropTypes.number,
+  unlocked: PropTypes.bool.isRequired,
+  fnSwitchWorld: PropTypes.func.isRequired,
 };

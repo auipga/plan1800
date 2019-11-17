@@ -1,70 +1,96 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types/';
 import {Button, ButtonGroup, Col, Input, InputGroup, InputGroupAddon, Row} from "reactstrap";
-import tiers from "../data/game/tiers";
-import worlds from "../data/game/worlds";
+import tiers from "../data/tiers";
+import worlds from "../data/worlds";
+import needs from "../data/needs";
 import {trans} from "../functions/translation";
-import CardHeader from "reactstrap/es/CardHeader";
+import NeedSwitch from "./NeedSwitch";
 
 export default class IslandPopulations extends Component {
+  handleWheel = (event, island, tierId, direction, move = false) => {
+    event.preventDefault()
+    this.props.fnChangePopulation(island, tierId, direction, move)
+  }
+
   render() {
-    const { island, fnChangePopulationLevel, fnSetPopulationLevel, fnHandleWheel } = this.props;
+    const {island, fnChangePopulation, fnSetPopulation, fnSetProhibitedNeeds} = this.props;
+    let loop={needs:null}
 
     return (
-      <CardHeader>
         <Row>
           {tiers
-            .filter(
-              tier => worlds.find(w => w.id === island.world).socialClassIDs
-                .find(tierId => tierId === tier.id))
+            .filter(tier => worlds.find(w => w.id === island.worldId).socialClassIDs.find(tierKey => tierKey === tier.id))
             .map((tier, tierKey) => (
-            <Col xs={12} sm={6} md={4} lg={3} xl={''} key={tierKey}
+            <Col xs={12} sm={6} md={4} lg={3} xl={''} key={tier.id}
                  style={{maxWidth: '20%'}}
-                 className={"align-content-center" + ((!tierKey || (island.population.level[tierKey] > 0)) ? ' bg-success-' : ' d-none-')}>
+                 className={"align-content-center" + ((!tier.id || (island.population.ofTier(tier.id) > 0)) ? ' bg-success-' : ' d-none-')}>
               <Row className={'align-items-end'}>
                 {/*   Eingabe Spalte   */}
                 <Col className=''>
                   <img src={"./icons/population/Workforce_" + (tier.key) + ".png"} alt="" className="d-block mx-auto rounded" style={{height: 40, width: 40}}/>
-                  {/*<Col xs={12} sm={10} md={6} lg={4} key={tierKey}>*/}
-                  {/*<PopulationItem tier={this.populationLevels[tierKey]} tierKey={tierKey} />*/}
                   <InputGroup>
                     <InputGroupAddon addonType="prepend">
-                      <Button onClick={() => fnChangePopulationLevel(island.id, tierKey, -1)} color='secondary'>-</Button>
+                      {/*eslint-disable-next-line*/}
+                      <Button onClick={() => fnChangePopulation(island, tier.id, -1)} color='secondary'>&#10134;{/*icon-minus*/}</Button>
                     </InputGroupAddon>
                     <Input placeholder={trans(tier)} title={trans(tier)}
-                           value={island.population.level[tierKey]}
-                           style={{height: 62}}
+                           value={island.population.get(tier.id)}
+                           style={{height: 56}}
                            className={'text-center'}
                       // readOnly
-                           onChange={e => fnSetPopulationLevel(island.id, tierKey, e.target.value)}
-                           onWheel={e => fnHandleWheel(e, island.id, tierKey, -Math.sign(e.deltaY))}
+                           onChange={e => fnSetPopulation(island, tier.id, e.target.value)}
+                           onWheel={e => this.handleWheel(e, island, tier.id, -Math.sign(e.deltaY))}
                     />
                     <InputGroupAddon addonType="append">
-                      <Button onClick={() => fnChangePopulationLevel(island.id, tierKey, +1)} color='secondary'>+</Button>
+                      {/*eslint-disable-next-line*/}
+                      <Button onClick={() => fnChangePopulation(island, tier.id, +1)} color='secondary'>&#10133;{/*icon-plus*/}</Button>
                     </InputGroupAddon>
                   </InputGroup>
+                  {/*   Ressourcen - Bedürfnisse   */}
+                  <hr className={'mt-3 mb-2'}/>
+                  <div className='text-center'>
+                    {needs.filter(n => n.tierIDs.includes(tier.id) && n.consumption[0] !== 1/1e10).map((need, key) => {
+                      let nextTier = loop.needs !== null && loop.needs !== need.tierIDs[0]
+                      loop.needs = need.tierIDs[0]
+                      return (<React.Fragment key={key}>
+                        {nextTier ? <hr className={'mt-1 mb-0'}/> : ''}
+                        <NeedSwitch
+                          needKey={need.key}
+                          needed={island.unlockedNeeds.includes(need.key)}
+                          prohibitedNeeds={island.prohibitedNeeds.ofTier(tier.id)}
+                          fnSetIslandProhibitedNeeds={prohibitedNeeds => fnSetProhibitedNeeds(island, tier.id, prohibitedNeeds)}
+                        />
+                      </React.Fragment>)
+                    })}
+                  </div>
                 </Col>
                 {/*   Upgrade Spalte   */}
-                <Col className={'col-auto ' + ((tier.id === worlds.find(w => w.id === island.world).socialClassIDs.slice(-1)[0]) ? ' bg-warning invisible' : '')}
-                     onWheel={e => fnHandleWheel(e, island.id, tierKey + (Math.sign(e.deltaY) > 0 ? 1 : 0), -1, true, -Math.sign(e.deltaY))}
+                <Col className={'col-auto ' + ((tier.id === worlds.find(w => w.id === island.worldId).socialClassIDs.slice(-1)[0]) ? ' bg-warning invisible' : '')}
+                     onWheel={e => this.handleWheel(e, island, tier.id+(Math.sign(e.deltaY) > 0 ? 1 : 0), -Math.sign(e.deltaY), true)}
                 >
                   <ButtonGroup vertical size='sm'>
-                    <Button onClick={() => fnChangePopulationLevel(island.id, tierKey + 0, -1, true, +1)} color='primary'>&raquo;</Button>
-                    <Button onClick={() => fnChangePopulationLevel(island.id, tierKey + 1, -1, true, -1)} color='warning'>&lsaquo;</Button>
+                    <Button onClick={() => fnChangePopulation(island, tier.id + 0, +1, true)} color='primary'>
+                      <img src="./icons/upgrade.png" alt=""
+                           style={{height: 24, width: 24}}
+                      />
+                    </Button>
+                    <Button onClick={() => fnChangePopulation(island, tier.id + 1, -1, true)} color='warning'
+                      className={'py-0'}>&#10094;{/*icon-arrow left*/}</Button>
                   </ButtonGroup>
                 </Col>
               </Row>
             </Col>
-          ))}
+            ))
+          }
         </Row>
-      </CardHeader>
     )
   }
 }
 
 IslandPopulations.propTypes = {
-  island: PropTypes.object.required,
-  fnChangePopulationLevel: PropTypes.func.required,
-  fnSetPopulationLevel: PropTypes.func.required,
-  fnHandleWheel: PropTypes.func.required,
+  island: PropTypes.object.isRequired,
+  fnChangePopulation: PropTypes.func.isRequired,
+  fnSetPopulation: PropTypes.func.isRequired,
+  fnSetProhibitedNeeds: PropTypes.func.isRequired,
 };

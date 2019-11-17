@@ -5,85 +5,65 @@ import BuildingInput from "./BuildingInput";
 import Chart from "./Chart";
 import RecommendedAddButton from "./RecommendedAddButton";
 import Trading from "./Trading";
-import producers from "../data/game/producers";
-import {Input} from "reactstrap";
 
 export default class Building extends Component {
   render() {
-    const {needOrProducer, island, balance, fnSetBuildingCount} = this.props
-    const {trades, fnTrade} = this.props
-
-    let producer = producers.find(p => p.key === needOrProducer.key)
-    if (!producer && needOrProducer.provides !== undefined) {
-      producer = producers.find(p => p.key === needOrProducer.provides) //or simply needOrProducer?
-    }
+    const {producer, island, balance, fnSetBuildingCount} = this.props
+    const {trades} = this.props
 
     let buildingBalance, recommendedCount, recommendedAdd = 0
     let max = undefined
-    if (producer) {
-      buildingBalance = balance*producer.productionTime/60
-      recommendedCount = Math.ceil(island.buildings[producer.key] - buildingBalance);
-      recommendedAdd = recommendedCount - island.buildings[needOrProducer.key];
 
-      if (producer.needs.includes("deposit")) {
-        max = island.regionalResources[producer.key] ? island.regionalResources[producer.key] : 0
-      }
-      if (producer.needs.includes("fertility")) {
-        max = island.fertilities.includes(producer.provides) ? 99 : 0
-      }
+    buildingBalance = balance*producer.productionTime/60
+    // recommendedCount = Math.ceil(island.buildings[producer.key] - buildingBalance);
+    // recommendedAdd = recommendedCount - island.buildings[producer.key];
+
+    if (producer.needs.includes("deposit")) {
+      max = island.regionalResources[producer.key]
+    }
+    if (producer.needs.includes("otherWorld")
+      // || !worlds.find(w => w.id === this.props.island.worldId).socialClassIDs.includes(producer.tierId)
+      || (producer.needs.includes("fertility") && !island.fertilities.includes(producer.provides))
+    ) {
+      max = 0
     }
 
-    return (<div className={'my-1'}>
-      <label htmlFor={"input_"+needOrProducer.key} className='d-inline-block mb-0 mr-1'>
-      <GoodItem resource={needOrProducer} producer={producer}>
-        {!producer ?
-          <Input
-            id={"input_"+needOrProducer.key}
-            type='checkbox'
-            checked={island.buildings[needOrProducer.key]}
-            onChange={e => fnSetBuildingCount(island.id, needOrProducer.key, e.target.checked ? 1 : 0)}
-          />
-          : <>
-            <span className="mr-2">{(island.buildings[producer.key] - buildingBalance).toFixed(2)}</span>{/** @todo remove? */}
-
+    return (
+      <label htmlFor={"input_"+producer.key} className='d-block mb-1'
+             onContextMenu={(e) => {fnSetBuildingCount(island, producer, null); e.preventDefault()}}
+      >
+      <GoodItem producer={producer}>
             <BuildingInput
               blend={-buildingBalance}
               buildingCount={island.buildings[producer.key]}
               buildingKey={producer.key}
               islandId={island.id}
-              fnSetBuildingCount={fnSetBuildingCount}
+              fnSetBuildingCount={number => fnSetBuildingCount(island, producer, number)}
               max={max}
             />
 
-            <span className="mr-2"><Chart balance={buildingBalance}/></span>{/** @todo remove? */}
             <span className="mr-2"><Chart balance={balance} max={3}/></span>
             {max === 0 || recommendedCount > max ? '' :
-            <RecommendedAddButton add={recommendedAdd} action={() => fnSetBuildingCount(island.id, producer.key, recommendedCount)} />
+              <RecommendedAddButton add={recommendedAdd} action={() => fnSetBuildingCount(island, producer, recommendedCount)} />
             }
-          </>
-        }
+        <Trading
+          island={island}
+          good={producer.provides}
+          balance={balance}
+          trades={trades.filter(r => r.good === producer.provides && (r.from === island.id || r.to === island.id || r.from === null || r.to === null))}
+          fnTrade={this.props.fnTrade}
+        />
       </GoodItem>
       </label>
-        {producer ?
-          <Trading
-            island={island}
-            good={producer.provides}
-            balance={balance}
-            trades={trades.filter(r => r.good === producer.provides && (r.from === island.id || r.to === island.id || r.from === null || r.to === null))}
-            fnTrade={fnTrade}
-          />
-          : (<></>)
-        }
-        </div>
     )
   }
 }
 
 Building.propTypes = {
-  needOrProducer: PropTypes.object.required,
-  island: PropTypes.object.required,
-  balance: PropTypes.int, //.required,
-  fnSetBuildingCount: PropTypes.func.required,
-  trades: PropTypes.object.required,
-  fnTrade: PropTypes.func.required,
+  producer: PropTypes.object.isRequired,
+  island: PropTypes.object.isRequired,
+  balance: PropTypes.number.isRequired,
+  fnSetBuildingCount: PropTypes.func.isRequired,
+  trades: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fnTrade: PropTypes.func.isRequired,
 };

@@ -19,8 +19,8 @@ export default class IslandButton extends Component {
 }
 
 IslandButton.propTypes = {
-  island: PropTypes.int,
-  activeIsland: PropTypes.int,
-  onClick: PropTypes.func,
+  island: PropTypes.object.isRequired,
+  activeIsland: PropTypes.number.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 

@@ -20,6 +20,6 @@ export default class RecommendedAddButton extends Component {
 }
 
 RecommendedAddButton.propTypes = {
-  add: PropTypes.int,
-  action: PropTypes.func.required,
+  add: PropTypes.number,
+  action: PropTypes.func.isRequired,
 };

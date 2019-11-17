@@ -21,7 +21,7 @@ export default class Chart extends React.Component {
         background={balance !== 0 ? 'rgba(255,255,75,0.2)' : 'rgba(255,255,75,0.2)'}
         totalValue={max !== undefined ? max : 5}
         startAngle={-90}
-        label={'2'}
+        label
         labelPosition={0}
         labelStyle={{
           fontSize: '50px',
@@ -39,6 +39,6 @@ export default class Chart extends React.Component {
 
 
 Chart.propTypes = {
-  balance: PropTypes.int, //.required,
-  max: PropTypes.int,
+  balance: PropTypes.number,//.isRequired,
+  max: PropTypes.number,
 };
