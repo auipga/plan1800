@@ -29,6 +29,7 @@ class App extends Component {
     timeout: null
   }
   initialState = {
+    darkMode: false,
     islands: [],
     worlds: [1],
     activeWorld: 1,
@@ -60,9 +61,7 @@ class App extends Component {
 
   reset = () => {
     localStorage.clear();
-    this.setState(prevState => jcl(this.initialState), () => {
-      this.addIsland(this.initialState.activeWorld)
-    });
+    this.setState(prevState => jcl(this.initialState));
   }
   saveState() {
     this.setState(prevState => prevState, this.persistState);
@@ -75,7 +74,6 @@ class App extends Component {
       localStorage.setItem('state', jst(this.state));
     }, this.saveLogic.waitMs)
   }
-
   toggleDarkMode = () => {
     let darkMode = !this.state.darkMode
 
@@ -84,6 +82,7 @@ class App extends Component {
     this.setState({darkMode: darkMode}, this.persistState)
   }
 
+  // Islands and Worlds
   generateEmptyIsland = (worldId, newIslandId) => {
     const world = worlds.find(w => w.id === worldId)
 
@@ -101,43 +100,61 @@ class App extends Component {
       prohibitedNeeds: new TieredMap(world.socialClassIDs, [])
     }
   }
+  setIslandName = (id, name) => {
+    let islands = this.state.islands
+    islands.find((i) => i.id === id).name = name
 
-  productionPerTick = (resource, buildings) => {
-    return producers
-      .filter(p => buildings[p.key] !== undefined) // omit buildings not (yet) built
-      .filter(p => p.provides === resource)        // only providers of that resource
-      .reduce((sum, p) => sum + buildings[p.key] * 60 / p.productionTime, 0)
+    this.setState({islands: islands}, this.persistState);
   }
-  consumptionThroughBuildingsPerTick = (resource, buildings) => {
-    return producers
-      .filter(p => buildings[p.key] !== undefined) // noch nie gebaut
-      .filter(p => p.needs.includes(resource)) // isConsumingResource
-      .reduce((prev, next, i) => prev + buildings[next.key] * 60 / next.productionTime, 0)
-  }
-  consumptionThroughPopulationPerTick = (resource, island) => {
-    let need = needs.find(n => n.key === resource && Array.from(island.population.keys()).includes(n.tierIDs[0]))
-    if (!need) {
-      return 0
-    }
+  addIsland(worldId) {
+    let islands = this.state.islands
+    let increment = islands.reduce((prev, next, i) => Math.max(prev, next.id), 0) + 1
+    let newIsland = this.generateEmptyIsland(worldId, increment)
 
-    return need.tierIDs
-      .filter(id => island.population.present(id))
-      .filter(id => !island.prohibitedNeeds.ofTier(id).includes(resource))
-      .filter(id => island.unlockedNeeds.includes(need.key))
-      .reduce((prev, next, i) => prev + island.population.ofTier(next) * need.consumption[i], 0)
+    this.setState({islands: [...islands, newIsland]}, () => {this.switchIsland(increment)})
   }
-  calculateTradeBalance = (islandId, good) => {
-    const trades = this.state.trades.filter(t => t.good === good);
-    const loading  = trades.filter(t => t.from === islandId && t.to   !== null).reduce((sum, that) => sum + that.amount, 0);
-    const dropping = trades.filter(t => t.to   === islandId && t.from !== null).reduce((sum, that) => sum + that.amount, 0);
-    return dropping - loading
+  switchIsland = (id) => {
+    let activeIslands = this.state.activeIslands
+    activeIslands[this.state.activeWorld] = id
+    this.setState({activeIslands: activeIslands}, this.persistState);
   }
-  calculateBalance = (resource, island) => {
-    return (
-      + this.productionPerTick(resource, island.buildings)
-      - this.consumptionThroughBuildingsPerTick(resource, island.buildings)
-      - this.consumptionThroughPopulationPerTick(resource, island)
-    )
+  deleteIsland(islandId) {
+    // if (!window.confirm('Insel "'+this.state.islands[islandKey].name+'" ('+islandKey+') löschen?')) {
+    //   return;
+    // }
+    let islands = this.state.islands.filter((i) => i.id !== islandId)
+
+    this.setState({islands: islands}, () => {
+      this.persistState();
+      let otherIsland = this.state.islands.find(i => i.worldId === this.state.activeWorld);
+      if (otherIsland) {
+        this.switchIsland(otherIsland.id)
+      }
+    });
+  }
+  unlockWorld = (worldId) => {
+    this.state.worlds.push(worldId)
+
+    this.setState({worlds: this.state.worlds}, this.persistState)
+  }
+  switchWorld = (worldId) => {
+    this.setState({activeWorld: worldId}, this.persistState);
+  }
+
+  // Island settings
+  setFertilities = (island, fertilities) => {
+    island.fertilities = fertilities
+    this.saveState()
+  }
+  changeResourceCount = (island, resource, addend) => {
+    let resources = island.regionalResources
+    resources[resource] = Math.max(0,(resources[resource] ? parseInt(resources[resource]) : 0) + addend)
+
+    this.saveState()
+  }
+  setProhibitedNeeds = (island, tierId, needs) => {
+    island.prohibitedNeeds.set(tierId, needs)
+    this.saveState()
   }
 
   changePopulation = (island, tierId, direction, move = false) => {
@@ -158,90 +175,8 @@ class App extends Component {
 
     this.saveState()
   }
-  setIslandName = (id, name) => {
-    let islands = this.state.islands
-    islands.find((i) => i.id === id).name = name
 
-    this.setState({islands: islands}, this.persistState);
-  }
-  setFertilities = (island, fertilities) => {
-    island.fertilities = fertilities
-    this.saveState()
-  }
-  setProhibitedNeeds = (island, tierId, needs) => {
-    island.prohibitedNeeds.set(tierId, needs)
-    this.saveState()
-  }
-  changeResourceCount = (island, resource, addend) => {
-    let resources = island.regionalResources
-    resources[resource] = Math.max(0,(resources[resource] ? parseInt(resources[resource]) : 0) + addend)
-
-    this.saveState()
-  }
-  addIsland(worldId) {
-    let islands = this.state.islands
-    let increment = islands.reduce((prev, next, i) => Math.max(prev, next.id), 0) + 1
-    let newIsland = this.generateEmptyIsland(worldId, increment)
-
-    this.setState({islands: [...islands, newIsland]}, () => {this.switchIsland(increment)})
-  }
-  unlockWorld = (worldId) => {
-    this.state.worlds.push(worldId)
-
-    this.setState({worlds: this.state.worlds}, this.persistState)
-  }
-  deleteIsland(islandId) {
-    // if (!window.confirm('Insel "'+this.state.islands[islandKey].name+'" ('+islandKey+') löschen?')) {
-    //   return;
-    // }
-    let islands = this.state.islands.filter((i) => i.id !== islandId)
-
-    this.setState({islands: islands}, () => {
-      this.persistState();
-      let otherIsland = this.state.islands.find(i => i.worldId === this.state.activeWorld);
-      if (otherIsland) {
-        this.switchIsland(otherIsland.id)
-      }
-    });
-  }
-  setBuildingCount = (island, producer, number) => {
-    let buildings = island.buildings;
-
-    if (number===null) {
-      buildings[producer.key] = null
-    } else {
-      if (number > 0) {
-        this.enableDisabledBuildingAndItsNeeds(island, producer)
-      }
-      buildings[producer.key] = number ? Math.max(parseInt(number), 0) : 0
-    }
-
-    this.setState(prevState => prevState, this.persistState);
-  }
-  upsertTrade = (oldTrade, newTrade) => {
-    // d(from, to, good, amount)
-    let trades = this.state.trades;
-    // remove possibly existing trade
-    if (oldTrade) {
-      // trades = trades.filter(r => !(r.from === oldTrade.from && r.to === oldTrade.to && r.good === oldTrade.good))
-      trades = trades.filter(r => r !== oldTrade)
-    }
-    if (newTrade) {
-    // if (!isNaN(newTrade.amount)) {
-    //   if (newTrade.amount > 0) {
-    //     newTrade.amount = newTrade.amount
-    //   }
-    // }
-      // add new trade / re-add changed trade
-      trades = [...trades, newTrade]
-    }
-    this.setTrades(trades)
-    // this.props.fnbsTrades(trades)
-  }
-  setTrades = (trades) => {
-    this.setState({trades: trades}, this.persistState)
-  }
-
+  // Buildings and Needs
   updateUnlockedProducers = (producer, island) => {
     const pop = island.population
     let unlocked = false
@@ -289,6 +224,20 @@ class App extends Component {
       island.unlockedNeeds = island.unlockedNeeds.filter(n => n !== need.key)
     }
   };
+  setBuildingCount = (island, producer, number) => {
+    let buildings = island.buildings;
+
+    if (number===null) {
+      buildings[producer.key] = null
+    } else {
+      if (number > 0) {
+        this.enableDisabledBuildingAndItsNeeds(island, producer)
+      }
+      buildings[producer.key] = number ? Math.max(parseInt(number), 0) : 0
+    }
+
+    this.setState(prevState => prevState, this.persistState);
+  }
   enableDisabledBuildingAndItsNeeds = (island, producer) => {
     if (!producer) {
       return
@@ -304,13 +253,70 @@ class App extends Component {
     }
 
   }
-  switchWorld = (worldId) => {
-    this.setState({activeWorld: worldId}, this.persistState);
+
+  // Trading
+  upsertTrade = (oldTrade, newTrade) => {
+    // d(from, to, good, amount)
+    let trades = this.state.trades;
+    // remove possibly existing trade
+    if (oldTrade) {
+      // trades = trades.filter(r => !(r.from === oldTrade.from && r.to === oldTrade.to && r.good === oldTrade.good))
+      trades = trades.filter(r => r !== oldTrade)
+    }
+    if (newTrade) {
+      // if (!isNaN(newTrade.amount)) {
+      //   if (newTrade.amount > 0) {
+      //     newTrade.amount = newTrade.amount
+      //   }
+      // }
+      // add new trade / re-add changed trade
+      trades = [...trades, newTrade]
+    }
+    this.setTrades(trades)
+    // this.props.fnbsTrades(trades)
   }
-  switchIsland = (id) => {
-    let activeIslands = this.state.activeIslands
-    activeIslands[this.state.activeWorld] = id
-    this.setState({activeIslands: activeIslands}, this.persistState);
+  setTrades = (trades) => {
+    this.setState({trades: trades}, this.persistState)
+  }
+
+  // Resource Balance
+  productionPerTick = (resource, buildings) => {
+    return producers
+      .filter(p => buildings[p.key] !== undefined) // omit buildings not (yet) built
+      .filter(p => p.provides === resource)        // only providers of that resource
+      .reduce((sum, p) => sum + buildings[p.key] * 60 / p.productionTime, 0)
+  }
+  consumptionThroughBuildingsPerTick = (resource, buildings) => {
+    return producers
+      .filter(p => buildings[p.key] !== undefined) // noch nie gebaut
+      .filter(p => p.needs.includes(resource)) // isConsumingResource
+      .reduce((prev, next, i) => prev + buildings[next.key] * 60 / next.productionTime, 0)
+  }
+  consumptionThroughPopulationPerTick = (resource, island) => {
+    let need = needs.find(n => n.key === resource && Array.from(island.population.keys()).includes(n.tierIDs[0]))
+    if (!need) {
+      return 0
+    }
+
+    return need.tierIDs
+      .filter(id => island.population.present(id))
+      .filter(id => !island.prohibitedNeeds.ofTier(id).includes(resource))
+      .filter(id => island.unlockedNeeds.includes(need.key))
+      .reduce((prev, next, i) => prev + island.population.ofTier(next) * need.consumption[i], 0)
+  }
+  calculateTradeBalance = (good, island) => {
+    const trades = this.state.trades.filter(t => t.good === good);
+    const loading  = trades.filter(t => t.from === island.id && t.to   !== null).reduce((sum, that) => sum + that.amount, 0);
+    const dropping = trades.filter(t => t.to   === island.id && t.from !== null).reduce((sum, that) => sum + that.amount, 0);
+    return dropping - loading
+  }
+  calculateBalance = (resource, island) => {
+    return (
+      + this.productionPerTick(resource, island.buildings)
+      - this.consumptionThroughBuildingsPerTick(resource, island.buildings)
+      - this.consumptionThroughPopulationPerTick(resource, island)
+      + this.calculateTradeBalance(resource, island)
+    )
   }
 
   render() {
@@ -384,7 +390,7 @@ class App extends Component {
                   island={island}
                   trades={this.state.trades}
                   fnTrade={this.upsertTrade}
-                  fnBalance={(resource) => this.calculateBalance(resource, island) + this.calculateTradeBalance(island.id, resource)}
+                  fnBalance={(resource) => this.calculateBalance(resource, island)}
                   fnSetBuildingCount={this.setBuildingCount}
                   fnEnableDisabledBuildingAndItsNeeds={producer => this.enableDisabledBuildingAndItsNeeds(island, producer)}
                   unlockedProducers={this.state.unlockedProducers}
