@@ -10,11 +10,11 @@ import NeedSwitch from "./NeedSwitch";
 export default class IslandPopulations extends Component {
   handleWheel = (event, island, tierId, direction, move = false) => {
     event.preventDefault()
-    this.props.fnChangePopulation(island, tierId, direction, move)
+    this.props.fnChangeResidences(event, island, tierId, direction, move)
   }
 
   render() {
-    const {island, fnChangePopulation, fnSetPopulation, fnSetProhibitedNeeds} = this.props;
+    const {island, fnChangeResidences, fnSetResidences, fnSetProhibitedNeeds} = this.props;
     let loop={needs:null}
 
     return (
@@ -29,28 +29,29 @@ export default class IslandPopulations extends Component {
               {/*   Eingabe Spalte   */}
               <Col className=''>
                 <img src={"./icons/population/Workforce_" + (tier.key) + ".png"} alt="" className="d-block mx-auto rounded" style={{height: 40, width: 40}}/>
+                {island.residences.get(tier.id)}x{island.populationPerResidence.get(tier.id)}={island.population.get(tier.id)}
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">
                     {/*eslint-disable-next-line*/}
-                    <Button onClick={() => fnChangePopulation(island, tier.id, -1)} color='secondary'>&#10134;{/*icon-minus*/}</Button>
+                    <Button onClick={e => fnChangeResidences(e, island, tier.id, -1)} color='secondary'>&#10134;{/*icon-minus*/}</Button>
                   </InputGroupAddon>
                   <Input placeholder={trans(tier)} title={trans(tier)}
-                         value={island.population.get(tier.id)}
+                         value={island.residences.get(tier.id)}
                          style={{height: 56}}
                          className={'text-center'}
                     // readOnly
-                         onChange={e => fnSetPopulation(island, tier.id, e.target.value)}
+                         onChange={e => fnSetResidences(island, tier.id, e.target.value)}
                          onWheel={e => this.handleWheel(e, island, tier.id, -Math.sign(e.deltaY))}
                   />
                   <InputGroupAddon addonType="append">
                     {/*eslint-disable-next-line*/}
-                    <Button onClick={() => fnChangePopulation(island, tier.id, +1)} color='secondary'>&#10133;{/*icon-plus*/}</Button>
+                    <Button onClick={e => fnChangeResidences(e, island, tier.id, +1)} color='secondary'>&#10133;{/*icon-plus*/}</Button>
                   </InputGroupAddon>
                 </InputGroup>
                 {/*   Ressourcen - Bedürfnisse   */}
                 <hr className={'mt-3 mb-2'}/>
                 <div className='text-center'>
-                  {needs.filter(n => n.tierIDs.includes(tier.id) && n.consumption[0] !== 1/1e10).map((need, key) => {
+                  {needs.filter(n => n.tierIDs.includes(tier.id)).map((need, key) => {
                     let nextTier = loop.needs !== null && loop.needs !== need.tierIDs[0]
                     loop.needs = need.tierIDs[0]
                     return (<React.Fragment key={key}>
@@ -70,12 +71,12 @@ export default class IslandPopulations extends Component {
                    onWheel={e => this.handleWheel(e, island, tier.id+(Math.sign(e.deltaY) > 0 ? 1 : 0), -Math.sign(e.deltaY), true)}
               >
                 <ButtonGroup vertical size='sm'>
-                  <Button onClick={() => fnChangePopulation(island, tier.id + 0, +1, true)} color='primary'>
+                  <Button onClick={e => fnChangeResidences(e, island, tier.id + 0, +1, true)} color='primary'>
                     <img src="./icons/upgrade.png" alt=""
                          style={{height: 24, width: 24}}
                     />
                   </Button>
-                  <Button onClick={() => fnChangePopulation(island, tier.id + 1, -1, true)} color='warning'
+                  <Button onClick={e => fnChangeResidences(e, island, tier.id + 1, -1, true)} color='warning'
                           className={'py-0'}>&#10094;{/*icon-arrow left*/}</Button>
                 </ButtonGroup>
               </Col>
@@ -90,7 +91,7 @@ export default class IslandPopulations extends Component {
 
 IslandPopulations.propTypes = {
   island: PropTypes.object.isRequired,
-  fnChangePopulation: PropTypes.func.isRequired,
-  fnSetPopulation: PropTypes.func.isRequired,
+  fnChangeResidences: PropTypes.func.isRequired,
+  fnSetResidences: PropTypes.func.isRequired,
   fnSetProhibitedNeeds: PropTypes.func.isRequired,
 };

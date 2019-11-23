@@ -50,9 +50,10 @@ class App extends Component {
       this.addIsland(this.initialState.activeWorld)
     } else {
       for (let island of this.state.islands) {
-        island.residences       = TieredMap.createFromJson(island.residences)
-        island.population       = TieredMap.createFromJson(island.population)
-        island.prohibitedNeeds  = TieredMap.createFromJson(island.prohibitedNeeds)
+        island.residences              = TieredMap.createFromJson(island.residences)
+        island.populationPerResidence  = TieredMap.createFromJson(island.populationPerResidence)
+        island.population              = TieredMap.createFromJson(island.population)
+        island.prohibitedNeeds         = TieredMap.createFromJson(island.prohibitedNeeds)
       }
     }
     // initialise darkMode in index.html
@@ -94,6 +95,7 @@ class App extends Component {
       regionalResources: world.regionalResources.reduce((obj,res) => ({...obj, [res]:0}), {}),
       name: `(${newIslandId}) ${trans(world)}`,
       residences: new TieredMap(world.socialClassIDs, 0),
+      populationPerResidence: new TieredMap(world.socialClassIDs, 0),
       population: new TieredMap(world.socialClassIDs, 0),
       buildings: {},
       unlockedNeeds: [],
@@ -154,26 +156,89 @@ class App extends Component {
   }
   setProhibitedNeeds = (island, tierId, needs) => {
     island.prohibitedNeeds.set(tierId, needs)
+
+    this.updatePopulationPerResidence(island, tierId)
+    this.recalculatePopulation(island, tierId)
+
+    while (this.updateUnlockedNeeds(island)) {
+      d("updateUnlockedNeeds", "tierId", tierId)
+      this.updatePopulationPerResidence(island, tierId)
+      this.recalculatePopulation(island, tierId)
+    }
+
     this.saveState()
   }
-
-  changePopulation = (island, tierId, direction, move = false) => {
+  changeResidences = (event, island, tierId, direction, move = false) => {
     if (move === true) {
-      island.population.move(tierId, direction + tierId, this.step);
+      island.residences.move(tierId, direction + tierId, this.step);
+      this.postChangeResidences(island, tierId+(direction>0?1:0))
     } else {
-      island.population.add(tierId, direction * this.step);
+      island.residences.add(tierId, direction * this.step);
+      this.postChangeResidences(island, tierId)
+    }
+
+    this.saveState()
+  }
+  setResidences = (island, tierId, number) => {
+    island.residences.set(tierId, number ? parseInt(number) : 0)
+
+    this.postChangeResidences(island, tierId)
+    this.saveState()
+  }
+  postChangeResidences = (island, tierId) => {
+    const highestFrom0 = tierId > island.population.highestTier() // population not yet calculated / still 0
+    const thisFrom0 = !island.population.present(tierId) // population not yet calculated / still 0
+    const highestTo0 = tierId > island.residences.highestTier()   // residences already set to 0 in this action
+    const handleLowerTiers = highestFrom0 || highestTo0
+    const handleNoOtherTiers = tierId < island.residences.highestTier()
+
+    if (handleNoOtherTiers) {
+      this.recalculatePopulation(island, tierId)
+      if (thisFrom0) {
+        needs.filter(n => n.tierIDs.includes(tierId)).forEach(need => {
+          this.enableDisabledBuildingAndItsNeeds(island, producers.find(p => p.key === need.key))
+        })
+      }
+      return
+    }
+
+    this.recalculatePopulation(island, tierId)
+
+    while (this.updateUnlockedNeeds(island)) {
+      d("updateUnlockedNeeds", "tierId", tierId)
+      this.updatePopulationPerResidence(island, tierId)
+      this.recalculatePopulation(island, tierId)
+    }
+    if (island.residences.has(tierId+1)) { // wenn ausgeblendet, reicht .present
+      d("updatePopulationPerResidence", "+1",tierId+1)
+      this.updatePopulationPerResidence(island, tierId+1)
+    }
+    while (handleLowerTiers && island.residences.has(--tierId)) {
+      d("updatePopulationPerResidence", '--', tierId)
+      this.updatePopulationPerResidence(island, tierId)
+      this.recalculatePopulation(island, tierId)
+      if (island.residences.present(tierId)) {
+        break
+      }
     }
     producers.forEach(p => {this.updateUnlockedProducers(p, island)})
-    needs.filter(n => Array.from(island.population.keys()).includes(n.tierIDs[0])).forEach(need => {this.updateUnlockedNeeds(need, island)})
 
     this.saveState()
   }
-  setPopulation = (island, tierId, number) => {
-    island.population.set((tierId), number ? parseInt(number) : 0)
-    producers.forEach(p => {this.updateUnlockedProducers(p, island)})
-    needs.forEach(need => {this.updateUnlockedNeeds(need, island)})
-
-    this.saveState()
+  updatePopulationPerResidence(island, tierId) {
+    const relevantNeeds = needs.filter(n =>
+      island.unlockedNeeds.includes(n.key)                       // unlocked on this island
+      && n.tierIDs.includes(tierId)                              // relevant for this tier
+      && !island.prohibitedNeeds.ofTier(tierId).includes(n.key)  // not prohibited for this tier
+    )
+    island.populationPerResidence.set(tierId, 0)
+    relevantNeeds.forEach(n => {
+      // d('add', n.influx[n.tierIDs.indexOf(tierId)], 'for', tierId, n.key)
+      island.populationPerResidence.add(tierId, n.influx[n.tierIDs.indexOf(tierId)])
+    })
+  }
+  recalculatePopulation = (island, tierId) => {
+    island.population.set(tierId, island.residences.ofTier(tierId) * island.populationPerResidence.ofTier(tierId))
   }
 
   // Buildings and Needs
@@ -201,29 +266,27 @@ class App extends Component {
       }
     }
   }
-  updateUnlockedNeeds = (need, island) => {
-    const pop = island.population
-    let needed = false
-    const firstTierID = need.tierIDs[0];
+  updateUnlockedNeeds = (island) => {
+    const unlockedNeeds = needs.filter(n =>
+      // unlocked by higher tier present
+      (n.tierIDs[0] < island.residences.highestTier())
+      // unlocked by requirement with highest tier
+      || (n.tierIDs[0] === island.residences.highestTier() && island.population.highestTierValue() >= n.requirement)
+    )
 
-    if (!needed) {
-      needed = pop.ofTier(firstTierID) >= need.requirement;
-    }
-    if (!needed && firstTierID < Math.max(...pop.keys())) { // wenn das nächste Tier noch zur selben Welt gehört
-      needed = pop.present(firstTierID+1)
-    }
-    if (!needed) {
-      needed = pop.present(firstTierID) && pop.sumAbove(firstTierID)
-    }
-    if (needed) {
-      if (!island.unlockedNeeds.includes(need.key)) {
+    unlockedNeeds.filter(n => n.tierIDs.filter(t => island.population.present(t)).length)
+      .forEach(need => {
         this.enableDisabledBuildingAndItsNeeds(island, producers.find(p => p.key === need.key))
-        island.unlockedNeeds.push(need.key)
-      }
-    } else if (island.unlockedNeeds.includes(need.key)) {
-      island.unlockedNeeds = island.unlockedNeeds.filter(n => n !== need.key)
+      })
+
+    const keys = unlockedNeeds.reduce((all, need) => [...all, need.key], [])
+    const keysWithMarketplace = keys.length ? keys : ["Marketplace"]
+    if (island.unlockedNeeds.length !== keysWithMarketplace.length) {
+      island.unlockedNeeds = keysWithMarketplace
+      return true
     }
-  };
+    return false
+  }
   setBuildingCount = (island, producer, number) => {
     let buildings = island.buildings;
 
@@ -251,7 +314,6 @@ class App extends Component {
       this.setBuildingCount(island, producer, 0)
       // this.state.islands.find((i) => i.id === island.id).buildings[buildingKey] = 0;
     }
-
   }
 
   // Trading
@@ -371,11 +433,11 @@ class App extends Component {
                 <Button onClick={() => this.deleteIsland(island.id)} size='sm' className='float-right'>&#10005;{/*icon-x*/}</Button>
               </CardHeader>
               {/*   Bevölkerungsstufen   */}
-              <CardHeader>
+              <CardHeader>x{this.state.modifier}
                 <IslandPopulations
                   island={island}
-                  fnChangePopulation={this.changePopulation}
-                  fnSetPopulation={this.setPopulation}
+                  fnChangeResidences={this.changeResidences}
+                  fnSetResidences={this.setResidences}
                   fnSetProhibitedNeeds={this.setProhibitedNeeds}
                 />
               </CardHeader>
