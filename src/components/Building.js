@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Button} from "reactstrap";
 import PropTypes from 'prop-types/';
 import GoodItem from "./GoodItem";
 import BuildingInput from "./BuildingInput";
@@ -9,7 +10,6 @@ import Trading from "./Trading";
 export default class Building extends Component {
   render() {
     const {producer, island, balance, fnSetBuildingCount} = this.props
-    const {trades} = this.props
 
     let buildingBalance, recommendedCount, recommendedAdd = 0
     let max = undefined
@@ -28,10 +28,11 @@ export default class Building extends Component {
       max = 0
     }
 
+    this.trades = this.props.trades.filter(r => r.good === producer.provides && (r.from === island.id || r.to === island.id || r.from === null || r.to === null));
+    this.removable = !island.buildings[producer.key] && !this.trades.length && !balance
+
     return (
-      <label htmlFor={"input_"+producer.key} className='d-block mb-1'
-             onContextMenu={(e) => {fnSetBuildingCount(island, producer, null); e.preventDefault()}}
-      >
+      <label htmlFor={"input_"+producer.key} className='d-block mb-1'>
         <GoodItem producer={producer}>
           <BuildingInput
             blend={-buildingBalance}
@@ -42,7 +43,11 @@ export default class Building extends Component {
             max={max}
           />
 
-          <span className="mr-2"><Chart balance={balance} max={3}/></span>
+          {this.removable ?
+            <Button onClick={() => fnSetBuildingCount(island, producer, null)} className={'px-1 py-0 mr-2'} style={{marginLeft: 6, borderRadius:20}}>&#10005;{/*icon-x*/}</Button>
+          :
+            <span className="mr-2"><Chart balance={balance} max={3}/></span>
+          }
           {max === 0 || recommendedCount > max ? '' :
             <RecommendedAddButton add={recommendedAdd} action={() => fnSetBuildingCount(island, producer, recommendedCount)} />
           }
@@ -50,7 +55,7 @@ export default class Building extends Component {
             island={island}
             good={producer.provides}
             balance={balance}
-            trades={trades.filter(r => r.good === producer.provides && (r.from === island.id || r.to === island.id || r.from === null || r.to === null))}
+            trades={this.trades}
             fnTrade={this.props.fnTrade}
           />
         </GoodItem>
