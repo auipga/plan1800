@@ -24,7 +24,6 @@ const d = debugEnabled ? cl : () => null
 const dd = debugEnabled ? (...foo) => <div className='d-inline-block font-italic text-break'>{foo}</div> : () => null
 
 class App extends Component {
-  step = 50;
   saveLogic = {
     waitMs: 500,
     timeout: null
@@ -71,6 +70,9 @@ class App extends Component {
 
     document.addEventListener('keydown', handleHighlight)
     document.addEventListener('keyup',   handleHighlight)
+
+    document.addEventListener('keydown', e => { this.setState({modifier: this.modifier(e)}) })
+    document.addEventListener('keyup',   e => { this.setState({modifier: this.modifier(e)}) })
   }
 
   reset = () => {
@@ -99,6 +101,13 @@ class App extends Component {
     document.getElementsByTagName('body')[0].classList.toggle('bg-secondary', darkMode)
 
     this.setState({darkMode: darkMode}, this.persistState)
+  }
+  modifier = (event) => {
+    let step = 1
+    if (event.ctrlKey)  { step *= 5  }
+    if (event.shiftKey) { step *= 10 }
+    // if (event.altKey)   { step *= 5  }
+    return step
   }
 
   // Islands and Worlds
@@ -187,11 +196,13 @@ class App extends Component {
     this.saveState()
   }
   changeResidences = (event, island, tierId, direction, move = false) => {
+    const step = this.modifier(event)
+
     if (move === true) {
-      island.residences.move(tierId, direction + tierId, this.step);
+      island.residences.move(tierId, direction + tierId, step)
       this.postChangeResidences(island, tierId+(direction>0?1:0))
     } else {
-      island.residences.add(tierId, direction * this.step);
+      island.residences.add(tierId, direction * step)
       this.postChangeResidences(island, tierId)
     }
 
