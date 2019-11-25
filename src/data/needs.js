@@ -208,7 +208,7 @@ export default [
     tierIDs: [4, 5],
     requirement: 1750,
     consumption: [1/1e10, 1/1e10],
-    influx: [0, 0],
+    influx: [2, 8],
     income: [0, 0],
     happiness: [0, 0],
   },
