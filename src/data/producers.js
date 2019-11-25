@@ -663,7 +663,7 @@ export default [
     needs: ["fertility"],
   },
   {
-    key: "Cotton_fabric",
+    key: "Cotton_fabric_6",
     tierId: 6,
     requirement: 100,
     productionTime: 30,
@@ -690,7 +690,7 @@ export default [
     needs: ["fertility"],
   },
   {
-    key: "Rum",
+    key: "Rum_6",
     tierId: 6,
     requirement: 100,
     productionTime: 30,
@@ -717,7 +717,7 @@ export default [
     needs: ["Alpaca_wool"],
   },
   {
-    key: "Caoutchouc",
+    key: "Caoutchouc_6",
     tierId: 6,
     requirement: 200,
     productionTime: 60,
@@ -726,7 +726,7 @@ export default [
     needs: ["fertility"],
   },
   {
-    key: "Pearls",
+    key: "Pearls_6",
     tierId: 6,
     requirement: 300,
     productionTime: 90,
@@ -793,7 +793,7 @@ export default [
     needs: ["fertility"],
   },
   {
-    key: "Coffee",
+    key: "Coffee_6",
     tierId: 7,
     requirement: 300,
     productionTime: 30,
@@ -802,7 +802,7 @@ export default [
     needs: ["Coffee_beans"],
   },
   {
-    key: "Gold_ore",
+    key: "Gold_ore_6",
     tierId: 7,
     requirement: 300,
     productionTime: 150,
@@ -829,7 +829,7 @@ export default [
     needs: ["Cotton_fabric", "Felt"],
   },
   {
-    key: "Beer",
+    key: "Beer_6",
     tierId: 7,
     requirement: 600,
     productionTime: Infinity,
@@ -847,7 +847,7 @@ export default [
     needs: ["fertility"],
   },
   {
-    key: "Cigars",
+    key: "Cigars_6",
     tierId: 7,
     requirement: 1000,
     productionTime: 30,
@@ -865,7 +865,7 @@ export default [
     needs: ["Wood"],
   },
   {
-    key: "Sewing_machines",
+    key: "Sewing_machines_6",
     tierId: 7,
     requirement: 1000,
     productionTime: Infinity,
@@ -892,7 +892,7 @@ export default [
     needs: ["fertility"],
   },
   {
-    key: "Chocolate",
+    key: "Chocolate_6",
     tierId: 7,
     requirement: 1500,// AND (?) 1750 of 5
     productionTime: 30,

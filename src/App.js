@@ -260,7 +260,7 @@ class App extends Component {
         break
       }
     }
-    producers.forEach(p => {this.updateUnlockedProducers(p, island)})
+    this.updateUnlockedProducers(island)
 
     this.saveState()
   }
@@ -281,29 +281,22 @@ class App extends Component {
   }
 
   // Buildings and Needs
-  updateUnlockedProducers = (producer, island) => {
-    const pop = island.population
-    let unlocked = false
+  updateUnlockedProducers = (island) => {
+    const unlockedProducers = producers.filter(p =>
+      // only this world
+      island.population.has(p.tierId) && !p.needs.includes("otherWorld") && (
+      // unlocked by higher tier present
+      (p.tierId < island.residences.highestTier())
+      // unlocked by requirement with highest tier
+      || (p.tierId === island.residences.highestTier() && island.population.highestTierValue() >= p.requirement)
+    ))
 
-    if (!island.population.has(producer.tierId)) {
-      return false // wrong world
-    }
-
-    if (!unlocked) {
-      unlocked = pop.ofTier(producer.tierId) >= producer.requirement
-    }
-    if (!unlocked) {
-      unlocked = pop.sumAbove(producer.tierId) > 0;
-    }
-
-    if (unlocked) {
-      if (island.buildings[producer.key] === undefined) {
-        island.buildings[producer.key] = producer.type === "" ? 0 : null
-      }
-      if (!this.state.unlockedProducers.includes(producer.key)) {
+    unlockedProducers
+      .filter(p => !this.state.unlockedProducers.includes(p.key))
+      .forEach(producer => {
         this.state.unlockedProducers.push(producer.key)
-      }
-    }
+        island.buildings[producer.key] = 0
+    })
   }
   updateUnlockedNeeds = (island) => {
     const unlockedNeeds = needs.filter(n =>
