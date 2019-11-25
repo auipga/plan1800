@@ -14,7 +14,7 @@ import Producers from "./components/Producers";
 import TieredMap from "./classes/TieredMap";
 import GoodItem from "./components/GoodItem";
 
-const debugEnabled = true
+const debugEnabled = !true
 const jst = JSON.stringify
 const jpa = JSON.parse
 const jcl = foo => jpa(jst(foo)) // clone function
@@ -478,7 +478,6 @@ class App extends Component {
 
               {/*   Zeug auf der Insel   */}
               <CardBody>
-                {false ? dd(jst(this.state.islands.find(i => i.id === this.state.activeIslands[this.state.activeWorld]).buildings)) : null}
                 {/*   Producers   */}
                 <br/>
                 {/*{dd(jst(this.state.unlockedProducers))}*/}

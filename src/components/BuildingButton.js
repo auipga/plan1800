@@ -30,5 +30,5 @@ export default class BuildingButton extends Component {
 BuildingButton.propTypes = {
   producer: PropTypes.object.isRequired,
   isUnlocked: PropTypes.bool.isRequired,
-  fnEnable: PropTypes.func.isRequired,
+  fnEnable: PropTypes.func,
 }
