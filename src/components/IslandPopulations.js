@@ -55,7 +55,8 @@ export default class IslandPopulations extends Component {
                     return (<React.Fragment key={key}>
                       {nextTier ? <hr className={'mt-1 mb-0'}/> : ''}
                       <NeedSwitch
-                        needKey={need.key}
+                        need={need}
+                        nIndex={need.tierIDs.indexOf(tier.id)}
                         needed={island.unlockedNeeds.includes(need.key)}
                         prohibitedNeeds={island.prohibitedNeeds.ofTier(tier.id)}
                         fnSetIslandProhibitedNeeds={prohibitedNeeds => fnSetProhibitedNeeds(island, tier.id, prohibitedNeeds)}
