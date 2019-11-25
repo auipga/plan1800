@@ -561,7 +561,7 @@ export default [
   {
     key: "Chocolate",
     tierId: 5,
-    requirement: 750,
+    requirement: 1750,
     productionTime: Infinity,
     type: "Konsumgüter",
     provides: "Chocolate",
@@ -894,7 +894,7 @@ export default [
   {
     key: "Chocolate_6",
     tierId: 7,
-    requirement: 1500,// AND (?) 1750 of 5
+    requirement: 1500,
     productionTime: 30,
     type: "Konsumgüter",
     provides: "Chocolate",
