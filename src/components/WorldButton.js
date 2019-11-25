@@ -17,7 +17,7 @@ export default class WorldButton extends Component {
         disabled={!unlocked}
         onClick={() => fnSwitchWorld(world.id)}>
         <img src={'./icons/worlds/' + world.id + '.png'} alt={world} style={{width: 40, height: 40}}/>
-        <span className={'ml-2'}>
+        <span className={'ml-2 d-none'}>
           {trans(world)}
         </span>
       </Button>

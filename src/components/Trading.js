@@ -104,7 +104,7 @@ export default class Trading extends Component {
                 <span className={'mr-2'}>&#10134;{/*icon-minus*/}</span>
                 <span className={'mr-2'}>{trade.amount.toFixed(2)} to {trade.to ? trade.to : <>&#10031;{/*icon-star*/}</>}</span>
                 <Button onClick={() => fnTrade(trade, null) }
-                        className={'px-1 py-0 '} size={'sm'}><span>&#10006;</span></Button>
+                        className={'px-1 py-0 '} size={'sm'}><span>&#10006;{/*icon-X*/}</span></Button>
               </DropdownItem>
             ))}
           </DropdownMenu>

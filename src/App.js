@@ -85,6 +85,7 @@ class App extends Component {
     })
   }
   saveState() {
+    // it works but has a smell
     this.setState(prevState => prevState, this.persistState);
   }
   persistState() {
@@ -145,9 +146,9 @@ class App extends Component {
   switchIsland = (id) => {
     let activeIslands = this.state.activeIslands
     activeIslands[this.state.activeWorld] = id
-    this.setState({activeIslands: activeIslands}, this.persistState);
+    this.setState({activeIslands: activeIslands}, this.persistState)
   }
-  deleteIsland(islandId) {
+  deleteIsland = (islandId) => {
     // if (!window.confirm('Insel "'+this.state.islands[islandKey].name+'" ('+islandKey+') löschen?')) {
     //   return;
     // }
@@ -275,7 +276,7 @@ class App extends Component {
     const pop = island.population
     let unlocked = false
 
-    if (!worlds.find(w => w.id === island.worldId).socialClassIDs.includes(producer.tierId)) {
+    if (!island.population.has(producer.tierId)) {
       return false // wrong world
     }
 
@@ -390,9 +391,11 @@ class App extends Component {
     }
 
     return need.tierIDs
-      .filter(id => island.population.present(id))
-      .filter(id => !island.prohibitedNeeds.ofTier(id).includes(resource))
-      .filter(id => island.unlockedNeeds.includes(need.key))
+      .filter(id =>
+        island.population.present(id)
+        && !island.prohibitedNeeds.ofTier(id).includes(resource)
+        && island.unlockedNeeds.includes(need.key) /** @todo: extract from filter() as variable*/
+      )
       .reduce((prev, next, i) => prev + island.population.ofTier(next) * need.consumption[i], 0)
   }
   calculateTradeBalance = (good, island) => {
@@ -485,7 +488,6 @@ class App extends Component {
                   fnSetBuildingCount={this.setBuildingCount}
                   fnEnableDisabledBuilding={producer => this.enableDisabledBuilding(island, producer)}
                   unlockedProducers={this.state.unlockedProducers}
-
                 />
               </CardBody>
             </Card>

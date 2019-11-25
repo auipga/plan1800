@@ -19,9 +19,7 @@ export default class IslandPopulations extends Component {
 
     return (
       <Row>
-        {tiers
-        .filter(tier => worlds.find(w => w.id === island.worldId).socialClassIDs.find(tierKey => tierKey === tier.id))
-        .map((tier, tierKey) => (
+        {tiers.filter(tier => island.population.has(tier.id)).map((tier, tierKey) => (
           <Col xs={12} sm={6} md={4} lg={3} xl={''} key={tier.id}
                style={{maxWidth: '20%'}}
                className={"align-content-center" + ((!tier.id || (island.population.ofTier(tier.id) > 0)) ? ' bg-success-' : ' d-none-')}>

@@ -28,7 +28,7 @@ export default class TieredMap extends Map {
 
 TieredMap.prototype.toJSON = function() {
   let obj={}
-  this.forEach((value, key) => {obj[key] = value})
+  this.forEach((value, tierId) => {obj[tierId] = value})
   return obj
 }
 TieredMap.prototype.tiers = function() {
