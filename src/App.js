@@ -202,6 +202,7 @@ class App extends Component {
     if (move === true) {
       island.residences.move(tierId, direction + tierId, step)
       this.postChangeResidences(island, tierId+(direction>0?1:0))
+      this.recalculatePopulation(island, tierId+(direction>0?0:-1))
     } else {
       island.residences.add(tierId, direction * step)
       this.postChangeResidences(island, tierId)
