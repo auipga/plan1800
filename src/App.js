@@ -227,7 +227,7 @@ class App extends Component {
       this.recalculatePopulation(island, tierId)
       if (thisFrom0) {
         needs.filter(n => n.tierIDs.includes(tierId)).forEach(need => {
-          this.enableDisabledBuilding(island, producers.find(p => p.key === need.key))
+          this.enableDisabledBuilding(island, producers.find(p => p.key === need.key), -1)
         })
       }
       return
@@ -307,7 +307,7 @@ class App extends Component {
 
     unlockedNeeds.filter(n => n.tierIDs.filter(t => island.population.present(t)).length)
       .forEach(need => {
-        this.enableDisabledBuilding(island, producers.find(p => p.key === need.key))
+        this.enableDisabledBuilding(island, producers.find(p => p.key === need.key), -1)
       })
 
     const keys = unlockedNeeds.reduce((all, need) => [...all, need.key], [])
@@ -325,20 +325,20 @@ class App extends Component {
       buildings[producer.key] = null
     } else {
       if (number > 0) {
-        this.enableDisabledBuilding(island, producer, true)
+        this.enableDisabledBuilding(island, producer, -1)
       }
       buildings[producer.key] = number ? Math.max(parseInt(number), 0) : 0
     }
 
     this.setState(prevState => prevState, this.persistState);
   }
-  enableDisabledBuilding = (island, producer, recursive = false) => {
+  enableDisabledBuilding = (island, producer, recursive = 0) => {
     if (!producer) {
       return
     }
-    if (recursive) {
+    if (recursive !== 0) {
       producers.filter(p => producer.needs.includes(p.provides)).forEach(p => {
-        this.enableDisabledBuilding(island, p, false)
+        this.enableDisabledBuilding(island, p, --recursive)
       })
     }
 
@@ -487,7 +487,7 @@ class App extends Component {
                   fnTrade={this.upsertTrade}
                   fnBalance={(resource) => this.calculateBalance(resource, island)}
                   fnSetBuildingCount={this.setBuildingCount}
-                  fnEnableDisabledBuilding={producer => this.enableDisabledBuilding(island, producer)}
+                  fnEnableDisabledBuilding={this.enableDisabledBuilding}
                   unlockedProducers={this.state.unlockedProducers}
                 />
               </CardBody>

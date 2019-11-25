@@ -30,7 +30,7 @@ export default class ProducersOfType extends Component {
         <div className='d-flex flex-wrap mb-2' style={{maxWidth: '182px'}}>
           <img src={"./icons/Icon_build_menu.png"} alt='' className={'mr-1'} style={{height: 26, width: 26, filter: 'drop-shadow(0 0 1px #ffffff)'}}/>
           {unusedProducers.map((producer, producerKey) => (
-            <BuildingButton key={producerKey} producer={producer} isUnlocked={true} fnEnable={() => this.props.fnEnableDisabledBuilding(producer)} />
+            <BuildingButton key={producerKey} producer={producer} isUnlocked={true} fnEnable={recursive => this.props.fnEnableDisabledBuilding(island, producer, recursive)} />
           ))}
           {lockedProducers.map((producer, producerKey) => (
             <BuildingButton key={producerKey} producer={producer} isUnlocked={false} />
