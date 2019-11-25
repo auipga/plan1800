@@ -12,6 +12,7 @@ import Fertilities from "./components/Fertilities";
 import {trans} from "./functions/translation";
 import Producers from "./components/Producers";
 import TieredMap from "./classes/TieredMap";
+import GoodItem from "./components/GoodItem";
 
 const debugEnabled = true
 const jst = JSON.stringify
@@ -56,8 +57,20 @@ class App extends Component {
         island.prohibitedNeeds         = TieredMap.createFromJson(island.prohibitedNeeds)
       }
     }
+    function handleHighlight(e) {
+      let elem = document.querySelector('.hi-self')
+      if (elem) {
+        const clas = Array.from(elem.classList).find(c => c.startsWith('provides-'))
+        if (clas) {
+          GoodItem.highlight(producers.find(p => p.key === clas.split('provides-')[1]), e.ctrlKey)
+        }
+      }
+    }
     // initialise darkMode in index.html
     document.getElementsByTagName('body')[0].classList.toggle('bg-secondary', !!this.state.darkMode)
+
+    document.addEventListener('keydown', handleHighlight)
+    document.addEventListener('keyup',   handleHighlight)
   }
 
   reset = () => {

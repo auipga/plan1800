@@ -3,6 +3,7 @@ import PropTypes from 'prop-types/'
 import {trans} from "../functions/translation";
 import classNames from "classnames";
 import {Button} from "reactstrap";
+import GoodItem from "./GoodItem";
 
 export default class BuildingButton extends Component {
   render() {
@@ -10,9 +11,11 @@ export default class BuildingButton extends Component {
 
     return (
       <Button
-        className={'p-0 mr-1'} color={'link'}
+        className={'p-0 mr-1 ' + GoodItem.classes(producer)} color={'link'}
         onClick={fnEnable}
         disabled={!isUnlocked}
+        onMouseEnter={(e) => GoodItem.highlight(producer, e.ctrlKey)}
+        onMouseLeave={() => GoodItem.highlight(null)}
       >
         <img src={"./icons/goods/" + producer.key + ".png"}
              alt={trans(producer)} title={trans(producer)}

@@ -2,34 +2,42 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types/';
 import Media from "reactstrap/es/Media";
 import {trans} from "../functions/translation";
+import producers from "../data/producers";
 
 export default class GoodItem extends Component {
-  highlight = (good) => {
+  static highlight = (producer, recursive) => {
     // remove
-    document.querySelectorAll('.hi-needs').forEach(highlight => {highlight.classList.remove('hi-needs')})
-    document.querySelectorAll('.hi-neededBy').forEach(highlight => {highlight.classList.remove('hi-neededBy')})
-    document.querySelectorAll('.hi-self').forEach(highlight => {highlight.classList.remove('hi-self')})
+    document.querySelectorAll('.hi-needs, .hi-neededBy, .hi-self')
+      .forEach(elem => {elem.classList.remove('hi-needs','hi-neededBy','hi-self')})
+
+    if (producer === null) {
+      return
+    }
 
     // add
-    if (good !== null) {
-      let producer = this.props.producer
-      // self - producer
-      document.querySelectorAll('.GoodItem.provides-' + producer.provides).forEach(good => (good.classList.add('hi-self')))
+    // self - producer
+    document.querySelectorAll('.GoodItem.provides-' + producer.provides).forEach(elem => elem.classList.add('hi-self'))
 
-      // needs
-      producer.needs.forEach((g => (
-        // todo: mehr ebenen tief
-        document.querySelectorAll('.GoodItem.provides-' + g              ).forEach(good => (good.classList.add('hi-needs')))
-      )))
+    // needs
+    producer.needs.forEach(g => {
+      document.querySelectorAll('.GoodItem.provides-' + g              ).forEach(elem => elem.classList.add('hi-needs'))
+      if (recursive) {
+        producers.filter(p => p.provides === g).forEach(n => n.needs.forEach(g2 =>
+          document.querySelectorAll('.GoodItem.provides-' + g2         ).forEach(elem => elem.classList.add('hi-needs'))
+        ))
+      }
+    })
 
-      // neededBy
-      document.querySelectorAll('.GoodItem.needs-' + producer.provides   ).forEach(good => (good.classList.add('hi-neededBy')))
+    // neededBy
+    document.querySelectorAll('.GoodItem.needs-' + producer.provides   ).forEach(elem => elem.classList.add('hi-neededBy'))
+    if (recursive) {
+      producers.filter(p => p.needs.includes(producer.provides)).forEach(n =>
+        document.querySelectorAll('.GoodItem.needs-' + n.provides      ).forEach(elem => elem.classList.add('hi-neededBy'))
+      )
     }
   }
 
-  render() {
-    const {producer} = this.props;
-
+  static classes(producer) {
     let classes = 'GoodItem'
     // provides
     if (producer.provides !== undefined) {
@@ -42,10 +50,16 @@ export default class GoodItem extends Component {
         classes += ' needs-' + n
       ))
     }
+    return classes;
+  }
+
+  render() {
+    const {producer} = this.props;
+
     return (
-      <Media key={producer.key} className={classes}
-             onMouseEnter={() => this.highlight(producer.key)}
-             onMouseLeave={() => this.highlight(null)}
+      <Media key={producer.key} className={GoodItem.classes(producer)}
+             onMouseEnter={(e) => GoodItem.highlight(producer, e.ctrlKey)}
+             onMouseLeave={() => GoodItem.highlight(null)}
       >
         <Media left>
           <Media object src={"./icons/goods/" + producer.key + ".png"} alt={trans(producer)} title={trans(producer)}
