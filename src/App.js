@@ -86,6 +86,9 @@ class App extends Component {
       if (darkMode) {
         this.toggleDarkMode()
       }
+      if (debugEnabled) {
+        this.addIsland(1)
+      }
     })
   }
   saveState() {
@@ -163,7 +166,10 @@ class App extends Component {
       if (otherIsland) {
         this.switchIsland(otherIsland.id)
       }
-    });
+      else if (debugEnabled) {
+        this.addIsland(this.state.activeWorld)
+      }
+    })
   }
   unlockWorld = (worldId) => {
     this.state.unlockedWorlds.push(worldId)
