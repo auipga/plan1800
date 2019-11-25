@@ -31,6 +31,6 @@ export default class FertilitySwitch extends Component {
 
 FertilitySwitch.propTypes = {
   fertility: PropTypes.string,
-  islandFertilities: PropTypes.object,
+  islandFertilities: PropTypes.arrayOf(PropTypes.string).isRequired,
   fnSetFertilities: PropTypes.func.isRequired,
 };

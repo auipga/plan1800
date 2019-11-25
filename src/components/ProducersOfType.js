@@ -32,7 +32,7 @@ export default class ProducersOfType extends Component {
           {unusedProducers.map((producer, producerKey) => (
             <BuildingButton key={producerKey} producer={producer} isUnlocked={true} fnEnable={recursive => this.props.fnEnableDisabledBuilding(island, producer, recursive)} />
           ))}
-          {lockedProducers.map((producer, producerKey) => (
+          {lockedProducers.slice(0,3).map((producer, producerKey) => (
             <BuildingButton key={producerKey} producer={producer} isUnlocked={false} />
           ))}
         </div>

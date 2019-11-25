@@ -21,7 +21,6 @@ export default class Building extends Component {
       max = island.regionalResources[producer.key]
     }
     if (producer.needs.includes("otherWorld")
-      // || !worlds.find(w => w.id === this.props.island.worldId).socialClassIDs.includes(producer.tierId)
       || (producer.needs.includes("fertility") && !island.fertilities.includes(producer.provides))
     ) {
       max = 0
