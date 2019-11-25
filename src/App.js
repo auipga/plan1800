@@ -299,11 +299,13 @@ class App extends Component {
   }
   updateUnlockedNeeds = (island) => {
     const unlockedNeeds = needs.filter(n =>
+      // only this world
+      n.tierIDs[0] >= island.residences.firstTier() && (
       // unlocked by higher tier present
       (n.tierIDs[0] < island.residences.highestTier())
       // unlocked by requirement with highest tier
       || (n.tierIDs[0] === island.residences.highestTier() && island.population.highestTierValue() >= n.requirement)
-    )
+    ))
 
     unlockedNeeds.filter(n => n.tierIDs.filter(t => island.population.present(t)).length)
       .forEach(need => {
