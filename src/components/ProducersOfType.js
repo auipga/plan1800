@@ -30,7 +30,7 @@ export default class ProducersOfType extends Component {
         <div className='d-flex flex-wrap mb-2' style={{maxWidth: '182px'}}>
           <img src={"./icons/Icon_build_menu.png"} alt='' className={'mr-1'} style={{height: 26, width: 26, filter: 'drop-shadow(0 0 1px #ffffff)'}}/>
           {unusedProducers.map((producer, producerKey) => (
-            <BuildingButton key={producerKey} producer={producer} isUnlocked={true} fnEnable={() => this.props.fnEnableDisabledBuildingAndItsNeeds(producer)} />
+            <BuildingButton key={producerKey} producer={producer} isUnlocked={true} fnEnable={() => this.props.fnEnableDisabledBuilding(producer)} />
           ))}
           {lockedProducers.map((producer, producerKey) => (
             <BuildingButton key={producerKey} producer={producer} isUnlocked={false} />
@@ -49,7 +49,7 @@ ProducersOfType.propTypes = {
   island: PropTypes.object.isRequired,
   trades: PropTypes.arrayOf(PropTypes.object).isRequired,
   fnSetBuildingCount: PropTypes.func.isRequired,
-  fnEnableDisabledBuildingAndItsNeeds: PropTypes.func.isRequired,
+  fnEnableDisabledBuilding: PropTypes.func.isRequired,
   fnBalance: PropTypes.func.isRequired,
   unlockedProducers: PropTypes.arrayOf(PropTypes.object).isRequired,
   lockedProducers: PropTypes.arrayOf(PropTypes.object).isRequired,

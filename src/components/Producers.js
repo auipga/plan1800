@@ -49,7 +49,7 @@ export default class Producers extends Component {
               unlockedProducers={producers.filter(p => this.props.unlockedProducers.includes(p.key) && island.population.has(p.tierId) )}
               lockedProducers={producers.filter(p => !this.props.unlockedProducers.includes(p.key) && island.population.has(p.tierId) )}
               fnSetBuildingCount={this.props.fnSetBuildingCount}
-              fnEnableDisabledBuildingAndItsNeeds={this.props.fnEnableDisabledBuildingAndItsNeeds}
+              fnEnableDisabledBuilding={this.props.fnEnableDisabledBuilding}
               fnBalance={fnBalance}
             />
           </Col>
@@ -63,7 +63,7 @@ Producers.propTypes = {
   island: PropTypes.object.isRequired,
   trades: PropTypes.arrayOf(PropTypes.object).isRequired,
   fnSetBuildingCount: PropTypes.func.isRequired,
-  fnEnableDisabledBuildingAndItsNeeds: PropTypes.func.isRequired,
+  fnEnableDisabledBuilding: PropTypes.func.isRequired,
   fnBalance: PropTypes.func.isRequired,
   unlockedProducers: PropTypes.array.isRequired,
 }

@@ -196,7 +196,7 @@ class App extends Component {
       this.recalculatePopulation(island, tierId)
       if (thisFrom0) {
         needs.filter(n => n.tierIDs.includes(tierId)).forEach(need => {
-          this.enableDisabledBuildingAndItsNeeds(island, producers.find(p => p.key === need.key))
+          this.enableDisabledBuilding(island, producers.find(p => p.key === need.key))
         })
       }
       return
@@ -276,7 +276,7 @@ class App extends Component {
 
     unlockedNeeds.filter(n => n.tierIDs.filter(t => island.population.present(t)).length)
       .forEach(need => {
-        this.enableDisabledBuildingAndItsNeeds(island, producers.find(p => p.key === need.key))
+        this.enableDisabledBuilding(island, producers.find(p => p.key === need.key))
       })
 
     const keys = unlockedNeeds.reduce((all, need) => [...all, need.key], [])
@@ -294,25 +294,25 @@ class App extends Component {
       buildings[producer.key] = null
     } else {
       if (number > 0) {
-        this.enableDisabledBuildingAndItsNeeds(island, producer)
+        this.enableDisabledBuilding(island, producer, true)
       }
       buildings[producer.key] = number ? Math.max(parseInt(number), 0) : 0
     }
 
     this.setState(prevState => prevState, this.persistState);
   }
-  enableDisabledBuildingAndItsNeeds = (island, producer) => {
+  enableDisabledBuilding = (island, producer, recursive = false) => {
     if (!producer) {
       return
     }
-    producers.filter(p => producer.needs.includes(p.provides)).forEach(p => {
-      // console.log("enableDisabledBuildingAndItsNeeds",p.key);
-      this.enableDisabledBuildingAndItsNeeds(island, p)
-    })
+    if (recursive) {
+      producers.filter(p => producer.needs.includes(p.provides)).forEach(p => {
+        this.enableDisabledBuilding(island, p, false)
+      })
+    }
 
     if ([undefined, null].includes(island.buildings[producer.key])) {
       this.setBuildingCount(island, producer, 0)
-      // this.state.islands.find((i) => i.id === island.id).buildings[buildingKey] = 0;
     }
   }
 
@@ -454,7 +454,7 @@ class App extends Component {
                   fnTrade={this.upsertTrade}
                   fnBalance={(resource) => this.calculateBalance(resource, island)}
                   fnSetBuildingCount={this.setBuildingCount}
-                  fnEnableDisabledBuildingAndItsNeeds={producer => this.enableDisabledBuildingAndItsNeeds(island, producer)}
+                  fnEnableDisabledBuilding={producer => this.enableDisabledBuilding(island, producer)}
                   unlockedProducers={this.state.unlockedProducers}
 
                 />
