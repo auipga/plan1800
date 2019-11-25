@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Button} from "reactstrap";
 import PropTypes from 'prop-types/';
 import GoodItem from "./GoodItem";
 import BuildingInput from "./BuildingInput";
@@ -32,7 +31,9 @@ export default class Building extends Component {
     this.removable = !island.buildings[producer.key] && !this.trades.length && !balance
 
     return (
-      <label htmlFor={"input_"+producer.key} className='d-block mb-1'>
+      <label htmlFor={"input_"+producer.key} className='d-block mb-1'
+             onContextMenu={(e) => {e.preventDefault(); this.removable ? fnSetBuildingCount(island, producer, null) : console.log('in use.') }}
+      >
         <GoodItem producer={producer}>
           <BuildingInput
             blend={-buildingBalance}
@@ -43,11 +44,7 @@ export default class Building extends Component {
             max={max}
           />
 
-          {this.removable ?
-            <Button onClick={() => fnSetBuildingCount(island, producer, null)} className={'px-1 py-0 mr-2'} style={{marginLeft: 6, borderRadius:20}}>&#10005;{/*icon-x*/}</Button>
-          :
-            <span className="mr-2"><Chart balance={balance} max={3}/></span>
-          }
+          <span className="mr-2"><Chart balance={balance} max={3}/></span>
           {max === 0 || recommendedCount > max ? '' :
             <RecommendedAddButton add={recommendedAdd} action={() => fnSetBuildingCount(island, producer, recommendedCount)} />
           }
