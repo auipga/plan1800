@@ -14,7 +14,7 @@ import Producers from "./components/Producers";
 import TieredMap from "./classes/TieredMap";
 import GoodItem from "./components/GoodItem";
 
-const debugEnabled = !true
+const debugEnabled = true
 const jst = JSON.stringify
 const jpa = JSON.parse
 const jcl = foo => jpa(jst(foo)) // clone function
@@ -31,7 +31,7 @@ class App extends Component {
   initialState = {
     darkMode: false,
     islands: [],
-    worlds: [1],
+    unlockedWorlds: debugEnabled ? [1, 2, 3] : [1],
     activeWorld: 1,
     activeIslands: {},
     unlockedProducers: [],
@@ -46,8 +46,9 @@ class App extends Component {
 
     let oldState = localStorage.getItem('state');
     this.state = jpa(oldState ? oldState : jst(this.initialState))
-    if (!this.state.islands.length) {
-      this.addIsland(this.initialState.activeWorld)
+
+    if (debugEnabled && !this.state.islands.length) {
+      setTimeout(() => this.addIsland(1), 1)
     } else {
       for (let island of this.state.islands) {
         island.residences              = TieredMap.createFromJson(island.residences)
@@ -76,6 +77,9 @@ class App extends Component {
   }
 
   reset = () => {
+    if (!debugEnabled && !window.confirm('Start from beginning?')) {
+      return;
+    }
     localStorage.clear();
     const darkMode = this.state.darkMode
     this.setState(prevState => jcl(this.initialState), () => {
@@ -118,9 +122,8 @@ class App extends Component {
     return {
       id: newIslandId,
       worldId: worldId,
-      fertilities: [],
-      // fertilities: world.fertilities,
-      regionalResources: world.regionalResources.reduce((obj,res) => ({...obj, [res]:0}), {}),
+      fertilities: debugEnabled ? world.fertilities : [],
+      regionalResources: world.regionalResources.reduce((obj,res) => ({...obj, [res]:debugEnabled ? 5 : 0}), {}),
       name: `(${newIslandId}) ${trans(world)}`,
       residences: new TieredMap(world.socialClassIDs, 0),
       populationPerResidence: new TieredMap(world.socialClassIDs, 0),
@@ -149,9 +152,9 @@ class App extends Component {
     this.setState({activeIslands: activeIslands}, this.persistState)
   }
   deleteIsland = (islandId) => {
-    // if (!window.confirm('Insel "'+this.state.islands[islandKey].name+'" ('+islandKey+') löschen?')) {
-    //   return;
-    // }
+    if (!debugEnabled && !window.confirm('Insel "'+this.state.islands.find((i) => i.id === islandId).name+'" löschen?')) {
+      return;
+    }
     let islands = this.state.islands.filter((i) => i.id !== islandId)
 
     this.setState({islands: islands}, () => {
@@ -163,12 +166,17 @@ class App extends Component {
     });
   }
   unlockWorld = (worldId) => {
-    this.state.worlds.push(worldId)
+    this.state.unlockedWorlds.push(worldId)
 
-    this.setState({worlds: this.state.worlds}, this.persistState)
+    this.setState({unlockedWorlds: this.state.unlockedWorlds}, this.persistState)
   }
   switchWorld = (worldId) => {
-    this.setState({activeWorld: worldId}, this.persistState);
+    this.setState({activeWorld: worldId}, this.persistState)
+    if (debugEnabled) {
+      if (!this.state.islands.filter(i => i.worldId === worldId).length) {
+        setTimeout(() => this.addIsland(worldId), 500)
+      }
+    }
   }
 
   // Island settings
@@ -429,7 +437,7 @@ class App extends Component {
                   key={world.id}
                   world={world}
                   activeWorld={this.state.activeWorld}
-                  unlocked={this.state.worlds.includes(world.id)}
+                  unlocked={this.state.unlockedWorlds.includes(world.id)}
                   islands={this.state.islands}
                   fnSwitchWorld={this.switchWorld}
                   fnUnlockWorld={this.unlockWorld}
