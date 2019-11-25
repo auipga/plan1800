@@ -339,6 +339,7 @@ class App extends Component {
     if (recursive !== 0) {
       producers.filter(p => producer.needs.includes(p.provides)).forEach(p => {
         this.enableDisabledBuilding(island, p, --recursive)
+        setTimeout(() => GoodItem.highlight(producer), 1)
       })
     }
 
