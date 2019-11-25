@@ -62,7 +62,12 @@ class App extends Component {
 
   reset = () => {
     localStorage.clear();
-    this.setState(prevState => jcl(this.initialState));
+    const darkMode = this.state.darkMode
+    this.setState(prevState => jcl(this.initialState), () => {
+      if (darkMode) {
+        this.toggleDarkMode()
+      }
+    })
   }
   saveState() {
     this.setState(prevState => prevState, this.persistState);
