@@ -11,7 +11,7 @@ export default class BuildingButton extends Component {
 
     return (
       <Button
-        className={'p-0 mr-1 ' + GoodItem.classes(producer)} color={'link'}
+        className={'p-0 mr-0 ' + GoodItem.classes(producer)} color={'link'}
         onClick={e => fnEnable(e.ctrlKey ? -1 : e.shiftKey ? 1 : 0)}
         disabled={!isUnlocked}
         onMouseEnter={(e) => GoodItem.highlight(producer, e.ctrlKey)}
