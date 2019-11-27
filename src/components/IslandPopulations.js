@@ -18,8 +18,7 @@ export default class IslandPopulations extends Component {
     return (
       <Row>
         {tiers.filter(tier => island.population.has(tier.id)).map((tier, tierKey) => (
-          <Col sm={'auto'} key={tier.id}
-               className={"" + ((!tier.id || (island.population.ofTier(tier.id) > 0)) ? ' bg-success-' : ' d-none-')}>
+          <Col sm={'auto'} key={tier.id}>
             {/*   Eingabe Spalte   */}
             <InputGroup style={{width: 170}}>
               <InputGroupAddon addonType="prepend">

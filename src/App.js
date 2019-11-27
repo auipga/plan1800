@@ -21,6 +21,7 @@ const jcl = foo => jpa(jst(foo)) // clone function
 const cl = console.log
 // eslint-disable-next-line
 const d = debugEnabled ? cl : () => null
+// eslint-disable-next-line
 const dd = debugEnabled ? (...foo) => <div className='d-inline-block font-italic text-break'>{foo}</div> : () => null
 
 class App extends Component {
@@ -290,7 +291,7 @@ class App extends Component {
   updateUnlockedProducers = (island) => {
     const unlockedProducers = producers.filter(p =>
       // only this world
-      island.population.has(p.tierId) && !p.needs.includes("otherWorld") && (
+      island.population.has(p.tierId) && (
       // unlocked by higher tier present
       (p.tierId < island.residences.highestTier())
       // unlocked by requirement with highest tier
@@ -398,16 +399,17 @@ class App extends Component {
       .reduce((prev, next, i) => prev + buildings[next.key] * 60 / next.productionTime, 0)
   }
   consumptionThroughPopulationPerTick = (resource, island) => {
-    let need = needs.find(n => n.key === resource && Array.from(island.population.keys()).includes(n.tierIDs[0]))
+    let need = needs.find(n => n.key === resource && island.population.has(n.tierIDs[0]))
     if (!need) {
       return 0
     }
 
+    const isUnlocked = island.unlockedNeeds.includes(need.key);
     return need.tierIDs
       .filter(id =>
-        island.population.present(id)
+        isUnlocked
+        // && island.population.present(id)
         && !island.prohibitedNeeds.ofTier(id).includes(resource)
-        && island.unlockedNeeds.includes(need.key) /** @todo: extract from filter() as variable*/
       )
       .reduce((prev, next, i) => prev + island.population.ofTier(next) * need.consumption[i], 0)
   }
@@ -478,7 +480,7 @@ class App extends Component {
                 <Button onClick={() => this.deleteIsland(island.id)} size='sm' className='float-right'>&#10005;{/*icon-x*/}</Button>
               </CardHeader>
               {/*   Bevölkerungsstufen   */}
-              <CardHeader>x{this.state.modifier}
+              <CardHeader>
                 <IslandPopulations
                   island={island}
                   fnChangeResidences={this.changeResidences}
@@ -490,8 +492,6 @@ class App extends Component {
               {/*   Zeug auf der Insel   */}
               <CardBody>
                 {/*   Producers   */}
-                <br/>
-                {/*{dd(jst(this.state.unlockedProducers))}*/}
                 <Producers
                   island={island}
                   trades={this.state.trades}

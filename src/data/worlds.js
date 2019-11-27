@@ -7,7 +7,7 @@ export default [
     socialClassIDs: [1, 2, 3, 4, 5],
     unlock: [1, 0],// 0 of tier 1 = instant/always
     fertilities: ["Potato", "Grain", "Hops", "Red_peppers", "Furs", "Saltpeter", "Grapes"],
-    regionalResources: ["Clay", "Iron", "Coal", "Cement", "Copper", "Zinc", "Oil"],
+    regionalResources: ["Clay", "Iron", "Coal", "Zinc", "Copper", "Cement", "Oil"],
   },
   {
     id: 2,
@@ -16,8 +16,8 @@ export default [
     img: "new-world.png",
     socialClassIDs: [6, 7],
     unlock: [3, 1],// 1 of tier 3
-    fertilities: ["Plantains", "Sugar_cane", "Cotton", "Caoutchouc", "Corn", "Coffee_beans", "Pearls", "Tobacco", "Cocoa"],
-    regionalResources: ["Clay_6", "Gold_ore", "Oil_6"],
+    fertilities: ["Plantains", "Sugar_cane", "Cotton", "Cocoa", "Corn", "Caoutchouc", "Coffee_beans", "Pearls", "Tobacco"],
+    regionalResources: ["Clay_6", "Oil_6", "Gold_ore_6"],
   },
   {
     id: 3,
@@ -27,6 +27,6 @@ export default [
     socialClassIDs: [1, 2, 3, 4, 5],
     unlock: [3, 750],// 750 of tier 3
     fertilities: ["Potato", "Grain", "Hops", "Red_peppers", "Furs", "Saltpeter", "Grapes"],
-    regionalResources: ["Clay", "Iron", "Coal", "Cement", "Copper", "Zinc", "Oil"],
+    regionalResources: ["Clay", "Iron", "Coal", "Zinc", "Copper", "Cement", "Oil"],
   },
 ]
