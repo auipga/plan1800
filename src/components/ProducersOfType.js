@@ -13,7 +13,9 @@ export default class ProducersOfType extends Component {
     const lockedProducers = this.props.lockedProducers.filter(p => p.type === type).slice(0,20)
 
     return (<>
-      <h6>{this.props.title}</h6>
+      <div className='mb-3 text-center'>
+        <img src={"./icons/buildingtypes/"+type+".png"} alt={type} title={type} style={{width:26,height:26}} className={"mr-1"}/>
+      </div>
       {usedProducers.map((producer, producerKey) => (
         <Building
           key={producerKey}
@@ -43,9 +45,7 @@ export default class ProducersOfType extends Component {
 }
 
 ProducersOfType.propTypes = {
-  title: PropTypes.string.isRequired, // todo: replace with icon
   type: PropTypes.string.isRequired,
-
   island: PropTypes.object.isRequired,
   trades: PropTypes.arrayOf(PropTypes.object).isRequired,
   fnSetBuildingCount: PropTypes.func.isRequired,

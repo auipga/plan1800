@@ -20,7 +20,6 @@ export default class Producers extends Component {
         {types.map((type, key) => (
           <Col sm={'auto'} key={key}>
             <ProducersOfType
-              title={type.split(" ")[0]}
               type={type}
               island={island}
               trades={this.props.trades}
