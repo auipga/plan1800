@@ -39,6 +39,19 @@ body.bg-secondary .form-inline .form-control.BuildingInput {
     color: rgb(33, 37, 41);
 }
 
+/* hide spin box / number controls */
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none; /* Chrome */
+    margin: 0;
+}
+.form-control.is-invalid, .was-validated .form-control:invalid  {
+    padding: initial !important;
+}
+
 .need {
     width: 20px;
     height: 20px;

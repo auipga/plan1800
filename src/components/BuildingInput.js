@@ -12,8 +12,7 @@ export default class BuildingInput extends Component {
         <Input id={"input_" + buildingKey}
                type='text'
                bsSize='sm'
-               style={{width: 50}}
-               className={'BuildingInput mr-2 text-center px-1'}
+               className={'BuildingInput mr-2 text-center'}
                value='&#10005;' // icon-x
                disabled={true}
         />
@@ -35,7 +34,7 @@ export default class BuildingInput extends Component {
         //     ),
         // }}
         className={
-          'BuildingInput mr-2 text-center pr-0'
+          'BuildingInput mr-2 text-center'
           + (blend > 0 ? ' is-invalid' : '')
           // + (blend < 0 ? ' border-primary' : '')
         }
