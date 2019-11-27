@@ -17,58 +17,60 @@ export default class IslandPopulations extends Component {
 
     return (
       <Row>
-        {tiers.filter(tier => island.population.has(tier.id)).map((tier, tierKey) => (
-          <Col sm={'auto'} key={tier.id}>
+        {island.population.tiers().map(tierId => (
+          <Col sm={'auto'} key={tierId}>
             {/*   Eingabe Spalte   */}
             <InputGroup style={{width: 170}}>
               <InputGroupAddon addonType="prepend">
-                {island.population.firstTier() === tier.id ?
-                  <Button color='secondary' className={'py-1 pl-1 pr-0'}
-                          onWheel={e => this.handleWheel(e, island, tier.id, -Math.sign(e.deltaY), false)}
-                          onClick={e => fnChangeResidences(e, island, tier.id, +1, false)}
+                {island.population.firstTier() === tierId ?
+                  <Button color='secondary' className={'py-0 px-1'}
+                          onWheel={e => this.handleWheel(e, island, tierId, -Math.sign(e.deltaY), false)}
+                          onClick={e => fnChangeResidences(e, island, tierId, +1, false)}
+                          onContextMenu={e => {fnChangeResidences(e, island, tierId, -1, false); e.preventDefault()}}
                   >
-                    <img src={"./icons/upgrade.png"} alt={"\u25B2"} style={{height: 24, width: 24}}/>
+                    {/*<img src={"./icons/upgrade.png"} alt={"\u25B2"} style={{height: 24, width: 24}}/>*/}
+                    <img src={"./icons/population/Workforce_" + tierId + ".png"} alt={tierId} style={{height: 30, width: 30}}/>
                   </Button>
                   :
-                  <Button color='secondary' className={'py-1 pl-1 pr-0'}
-                          onWheel={e => this.handleWheel(e, island, tier.id -1 +(Math.sign(e.deltaY) > 0 ? 1 : 0), -Math.sign(e.deltaY), true)}
-                          onClick={e => fnChangeResidences(e, island, tier.id - 1, +1, true)}
+                  <Button color='secondary' className={'py-0 px-1'}
+                          onWheel={e => this.handleWheel(e, island, tierId -1 +(Math.sign(e.deltaY) > 0 ? 1 : 0), -Math.sign(e.deltaY), true)}
+                          onClick={e => fnChangeResidences(e, island, tierId - 1, +1, true)}
+                          onContextMenu={e => {fnChangeResidences(e, island, tierId, -1, true); e.preventDefault()}}
                   >
-                    <img src={"./icons/upgrade.png"} alt={"\u25B2"} style={{height: 24, width: 24}}/>
+                    {/*<img src={"./icons/upgrade.png"} alt={"\u25B2"} style={{height: 24, width: 24}}/>*/}
+                    <img src={"./icons/population/Workforce_" + tierId + ".png"} alt={tierId} style={{height: 30, width: 30}}/>
                   </Button>
                 }
-                <InputGroupText className={'py-0 px-1'}>
-                  <img src={"./icons/population/Workforce_" + (tier.key) + ".png"} alt={tier.id} style={{height: 30, width: 30}}/>
-                </InputGroupText>
-
               </InputGroupAddon>
+
               <Input
-                value={island.residences.get(tier.id)}
+                value={island.residences.get(tierId)}
                 className={'text-center px-0'}
-                onChange={e => fnSetResidences(island, tier.id, e.target.value)}
+                onChange={e => fnSetResidences(island, tierId, e.target.value)}
                 onMouseEnter={e => e.target.focus()}
                 onMouseLeave={e => e.target.blur()}
-                onWheel={e => this.handleWheel(e, island, tier.id, -Math.sign(e.deltaY))}
+                onWheel={e => this.handleWheel(e, island, tierId, -Math.sign(e.deltaY))}
               />
+
               <InputGroupAddon addonType="append">
-                <InputGroupText className='py-1 px-1' style={{lineHeight: 1.1}}>
-                  <small>&times;{island.populationPerResidence.get(tier.id)}<br/>=<b>{island.population.get(tier.id)}</b></small>
+                <InputGroupText className='py-1 px-1' style={{lineHeight: 1.1, minWidth: 52}}>
+                  <small className='mx-auto'>&times;{island.populationPerResidence.get(tierId)}=<br/><b>{island.population.get(tierId)}</b></small>
                 </InputGroupText>
               </InputGroupAddon>
             </InputGroup>
             {/*   Ressourcen - Bedürfnisse   */}
             <div className='mt-1 mb-2 text-center'>
-              {needs.filter(n => n.tierIDs.includes(tier.id)).map((need, key) => {
+              {needs.filter(n => n.tierIDs.includes(tierId)).map((need, key) => {
                 let nextTier = loop.needs !== null && loop.needs !== need.tierIDs[0]
                 loop.needs = need.tierIDs[0]
                 return (<React.Fragment key={key}>
                   {nextTier ? <hr className={'mt-1 mb-0'}/> : ''}
                   <NeedSwitch
                     need={need}
-                    nIndex={need.tierIDs.indexOf(tier.id)}
+                    nIndex={need.tierIDs.indexOf(tierId)}
                     needed={island.unlockedNeeds.includes(need.key)}
-                    prohibitedNeeds={island.prohibitedNeeds.ofTier(tier.id)}
-                    fnSetIslandProhibitedNeeds={prohibitedNeeds => fnSetProhibitedNeeds(island, tier.id, prohibitedNeeds)}
+                    prohibitedNeeds={island.prohibitedNeeds.ofTier(tierId)}
+                    fnSetIslandProhibitedNeeds={prohibitedNeeds => fnSetProhibitedNeeds(island, tierId, prohibitedNeeds)}
                   />
                 </React.Fragment>)
               })}
