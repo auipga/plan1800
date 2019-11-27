@@ -13,8 +13,8 @@ export default class BuildingInput extends Component {
                type='text'
                bsSize='sm'
                style={{width: 50}}
-               className={'mr-2 text-center px-1'}
-               value='&#10060;' // icon-red-X
+               className={'BuildingInput mr-2 text-center px-1'}
+               value='&#10005;' // icon-x
                disabled={true}
         />
       )

@@ -31,6 +31,9 @@ body.bg-secondary {
     background-color: rgba(255,255,75,0.2);
     width: 50px;
 }
+.form-inline .form-control.BuildingInput[disabled] {
+    background-color: rgba(175, 175, 175, 0.31);
+}
 body.bg-secondary .form-inline .form-control.BuildingInput {
     /*color: rgb(164, 169, 175);*/
     color: rgb(33, 37, 41);
