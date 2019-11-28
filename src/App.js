@@ -57,7 +57,7 @@ class App extends Component {
       if (elem) {
         const clas = Array.from(elem.classList).find(c => c.startsWith('provides-'))
         if (clas) {
-          GoodItem.highlight(producers.find(p => p.key === clas.split('provides-')[1]), e.ctrlKey)
+          GoodItem.highlight(producers.find(p => p.provides === clas.split('provides-')[1]), e.ctrlKey)
         }
       }
     }
