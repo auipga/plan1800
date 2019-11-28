@@ -318,7 +318,7 @@ class App extends Component {
   updateUnlockedNeeds = (island) => {
     const unlockedNeeds = needs.filter(n =>
       // only this world
-      n.tierIDs[0] >= island.residences.firstTier() && (
+      island.population.has(n.tierIDs[0]) && (
       // unlocked by higher tier present
       (n.tierIDs[0] < island.residences.highestTier())
       // unlocked by requirement with highest tier
@@ -327,7 +327,7 @@ class App extends Component {
 
     unlockedNeeds.filter(n => n.tierIDs.filter(t => island.population.present(t)).length)
       .forEach(need => {
-        this.enableDisabledBuilding(island, producers.find(p => p.key === need.key), -1)
+        this.enableDisabledBuilding(island, producers.find(p => p.provides === need.key && island.population.has(p.tierId)), -1)
       })
 
     const keys = unlockedNeeds.reduce((all, need) => [...all, need.key], [])
@@ -359,7 +359,7 @@ class App extends Component {
       return
     }
     if (recursive !== 0) {
-      producers.filter(p => producer.needs.includes(p.provides)).forEach(p => {
+      producers.filter(p => producer.needs.includes(p.provides) && island.population.has(p.tierId)).forEach(p => {
         this.enableDisabledBuilding(island, p, --recursive)
         if (document.querySelector('.hi-self')) {
           setTimeout(() => GoodItem.highlight(producer), 1)
