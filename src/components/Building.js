@@ -3,6 +3,7 @@ import PropTypes from 'prop-types/';
 import GoodItem from "./GoodItem";
 import BuildingInput from "./BuildingInput";
 import Chart from "./Chart";
+import classNames from 'classnames'
 import RecommendedAddButton from "./RecommendedAddButton";
 import BuildingContextMenu from "./BuildingContextMenu";
 
@@ -29,6 +30,17 @@ export default class Building extends Component {
     this.trades = this.props.trades.filter(r => r.good === producer.provides && (r.from === island.id || r.to === island.id || r.from === null || r.to === null));
     this.removable = !island.buildings[producer.key] && !this.trades.length && !balance
 
+    const hasLoadings  = this.trades.find(t => t.from === island.id                       ) !== undefined
+    const hasDroppings = this.trades.find(t => t.from !== null      && t.to === island.id ) !== undefined
+
+    let tradeIcon = null
+    if (hasLoadings && hasDroppings) {
+      tradeIcon = <img src={"./icons/overlays/trade_buy_sell.png"} alt="" />
+    } else if (hasLoadings) {
+      tradeIcon = <img src={"./icons/overlays/trade_sell.png"} alt="" />
+    } else if (hasDroppings) {
+      tradeIcon = <img src={"./icons/overlays/trade_buy.png"} alt="" />
+    }
     return (
       <label htmlFor={"input_"+producer.key} className='d-block mb-1'
              onContextMenu={(e) => {e.preventDefault(); this.removable ? fnSetBuildingCount(island, producer, null) : console.log('in use.') }}
@@ -44,7 +56,10 @@ export default class Building extends Component {
             max={max}
           />
 
-          <span className="mr-2"><Chart balance={balance} max={3}/></span>
+          <span className={"mr-2 chart-wrapper " + classNames({'trade-sell' : hasLoadings, 'trade-buy' : hasDroppings})}>
+            {tradeIcon}
+            <Chart balance={balance} max={3}/>
+          </span>
           {max === 0 || recommendedCount > max ? '' :
             <RecommendedAddButton add={recommendedAdd} action={() => fnSetBuildingCount(island, producer, recommendedCount)} />
           }

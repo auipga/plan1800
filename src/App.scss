@@ -51,6 +51,17 @@ body.bg-secondary {
     }
 }
 
+.chart-wrapper {
+    position: relative;
+
+    img {
+        position: absolute;
+        top: -4px;
+        left: -8px;
+        width: 16px;
+    }
+}
+
 /* hide spin box / number controls */
 input[type=number] {
     -moz-appearance:textfield; /* Firefox */
