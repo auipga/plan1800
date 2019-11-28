@@ -19,6 +19,8 @@ export default class BuildingInput extends Component {
       )
     }
 
+    const boostClass = this.props.boost ? 'overlay-boost boost-'+ this.props.boost : ''
+
     return (
       <Input
         id={"input_"+buildingKey}
@@ -34,7 +36,7 @@ export default class BuildingInput extends Component {
         //     ),
         // }}
         className={
-          'BuildingInput mr-2 text-center'
+          'BuildingInput mr-2 text-center ' + boostClass
           + (blend > 0 ? ' is-invalid' : '')
           // + (blend < 0 ? ' border-primary' : '')
         }
@@ -54,5 +56,6 @@ BuildingInput.propTypes = {
   buildingCount: PropTypes.number,
   buildingKey: PropTypes.string,
   max: PropTypes.number,
+  boost: PropTypes.number,
   fnSetBuildingCount: PropTypes.func,
 };

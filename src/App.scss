@@ -37,6 +37,20 @@ body.bg-secondary {
         color: rgb(33, 37, 41);
     }
 
+    &.overlay-boost {
+        background-repeat: no-repeat;
+        background-position: 2px 2px;
+        background-size: 10px 13px;
+
+        &.boost-up {
+            background-image: url("icons/overlays/productivity_up.png") !important;
+        }
+        &.boost-down {
+            background-image: url("icons/overlays/productivity_down.png") !important;
+        }
+    }
+}
+
 /* hide spin box / number controls */
 input[type=number] {
     -moz-appearance:textfield; /* Firefox */

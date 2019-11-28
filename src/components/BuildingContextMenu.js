@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types/'
-import {Button, ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle, Input} from "reactstrap"
+import {Button, ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle, Input, InputGroup, InputGroupAddon, InputGroupText} from "reactstrap"
 
-export default class Trading extends Component {
+export default class BuildingContextMenu extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -35,7 +35,6 @@ export default class Trading extends Component {
 
     const highlight = droppable.length
     const inUse     = loadings.length || droppings.length
-    const enabled   = canSend || /*canWant ||*/ loadings.length || droppable.length || droppings.length
 
     return (<>
         <ButtonDropdown
@@ -43,12 +42,41 @@ export default class Trading extends Component {
           isOpen={this.state.btnDropright}
           toggle={() => { this.setState({ btnDropright: !this.state.btnDropright }) }}
         >
-          <DropdownToggle caret className={{'px-1 py-0 mr-2': true, 'text-danger': highlight, 'text-light': inUse}}
-                          disabled={!enabled}>
-            <img src={'./icons/Icon_traderoutes.png'} alt='+' style={{width: 18, height: 18}}/>
+          <DropdownToggle caret className={{'px-1 py-0 mr-2': true, 'text-danger': highlight, 'text-light': inUse}}>
+            {/*<img src={'./icons/Icon_traderoutes.png'} alt='+' style={{width: 18, height: 18}}/>*/}
           </DropdownToggle>
 
           <DropdownMenu>
+            <DropdownItem toggle={false} className={'form-inline py-0'}>
+              <InputGroup>
+                <InputGroupAddon addonType="prepend">
+                  <InputGroupText className='py-0 px-2'>
+                    &#8597;{/*icon-up-down*/}
+                  </InputGroupText>
+                </InputGroupAddon>
+
+                <Input
+                  type='number'
+                  bsSize='sm'
+                  style={{width: 20}}
+                  className='text-center'
+                  min={50}
+                  max={500}
+                  disabled={!this.props.productivity}
+                  value={this.props.productivity}
+                  onChange={(e) => this.props.fnProductivity(parseInt(e.target.value))} /*Math.min(500, Math.max(50, x))*/
+                  onMouseEnter={e => e.target.focus()}
+                />
+
+                <InputGroupAddon addonType="append">
+                  <InputGroupText className='py-0 px-2'>
+                    %
+                  </InputGroupText>
+                </InputGroupAddon>
+
+              </InputGroup>
+            </DropdownItem>
+
             {/*canSend*/}
             <DropdownItem toggle={false} disabled={!canSend} className={'form-inline py-0'}>
               &#10150;{/*icon-send/load*/}
@@ -115,10 +143,12 @@ export default class Trading extends Component {
   }
 }
 
-Trading.propTypes = {
+BuildingContextMenu.propTypes = {
   island: PropTypes.object.isRequired,
   good: PropTypes.string.isRequired,
   balance: PropTypes.number.isRequired,
   trades: PropTypes.arrayOf(PropTypes.object).isRequired,
   fnTrade: PropTypes.func.isRequired,
+  productivity: PropTypes.number.isRequired,
+  fnProductivity: PropTypes.func.isRequired,
 }

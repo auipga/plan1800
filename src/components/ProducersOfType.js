@@ -25,6 +25,8 @@ export default class ProducersOfType extends Component {
           fnSetBuildingCount={this.props.fnSetBuildingCount}
           trades={this.props.trades}
           fnTrade={this.props.fnTrade}
+          productivity={island.productivity[producer.key]}
+          fnSetProductivity={this.props.fnSetProductivity}
         />
       ))}
       {usedProducers.length && (unusedProducers.length || lockedProducers.length) ? <hr/> : ''}
@@ -53,4 +55,5 @@ ProducersOfType.propTypes = {
   fnBalance: PropTypes.func.isRequired,
   unlockedProducers: PropTypes.arrayOf(PropTypes.object).isRequired,
   lockedProducers: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fnSetProductivity: PropTypes.func.isRequired,
 }

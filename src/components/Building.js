@@ -4,7 +4,7 @@ import GoodItem from "./GoodItem";
 import BuildingInput from "./BuildingInput";
 import Chart from "./Chart";
 import RecommendedAddButton from "./RecommendedAddButton";
-import Trading from "./Trading";
+import BuildingContextMenu from "./BuildingContextMenu";
 
 export default class Building extends Component {
   render() {
@@ -36,6 +36,7 @@ export default class Building extends Component {
         <GoodItem producer={producer}>
           <BuildingInput
             blend={-buildingBalance}
+            boost={this.props.productivity > 100 ? 'up' : this.props.productivity < 100 ? 'down' : null }
             buildingCount={island.buildings[producer.key]}
             buildingKey={producer.key}
             islandId={island.id}
@@ -47,12 +48,14 @@ export default class Building extends Component {
           {max === 0 || recommendedCount > max ? '' :
             <RecommendedAddButton add={recommendedAdd} action={() => fnSetBuildingCount(island, producer, recommendedCount)} />
           }
-          <Trading
+          <BuildingContextMenu
             island={island}
             good={producer.provides}
             balance={balance}
             trades={this.trades}
             fnTrade={this.props.fnTrade}
+            productivity={this.props.productivity}
+            fnProductivity={(productivity) => this.props.fnSetProductivity(island, producer, productivity)}
           />
         </GoodItem>
       </label>
@@ -67,4 +70,6 @@ Building.propTypes = {
   fnSetBuildingCount: PropTypes.func.isRequired,
   trades: PropTypes.arrayOf(PropTypes.object).isRequired,
   fnTrade: PropTypes.func.isRequired,
+  productivity: PropTypes.number.isRequired,
+  fnSetProductivity: PropTypes.func.isRequired,
 };
