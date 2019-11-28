@@ -10,6 +10,7 @@ import IslandButton from "./components/IslandButton";
 import IslandPopulations from "./components/IslandPopulations";
 import Fertilities from "./components/Fertilities";
 import {trans} from "./functions/translation";
+import * as game from "./functions/game";
 import Producers from "./components/Producers";
 import TieredMap from "./classes/TieredMap";
 import GoodItem from "./components/GoodItem";
@@ -46,17 +47,10 @@ class App extends Component {
     super(props);
 
     let oldState = localStorage.getItem('state');
-    this.state = jpa(oldState ? oldState : jst(this.initialState))
+    this.state = this.prepareStateString(oldState ? oldState : jst(this.initialState))
 
     if (debugEnabled && !this.state.islands.length) {
       setTimeout(() => this.addIsland(1), 1)
-    } else {
-      for (let island of this.state.islands) {
-        island.residences              = TieredMap.createFromJson(island.residences)
-        island.populationPerResidence  = TieredMap.createFromJson(island.populationPerResidence)
-        island.population              = TieredMap.createFromJson(island.population)
-        island.prohibitedNeeds         = TieredMap.createFromJson(island.prohibitedNeeds)
-      }
     }
     function handleHighlight(e) {
       let elem = document.querySelector('.hi-self')
@@ -91,6 +85,20 @@ class App extends Component {
         this.addIsland(1)
       }
     })
+  }
+  prepareStateString(string) {
+    let newState = JSON.parse(string)
+    for (let island of newState.islands) {
+      island.residences              = TieredMap.createFromJson(island.residences)
+      island.populationPerResidence  = TieredMap.createFromJson(island.populationPerResidence)
+      island.population              = TieredMap.createFromJson(island.population)
+      island.prohibitedNeeds         = TieredMap.createFromJson(island.prohibitedNeeds)
+    }
+    return newState
+  }
+  loadState(string) {
+    localStorage.clear();
+    this.setState(prevState => this.prepareStateString(string), this.persistState);
   }
   saveState() {
     // it works but has a smell
@@ -459,6 +467,8 @@ class App extends Component {
               <ResetButton resetFunction={this.reset}/>
               {/*eslint-disable-next-line*/}
               <Button onClick={this.toggleDarkMode} color={'primary'} className='float-right mr-3'>&#128161;{/*icon-lamp*/}</Button>
+              <Button onClick={() => game.loadFromFile((fileContent) => this.loadState(fileContent))} color={'secondary'} className='float-right mr-3'>&#128194;{/*icon-load*/}</Button>
+              <Button onClick={() => game.exportToFile(this.state)} color={'secondary'} className='float-right mr-3'>&#128190;{/*icon-save*/}</Button>
             </CardHeader>
             {/*   Insel auswahl   */}
             <CardBody className={'overflow-auto text-nowrap'}>
