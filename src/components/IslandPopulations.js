@@ -48,7 +48,6 @@ export default class IslandPopulations extends Component {
                 className={'text-center px-0'}
                 onChange={e => fnSetResidences(island, tierId, e.target.value)}
                 onMouseEnter={e => e.target.focus()}
-                onMouseLeave={e => e.target.blur()}
                 onWheel={e => this.handleWheel(e, island, tierId, -Math.sign(e.deltaY))}
               />
 

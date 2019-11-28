@@ -44,7 +44,6 @@ export default class BuildingInput extends Component {
         value={buildingCount}
         onChange={e => fnSetBuildingCount(e.target.value)}
         onMouseEnter={e => e.target.focus()}
-        onMouseLeave={e => e.target.blur()}
       />
     )
   }

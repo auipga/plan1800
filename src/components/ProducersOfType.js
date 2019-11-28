@@ -10,15 +10,15 @@ export default class ProducersOfType extends Component {
     const unlockedProducers   = this.props.unlockedProducers.filter(p => p.type === type)
     const usedProducers   = unlockedProducers.filter(p =>  Number.isInteger(island.buildings[p.key]))
     const unusedProducers = unlockedProducers.filter(p => !Number.isInteger(island.buildings[p.key]))
-    const lockedProducers = this.props.lockedProducers.filter(p => p.type === type).slice(0,20)
+    const lockedProducers = this.props.lockedProducers.filter(p => p.type === type)
 
     return (<>
       <div className='mb-3 text-center'>
         <img src={"./icons/buildingtypes/"+type+".png"} alt={type} title={type} style={{width:26,height:26}} className={"mr-1"}/>
       </div>
-      {usedProducers.map((producer, producerKey) => (
+      {usedProducers.map((producer, key) => (
         <Building
-          key={producerKey}
+          key={key}
           island={this.props.island}
           producer={producer}
           balance={this.props.fnBalance(producer.provides)}
