@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Card, CardBody, CardHeader, Container, Input} from 'reactstrap';
-import './App.css'
+import './App.scss'
 import worlds from "./data/worlds";
 import needs from "./data/needs";
 import producers from "./data/producers";
