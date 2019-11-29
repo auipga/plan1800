@@ -2,11 +2,10 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types/';
 import {Badge, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown} from "reactstrap";
 import WorldButton from "./WorldButton";
-import worlds from "../data/worlds";
 
 export default class WorldSwitch extends Component {
   render() {
-    const {world, activeWorld, fnSwitchWorld, unlocked, fnUnlockWorld, islands} = this.props;
+    const {world, activeWorld, fnSwitchWorld, unlocked, fnUnlockWorld, allPopulation} = this.props;
 
     const elemWorldButton =
       <WorldButton
@@ -20,15 +19,10 @@ export default class WorldSwitch extends Component {
       return elemWorldButton
     }
 
-    let unlockCondition = worlds.find(w => w.id === world.id).unlock
-    let firstIsland = islands.find(() => true)
-    let planable, startable, unlockable = false
-
-    if (firstIsland) {
-      planable = false
-      startable = false
-      unlockable = islands.length && firstIsland.population.ofTier(unlockCondition[0]) >= unlockCondition[1]
-    }
+    const planable = false // unlockedWorlds.contains(Math.round(world.id/2)) && haveAddon: the passage || dlc-pack
+    const startable = false // wie unlockable, aber ohne started:true und timer===0
+    const unlockable = allPopulation.ofTier(world.tierId) >= world.requirement
+                    // || allPopulation.sumAbove(world.tierId+1) # sumAbove stimmt nicht weil 1 jornalero kein ingenieur ist
 
     return (
       <UncontrolledButtonDropdown className={'mr-2 '}>
@@ -61,6 +55,7 @@ export default class WorldSwitch extends Component {
 
 WorldSwitch.propTypes = {
   world: PropTypes.object.isRequired,
+  allPopulation: PropTypes.object.isRequired, // TieredMap
   activeWorld: PropTypes.number,
   unlocked: PropTypes.bool.isRequired,
   fnSwitchWorld: PropTypes.func.isRequired,

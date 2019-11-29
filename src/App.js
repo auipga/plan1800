@@ -14,6 +14,7 @@ import * as game from "./functions/game";
 import Producers from "./components/Producers";
 import TieredMap from "./classes/TieredMap";
 import GoodItem from "./components/GoodItem";
+import tiers from "./data/tiers";
 
 const debugEnabled = true
 const jst = JSON.stringify
@@ -193,6 +194,16 @@ class App extends Component {
         setTimeout(() => this.addIsland(worldId), 500)
       }
     }
+  }
+  getAllPopulation = (worldId = false) => {
+    let allPopulation = new TieredMap(tiers.reduce((all, t) => [...all, t.id], []), 0)
+    let islands = this.state.islands.filter(i => worldId === false || i.worldId === worldId)
+    islands.forEach(island => {
+      island.population.forEach((pop, tierId) => {
+        allPopulation.add(tierId, pop)
+      })
+    })
+    return allPopulation
   }
 
   // Island settings
@@ -453,17 +464,18 @@ class App extends Component {
           <Card className={'my-3' + (this.state.darkMode ? ' bg-dark' : '')}>
             {/*   Welt auswahl   */}
             <CardHeader>
-              {worlds.map((world, worldKey) => (
-                <WorldSwitch
-                  key={world.id}
-                  world={world}
-                  activeWorld={this.state.activeWorld}
-                  unlocked={this.state.unlockedWorlds.includes(world.id)}
-                  islands={this.state.islands}
-                  fnSwitchWorld={this.switchWorld}
-                  fnUnlockWorld={this.unlockWorld}
-                />
-              ))}
+                {worlds.map((world, worldKey) => (
+                  <WorldSwitch
+                    key={world.id}
+                    world={world}
+                    activeWorld={this.state.activeWorld}
+                    unlocked={this.state.unlockedWorlds.includes(world.id)}
+                    islands={this.state.islands}
+                    allPopulation={this.getAllPopulation()}
+                    fnSwitchWorld={this.switchWorld}
+                    fnUnlockWorld={this.unlockWorld}
+                  />
+                ))}
               <ResetButton resetFunction={this.reset}/>
               {/*eslint-disable-next-line*/}
               <Button onClick={this.toggleDarkMode} color={'primary'} className='float-right mr-3'>&#128161;{/*icon-lamp*/}</Button>

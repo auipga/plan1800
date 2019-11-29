@@ -5,7 +5,8 @@ export default [
     i10n: {en: "Old World", de: "Alte Welt"},
     img: "old-world.png",
     socialClassIDs: [1, 2, 3, 4, 5],
-    unlock: [1, 0],// 0 of tier 1 = instant/always
+    tierId: 1,
+    requirement: 0,
     fertilities: ["Potato", "Grain", "Hops", "Red_peppers", "Furs", "Saltpeter", "Grapes"],
     regionalResources: ["Clay", "Iron", "Coal", "Zinc", "Copper", "Cement", "Oil"],
   },
@@ -15,7 +16,8 @@ export default [
     i10n: {en: "New World", de: "Neue Welt"},
     img: "new-world.png",
     socialClassIDs: [6, 7],
-    unlock: [3, 1],// 1 of tier 3
+    tierId: 3,
+    requirement: 1,
     fertilities: ["Plantains", "Sugar_cane", "Cotton", "Cocoa", "Corn", "Caoutchouc", "Coffee_beans", "Pearls", "Tobacco"],
     regionalResources: ["Clay_6", "Oil_6", "Gold_ore_6"],
   },
@@ -25,7 +27,8 @@ export default [
     i10n: {en: "Cap Trelawny", de: "Kap Trelawny"},
     img: "cap-trelawny.png",
     socialClassIDs: [1, 2, 3, 4, 5],
-    unlock: [3, 750],// 750 of tier 3
+    tierId: 3,
+    requirement: 750,
     fertilities: ["Potato", "Grain", "Hops", "Red_peppers", "Furs", "Saltpeter", "Grapes"],
     regionalResources: ["Clay", "Iron", "Coal", "Zinc", "Copper", "Cement", "Oil"],
   },
