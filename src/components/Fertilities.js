@@ -45,7 +45,7 @@ export default class Fertilities extends Component {
             ))}
             <Button
               disabled={forceEdit}
-              className={'py-1 mr-1'}
+              className={'py-0 mr-1'}
               color={'info'}
               onClick={this.toggleEdit}
             >&#10004;{/*icon-check*/}</Button>
@@ -64,7 +64,7 @@ export default class Fertilities extends Component {
                 count={island.regionalResources[resource]}
               />
             ))}
-            <Button className={'p-0 mr-1'} color={'transparent'} onClick={this.toggleEdit}>&#9999;{/*icon-edit/pencil*/}</Button>
+            {/*<Button className={'p-0 mr-1'} color={'transparent'} onClick={this.toggleEdit}>&#9999;/!*icon-edit/pencil*!/</Button>*/}
           </>
         }
       </span>

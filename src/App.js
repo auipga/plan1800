@@ -488,7 +488,13 @@ class App extends Component {
                 <img src={'./icons/Icon_plus.png'} alt='Hinzufügen' style={{width: 36, height: 36}}/>
               </Button>
               {this.state.islands.filter(island => island.worldId === this.state.activeWorld).map((island, islandKey) => (
-                <IslandButton key={island.id} island={island} activeIsland={this.state.activeIslands[this.state.activeWorld]} onClick={this.switchIsland}/>
+                <IslandButton
+                  key={island.id}
+                  island={island}
+                  activeIsland={this.state.activeIslands[this.state.activeWorld]}
+                  onClick={this.switchIsland}
+                  fnSetIslandName={this.setIslandName}
+                />
               ))}
             </CardBody>
           </Card>
@@ -496,7 +502,6 @@ class App extends Component {
             <Card key={island.id} className={'my-3' + (this.state.darkMode ? ' bg-dark' : '')}>
               {/*   Inselname & Bevölkerung & Fruchtbarkeiten  */}
               <CardHeader>
-                <Input value={island.name} onChange={e => this.setIslandName(island.id, e.target.value)} style={{maxWidth: 300}} className={'d-inline-block mr-3'}/>
                 <strong className={'d-inline-block mr-3'}>
                   <img src={"./icons/population/Population.png"} alt="" style={{height: 40, width: 40}}/>
                   { island.population.sum() }

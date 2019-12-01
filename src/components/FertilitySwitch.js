@@ -18,7 +18,7 @@ export default class FertilitySwitch extends Component {
 
     return (
       <Button
-        className={'p-1 mr-1'}
+        className={'px-1 py-0 mr-1'}
         color={enabled ? 'light' : 'link'}
         active={enabled}
         onClick={toggle}
