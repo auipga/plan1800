@@ -39,8 +39,10 @@ class App extends Component {
     activeIslands: {},
     unlockedProducers: [],
     unlockedNonProducers: [],
+    globalBuffs: {"expansion": 0},
     trades: [],
   }
+  expansion_buffs = [0,50,100,200]
 
 
   constructor(props) {
@@ -94,6 +96,7 @@ class App extends Component {
       island.populationPerResidence  = TieredMap.createFromJson(island.populationPerResidence)
       island.population              = TieredMap.createFromJson(island.population)
       island.prohibitedNeeds         = TieredMap.createFromJson(island.prohibitedNeeds)
+      island.populationDifference    = TieredMap.createFromJson(island.populationDifference)
     }
     return newState
   }
@@ -141,6 +144,7 @@ class App extends Component {
       residences: new TieredMap(world.socialClassIDs, 0),
       populationPerResidence: new TieredMap(world.socialClassIDs, 0),
       population: new TieredMap(world.socialClassIDs, 0),
+      populationDifference: new TieredMap(world.socialClassIDs, 0),
       buildings: {},
       productivity: {},
       unlockedNeeds: [],
@@ -203,6 +207,19 @@ class App extends Component {
         allPopulation.add(tierId, pop)
       })
     })
+
+    // only workforce, not population!!
+    // if (this.state.globalBuffs.expansion > 0) {
+    //   islands.forEach(island => {
+    //     island.population.forEach((pop, tierId) => {
+    //       // d("add", island.id, tierId, pop)
+    //       if (allPopulation.present(tierId)) {
+    //         allPopulation.add(tierId, this.expansion_buffs[this.state.globalBuffs.expansion])
+    //       }
+    //     })
+    //   })
+    // }
+
     return allPopulation
   }
 
@@ -249,6 +266,14 @@ class App extends Component {
     island.residences.set(tierId, number ? parseInt(number) : 0)
 
     this.postChangeResidences(island, tierId)
+    this.saveState()
+  }
+  changePopDiff = (event, island, tierId, direction) => {
+    const step = this.modifier(event)
+
+    island.populationDifference.add(tierId, direction * step, true)
+    this.recalculatePopulation(island, tierId)
+
     this.saveState()
   }
   postChangeResidences = (island, tierId) => {
@@ -305,6 +330,7 @@ class App extends Component {
   }
   recalculatePopulation = (island, tierId) => {
     island.population.set(tierId, island.residences.ofTier(tierId) * island.populationPerResidence.ofTier(tierId))
+    island.population.add(tierId, island.populationDifference.ofTier(tierId))
   }
 
   // Buildings and Needs
@@ -476,7 +502,21 @@ class App extends Component {
                     fnUnlockWorld={this.unlockWorld}
                   />
                 ))}
+              <strong className={'d-inline-block mr-3'}>
+                <img src={"./icons/population/Population.png"} alt="" />
+                { this.getAllPopulation().sum() }
+              </strong>
               <ResetButton resetFunction={this.reset}/>
+              {this.state.islands.length > 5 ?
+              <div className="btn-group">
+                <Button
+                onClick={() =>this.setState({globalBuffs: {expansion: Math.min(3,this.state.globalBuffs.expansion+1)}})}
+                onContextMenu={e => {e.preventDefault(); this.setState({globalBuffs: {expansion: Math.max(0, this.state.globalBuffs.expansion-1)}}) }}
+                >
+                  <img src={'./icons/buffs/expansion_'+this.state.globalBuffs.expansion+'.png'} alt='' />
+                  +{this.expansion_buffs[this.state.globalBuffs.expansion]}
+                </Button>
+              </div> : ''}
               {/*eslint-disable-next-line*/}
               <Button onClick={this.toggleDarkMode} color={'primary'} className='float-right mr-3'>&#128161;{/*icon-lamp*/}</Button>
               <Button onClick={() => game.loadFromFile((fileContent) => this.loadState(fileContent))} color={'secondary'} className='float-right mr-3'>&#128194;{/*icon-load*/}</Button>
@@ -520,6 +560,9 @@ class App extends Component {
               <CardHeader>
                 <IslandPopulations
                   island={island}
+                  allPopulation={this.getAllPopulation()}
+                  buff={this.expansion_buffs[this.state.globalBuffs.expansion]}
+                  fnChangePopDiff={this.changePopDiff}
                   fnChangeResidences={this.changeResidences}
                   fnSetResidences={this.setResidences}
                   fnSetProhibitedNeeds={this.setProhibitedNeeds}

@@ -10,6 +10,12 @@ export default class IslandPopulations extends Component {
     event.preventDefault()
     this.props.fnChangeResidences(event, island, tierId, direction, move)
   }
+  handleWheelDiff = (event, island, tierId, direction) => {
+    event.preventDefault()
+    if (island.population.present(tierId)) {
+      this.props.fnChangePopDiff(event, island, tierId, direction)
+    }
+  }
 
   render() {
     const {island, fnChangeResidences, fnSetResidences, fnSetProhibitedNeeds} = this.props;
@@ -17,7 +23,17 @@ export default class IslandPopulations extends Component {
 
     return (
       <Row>
-        {island.population.tiers().map(tierId => (
+        {island.population.tiers().map(tierId => {
+          let popSum = island.population.get(tierId)
+          if (this.props.allPopulation.present(tierId)) {
+            popSum += this.props.buff
+          }
+
+          let popDiff = island.populationDifference.ofTier(tierId)
+          let popDiffText = ''
+          if (popDiff > 0) {popDiffText += '\u25B2'+popDiff}
+          if (popDiff < 0) {popDiffText += '\u25BC'+(-popDiff)}
+          return (
           <Col sm={'auto'} key={tierId}>
             {/*   Eingabe Spalte   */}
             <InputGroup style={{width: 170}}>
@@ -53,7 +69,9 @@ export default class IslandPopulations extends Component {
 
               <InputGroupAddon addonType="append">
                 <InputGroupText className='py-1 px-1' style={{lineHeight: 1.1, minWidth: 52}}>
-                  <small className='mx-auto'>&times;{island.populationPerResidence.get(tierId)}=<br/><b>{island.population.get(tierId)}</b></small>
+                  <small className='mx-auto' onWheel={e => this.handleWheelDiff(e, island, tierId, -Math.sign(e.deltaY))}>
+                    &times;{island.populationPerResidence.get(tierId)}{popDiffText}<br/>
+                    <b>{popSum}</b></small>
                 </InputGroupText>
               </InputGroupAddon>
             </InputGroup>
@@ -75,7 +93,7 @@ export default class IslandPopulations extends Component {
               })}
             </div>
           </Col>
-        ))}
+        )})}
       </Row>
     )
   }
@@ -85,5 +103,6 @@ IslandPopulations.propTypes = {
   island: PropTypes.object.isRequired,
   fnChangeResidences: PropTypes.func.isRequired,
   fnSetResidences: PropTypes.func.isRequired,
+  fnChangePopDiff: PropTypes.func.isRequired,
   fnSetProhibitedNeeds: PropTypes.func.isRequired,
 };
