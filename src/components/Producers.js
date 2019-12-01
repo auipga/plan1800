@@ -29,7 +29,7 @@ export default class Producers extends Component {
               fnSetBuildingCount={this.props.fnSetBuildingCount}
               fnEnableDisabledBuilding={this.props.fnEnableDisabledBuilding}
               fnBalance={fnBalance}
-              fnSetProductivity={this.props.fnSetProductivity}
+              fnSetProductivityBoost={this.props.fnSetProductivityBoost}
             />
           </Col>
         ))}
@@ -45,5 +45,5 @@ Producers.propTypes = {
   fnEnableDisabledBuilding: PropTypes.func.isRequired,
   fnBalance: PropTypes.func.isRequired,
   unlockedProducers: PropTypes.array.isRequired,
-  fnSetProductivity: PropTypes.func.isRequired,
+  fnSetProductivityBoost: PropTypes.func.isRequired,
 }

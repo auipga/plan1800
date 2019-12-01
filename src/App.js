@@ -146,7 +146,7 @@ class App extends Component {
       population: new TieredMap(world.socialClassIDs, 0),
       populationDifference: new TieredMap(world.socialClassIDs, 0),
       buildings: {},
-      productivity: {},
+      productivityBoost: {},
       unlockedNeeds: [],
       prohibitedNeeds: new TieredMap(world.socialClassIDs, [])
     }
@@ -349,7 +349,6 @@ class App extends Component {
       .forEach(producer => {
         this.state.unlockedProducers.push(producer.key)
         island.buildings[producer.key] = 0
-        island.productivity[producer.key] = producer.needs.includes("otherWorld") ? 0 : 100
       })
   }
   updateUnlockedNeeds = (island) => {
@@ -385,7 +384,6 @@ class App extends Component {
       if (number > 0) {
         this.enableDisabledBuilding(island, producer, -1)
       }
-      island.productivity[producer.key] = producer.needs.includes("otherWorld") ? 0 : 100
       buildings[producer.key] = number ? Math.max(parseInt(number), 0) : 0
     }
 
@@ -410,8 +408,8 @@ class App extends Component {
   }
 
   // Productivity
-  setProductivity = (island, producer, productivity) => {
-    island.productivity[producer.key] = productivity
+  setProductivityBoost = (island, producer, value) => {
+    island.productivityBoost[producer.key] = value
     this.saveState()
   }
 
@@ -445,13 +443,13 @@ class App extends Component {
     return producers
       .filter(p => island.buildings[p.key] !== undefined) // omit buildings not (yet) built
       .filter(p => p.provides === resource)        // only providers of that resource
-      .reduce((sum, p) => sum + island.buildings[p.key] * (60 / p.productionTime) * (island.productivity[p.key]/100), 0)
+      .reduce((sum, p) => sum + island.buildings[p.key] * (60 / p.productionTime) * ((100+(isNaN(parseInt(island.productivityBoost[p.key])) ? 0 : island.productivityBoost[p.key]))/100), 0)
   }
   consumptionThroughBuildingsPerTick = (resource, island) => {
     return producers
       .filter(p => island.buildings[p.key] !== undefined) // noch nie gebaut
       .filter(p => p.needs.includes(resource)) // isConsumingResource
-      .reduce((sum, p, i) => sum + island.buildings[p.key] * (60 / p.productionTime) * (island.productivity[p.key]/100), 0)
+      .reduce((sum, p) => sum + island.buildings[p.key] * (60 / p.productionTime) * ((100+(isNaN(parseInt(island.productivityBoost[p.key])) ? 0 : island.productivityBoost[p.key]))/100), 0)
   }
   consumptionThroughPopulationPerTick = (resource, island) => {
     let need = needs.find(n => n.key === resource && island.population.has(n.tierIDs[0]))
@@ -580,7 +578,7 @@ class App extends Component {
                   fnSetBuildingCount={this.setBuildingCount}
                   fnEnableDisabledBuilding={this.enableDisabledBuilding}
                   unlockedProducers={this.state.unlockedProducers}
-                  fnSetProductivity={this.setProductivity}
+                  fnSetProductivityBoost={this.setProductivityBoost}
                 />
               </CardBody>
             </Card>

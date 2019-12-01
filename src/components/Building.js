@@ -48,7 +48,7 @@ export default class Building extends Component {
         <GoodItem producer={producer}>
           <BuildingInput
             blend={-buildingBalance}
-            boost={this.props.productivity > 100 ? 'up' : this.props.productivity < 100 ? 'down' : null }
+            boost={this.props.productivityBoost > 0 ? 'up' : this.props.productivityBoost < 0 ? 'down' : null }
             buildingCount={island.buildings[producer.key]}
             buildingKey={producer.key}
             islandId={island.id}
@@ -69,8 +69,8 @@ export default class Building extends Component {
             balance={balance}
             trades={this.trades}
             fnTrade={this.props.fnTrade}
-            productivity={this.props.productivity}
-            fnProductivity={(productivity) => this.props.fnSetProductivity(island, producer, productivity)}
+            productivityBoost={this.props.productivityBoost}
+            fnProductivityBoost={(productivityBoost) => this.props.fnSetProductivityBoost(island, producer, productivityBoost)}
           />
         </GoodItem>
       </label>
@@ -85,6 +85,6 @@ Building.propTypes = {
   fnSetBuildingCount: PropTypes.func.isRequired,
   trades: PropTypes.arrayOf(PropTypes.object).isRequired,
   fnTrade: PropTypes.func.isRequired,
-  productivity: PropTypes.number.isRequired,
-  fnSetProductivity: PropTypes.func.isRequired,
+  productivityBoost: PropTypes.number.isRequired,
+  fnSetProductivityBoost: PropTypes.func.isRequired,
 };

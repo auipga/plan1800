@@ -60,11 +60,10 @@ export default class BuildingContextMenu extends Component {
                   bsSize='sm'
                   style={{width: 20}}
                   className='text-center'
-                  min={50}
-                  max={500}
-                  disabled={!this.props.productivity}
-                  value={this.props.productivity}
-                  onChange={(e) => this.props.fnProductivity(parseInt(e.target.value))} /*Math.min(500, Math.max(50, x))*/
+                  min={-50}
+                  max={+50}
+                  value={this.props.productivityBoost}
+                  onChange={(e) => this.props.fnProductivityBoost(parseInt(e.target.value))} /*Math.min(50, Math.max(-50, x))*/
                   onMouseEnter={e => e.target.focus()}
                 />
 
@@ -149,6 +148,6 @@ BuildingContextMenu.propTypes = {
   balance: PropTypes.number.isRequired,
   trades: PropTypes.arrayOf(PropTypes.object).isRequired,
   fnTrade: PropTypes.func.isRequired,
-  productivity: PropTypes.number.isRequired,
-  fnProductivity: PropTypes.func.isRequired,
+  productivityBoost: PropTypes.number.isRequired,
+  fnProductivityBoost: PropTypes.func.isRequired,
 }
