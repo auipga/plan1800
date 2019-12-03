@@ -21,7 +21,8 @@ export default class BuildingInput extends Component {
 
     const boostClass = this.props.boost ? 'overlay-boost boost-'+ this.props.boost : ''
 
-    return (
+    return (<div className='overlay-wrapper'>
+      {this.props.electricityIcon}
       <Input
         id={"input_"+buildingKey}
         type='number'
@@ -45,6 +46,7 @@ export default class BuildingInput extends Component {
         onChange={e => fnSetBuildingCount(e.target.value)}
         onMouseEnter={e => e.target.focus()}
       />
+      </div>
     )
   }
 }

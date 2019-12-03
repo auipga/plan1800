@@ -23,8 +23,10 @@ export default class ProducersOfType extends Component {
           producer={producer}
           balance={this.props.fnBalance(producer.provides)}
           fnSetBuildingCount={this.props.fnSetBuildingCount}
+          fnSetWithElectricity={this.props.fnSetWithElectricity}
           trades={this.props.trades}
           fnTrade={this.props.fnTrade}
+          electricity={this.props.electricity}
           productivityBoost={island.productivityBoost[producer.key]}
           fnSetProductivityBoost={this.props.fnSetProductivityBoost}
         />
@@ -51,6 +53,8 @@ ProducersOfType.propTypes = {
   island: PropTypes.object.isRequired,
   trades: PropTypes.arrayOf(PropTypes.object).isRequired,
   fnSetBuildingCount: PropTypes.func.isRequired,
+  electricity: PropTypes.bool.isRequired,
+  fnSetWithElectricity: PropTypes.func.isRequired,
   fnEnableDisabledBuilding: PropTypes.func.isRequired,
   fnBalance: PropTypes.func.isRequired,
   unlockedProducers: PropTypes.arrayOf(PropTypes.object).isRequired,

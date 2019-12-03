@@ -51,14 +51,28 @@ body.bg-secondary {
     }
 }
 
-.chart-wrapper {
+.overlay-wrapper {
     position: relative;
 
     img {
         position: absolute;
-        top: -4px;
-        left: -8px;
         width: 16px;
+        &.trade-icon{
+            top: -4px;
+            left: -8px;
+        }
+        &.electricity-icon {
+            filter: drop-shadow(0 0 0 black);
+
+            &.el-some {
+                filter: sepia(1) drop-shadow(0 0 0 black);
+            }
+            &.el-on.el-off {
+                filter: sepia(1) saturate(300%) hue-rotate(-50deg) drop-shadow(0 0 0px red);
+            }
+            top: -2px;
+            left: -15px;
+        }
     }
 }
 

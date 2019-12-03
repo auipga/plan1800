@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Card, CardBody, CardHeader, Container, Input} from 'reactstrap';
+import {Button, Card, CardBody, CardHeader, Container} from 'reactstrap';
 import './App.scss'
 import worlds from "./data/worlds";
 import needs from "./data/needs";
@@ -146,6 +146,7 @@ class App extends Component {
       population: new TieredMap(world.socialClassIDs, 0),
       populationDifference: new TieredMap(world.socialClassIDs, 0),
       buildings: {},
+      buildingsWithElectricity: {},
       productivityBoost: {},
       unlockedNeeds: [],
       prohibitedNeeds: new TieredMap(world.socialClassIDs, [])
@@ -407,10 +408,21 @@ class App extends Component {
     }
   }
 
-  // Productivity
+  // Productivity, Electricity
   setProductivityBoost = (island, producer, value) => {
     island.productivityBoost[producer.key] = value
     this.saveState()
+  }
+  setWithElectricity = (island, producer, number) => {
+    let elec = island.buildingsWithElectricity;
+
+    if ([null, "all"].includes(number)) {
+      elec[producer.key] = number
+    } else {
+      elec[producer.key] = number ? Math.max(parseInt(number), 0) : 0
+    }
+
+    this.setState(prevState => prevState, this.persistState);
   }
 
   // Trading
@@ -439,17 +451,44 @@ class App extends Component {
   }
 
   // Resource Balance
-  productionPerTick = (resource, island) => {
+  producersReducer = (sum, p, island, hasElectricity) => {
+    const productivityBoost = isNaN(parseInt(island.productivityBoost[p.key])) ? 0 : island.productivityBoost[p.key];
+    const buildingCount = island.buildings[p.key]
+    let withElec = island.buildingsWithElectricity[p.key]
+    if (withElec === undefined || !hasElectricity) {
+      withElec = 0
+    }
+
+    const electricityBoost = 100
+    let productivity
+    if (p.needs.includes("Electricity")) {
+      productivity = 100 + productivityBoost + electricityBoost;
+      if (withElec === "all") {
+        return sum + buildingCount * (60 / p.productionTime) * (productivity/100)
+      }
+      return sum + withElec * (60 / p.productionTime) * (productivity/100)
+    } else {
+      let partialElectricityBoost = 0
+      if (withElec === "all") {
+        partialElectricityBoost = electricityBoost
+      } else if (buildingCount>0) {
+        partialElectricityBoost = electricityBoost * withElec / buildingCount;
+      }
+      productivity = 100 + productivityBoost + partialElectricityBoost;
+    }
+    return sum + buildingCount * (60 / p.productionTime) * (productivity/100)
+  }
+  productionPerTick = (resource, island, hasElectricity) => {
     return producers
       .filter(p => island.buildings[p.key] !== undefined) // omit buildings not (yet) built
       .filter(p => p.provides === resource)        // only providers of that resource
-      .reduce((sum, p) => sum + island.buildings[p.key] * (60 / p.productionTime) * ((100+(isNaN(parseInt(island.productivityBoost[p.key])) ? 0 : island.productivityBoost[p.key]))/100), 0)
+      .reduce((sum, p) => this.producersReducer(sum, p, island, hasElectricity), 0)
   }
-  consumptionThroughBuildingsPerTick = (resource, island) => {
+  consumptionThroughBuildingsPerTick = (resource, island, hasElectricity) => {
     return producers
       .filter(p => island.buildings[p.key] !== undefined) // noch nie gebaut
       .filter(p => p.needs.includes(resource)) // isConsumingResource
-      .reduce((sum, p) => sum + island.buildings[p.key] * (60 / p.productionTime) * ((100+(isNaN(parseInt(island.productivityBoost[p.key])) ? 0 : island.productivityBoost[p.key]))/100), 0)
+      .reduce((sum, p) => this.producersReducer(sum, p, island, hasElectricity), 0)
   }
   consumptionThroughPopulationPerTick = (resource, island) => {
     let need = needs.find(n => n.key === resource && island.population.has(n.tierIDs[0]))
@@ -473,9 +512,11 @@ class App extends Component {
     return dropping - loading
   }
   calculateBalance = (resource, island) => {
+    const hasElectricity = island.buildings["Electricity"] > 0
+
     return (
-      + this.productionPerTick(resource, island)
-      - this.consumptionThroughBuildingsPerTick(resource, island)
+      + this.productionPerTick(resource, island, hasElectricity)
+      - this.consumptionThroughBuildingsPerTick(resource, island, hasElectricity)
       - this.consumptionThroughPopulationPerTick(resource, island)
       + this.calculateTradeBalance(resource, island)
     )
@@ -576,6 +617,7 @@ class App extends Component {
                   fnTrade={this.upsertTrade}
                   fnBalance={(resource) => this.calculateBalance(resource, island)}
                   fnSetBuildingCount={this.setBuildingCount}
+                  fnSetWithElectricity={this.setWithElectricity}
                   fnEnableDisabledBuilding={this.enableDisabledBuilding}
                   unlockedProducers={this.state.unlockedProducers}
                   fnSetProductivityBoost={this.setProductivityBoost}

@@ -366,6 +366,15 @@ export default [
     needs: ["deposit"],
   },
   {
+    key: "Electricity",
+    tierId: 4,
+    requirement: 1,
+    productionTime: 1/Infinity,
+    type: "Konsumgüter",
+    provides: "Electricity",
+    needs: ["Oil"],
+  },
+  {
     key: "Reinforced_concrete",
     tierId: 4,
     requirement: 1,
@@ -417,7 +426,7 @@ export default [
     productionTime: 45,
     type: "Baumaterial",
     provides: "Steam_motors",
-    needs: ["Furnace", "Brass", "electricity"],
+    needs: ["Furnace", "Brass", "Electricity"],
   },
   {
     key: "Saltpeter",
@@ -444,7 +453,7 @@ export default [
     productionTime: 60,
     type: "Baumaterial",
     provides: "Advanced_weapons",
-    needs: ["Dynamite", "Brass", "electricity"],
+    needs: ["Dynamite", "Brass", "Electricity"],
   },
   {
     key: "Caoutchouc",
@@ -462,7 +471,7 @@ export default [
     productionTime: 15,
     type: "Konsumgüter",
     provides: "Penny_farthings",
-    needs: ["Caoutchouc", "Furnace", "electricity"],
+    needs: ["Caoutchouc", "Furnace", "Electricity"],
   },
   {
     key: "Gold_ore",
@@ -498,7 +507,7 @@ export default [
     productionTime: 45,
     type: "Konsumgüter",
     provides: "Pocket_watches",
-    needs: ["Gold", "Glass", "electricity"],
+    needs: ["Gold", "Glass", "Electricity"],
   },
   {
     key: "Filaments",
@@ -583,7 +592,7 @@ export default [
     productionTime: 60,
     type: "Konsumgüter",
     provides: "Gramophones",
-    needs: ["Wood_veneers", "Brass", "electricity"],
+    needs: ["Wood_veneers", "Brass", "Electricity"],
   },
   {
     key: "Chassis",
@@ -601,7 +610,7 @@ export default [
     productionTime: 30,
     type: "Konsumgüter",
     provides: "Steam_carriages",
-    needs: ["Steam_motors", "Chassis", "electricity"],
+    needs: ["Steam_motors", "Chassis", "Electricity"],
   },
 
 

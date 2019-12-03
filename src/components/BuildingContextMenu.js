@@ -22,6 +22,9 @@ export default class BuildingContextMenu extends Component {
 
   render() {
     const {island, good, trades, fnTrade, balance} = this.props
+    const {buildingCount, electricity, buildingsWithElectricity, canEletrified} = this.props
+
+    const a = buildingsWithElectricity === "all"
 
     const canSend = balance > 0
     // eslint-disable-next-line
@@ -76,8 +79,39 @@ export default class BuildingContextMenu extends Component {
               </InputGroup>
             </DropdownItem>
 
+            {electricity && canEletrified ?
+              <DropdownItem toggle={false} className={'form-inline '}>
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText className='p-0'>
+                      <img src={'./icons/Electricity_on.png'} alt='+' style={{height: 24, width: 24}}/>
+                    </InputGroupText>
+                  </InputGroupAddon>
+                  <Input
+                    type={a ? 'text':'number'}
+                    disabled={a}
+                    bsSize='sm'
+                    className='text-center px-0'
+                    min={0}
+                    max={buildingCount}
+                    value={buildingsWithElectricity}
+                    onChange={(e) => this.props.fnSetWithElectricity(e.target.value)}
+                    onBlur={(e) => e.target.value = Math.min(this.props.buildingCount, Math.max(0,e.target.value))}
+                    onMouseEnter={e => e.target.focus()}
+                  />
+                  <InputGroupAddon addonType="append">
+                    <InputGroupText className='p-0'>
+                      <Input type='checkbox' className='mx-1' value='all'
+                             checked={a} onChange={(e) => this.props.fnSetWithElectricity(e.target.checked?"all":buildingCount)}
+                      />
+                    </InputGroupText>
+                  </InputGroupAddon>
+                </InputGroup>
+              </DropdownItem>
+              : null}
+
             {/*canSend*/}
-            <DropdownItem toggle={false} disabled={!canSend} className={'form-inline py-0'}>
+            <DropdownItem toggle={false} disabled={!canSend} className={'form-inline'}>
               &#10150;{/*icon-send/load*/}
               <Input
                 type='number'
@@ -136,7 +170,6 @@ export default class BuildingContextMenu extends Component {
             ))}
           </DropdownMenu>
         </ButtonDropdown>
-
       </>
     )
   }
@@ -150,4 +183,6 @@ BuildingContextMenu.propTypes = {
   fnTrade: PropTypes.func.isRequired,
   productivityBoost: PropTypes.number.isRequired,
   fnProductivityBoost: PropTypes.func.isRequired,
+  canEletrified: PropTypes.bool.isRequired,
+  fnSetWithElectricity: PropTypes.func.isRequired,
 }
