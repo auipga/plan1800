@@ -178,7 +178,8 @@ class App extends Component {
 
     this.setState({islands: islands}, () => {
       this.persistState();
-      let otherIsland = this.state.islands.find(i => i.worldId === this.state.activeWorld);
+      const otherIslands = this.state.islands.filter(i => i.worldId === this.state.activeWorld);
+      const otherIsland = otherIslands.find(i => i.id > islandId) || otherIslands.reverse().find(i => i.id < islandId)
       if (otherIsland) {
         this.switchIsland(otherIsland.id)
       }
@@ -364,7 +365,7 @@ class App extends Component {
 
     unlockedNeeds.filter(n => n.tierIDs.filter(t => island.population.present(t)).length)
       .forEach(need => {
-        this.enableDisabledBuilding(island, producers.find(p => p.provides === need.key && island.population.has(p.tierId)), -1)
+        this.enableDisabledBuilding(island, producers.find(p => p.provides === need.key && island.population.has(p.tierId)), 0)
       })
 
     const keys = unlockedNeeds.reduce((all, need) => [...all, need.key], [])
@@ -380,7 +381,6 @@ class App extends Component {
 
     if (number===null) {
       buildings[producer.key] = null
-      island.productivity[producer.key] = null
     } else {
       if (number > 0) {
         this.enableDisabledBuilding(island, producer, -1)
@@ -546,7 +546,7 @@ class App extends Component {
                 { this.getAllPopulation().sum() }
               </strong>
               <ResetButton resetFunction={this.reset}/>
-              {this.state.islands.length > 5 ?
+              {this.state.islands.length > 3 ?
               <div className="btn-group">
                 <Button
                 onClick={() =>this.setState({globalBuffs: {expansion: Math.min(3,this.state.globalBuffs.expansion+1)}})}
@@ -558,7 +558,9 @@ class App extends Component {
               </div> : ''}
               {/*eslint-disable-next-line*/}
               <Button onClick={this.toggleDarkMode} color={'primary'} className='float-right mr-3'>&#128161;{/*icon-lamp*/}</Button>
+              {/*eslint-disable-next-line*/}
               <Button onClick={() => game.loadFromFile((fileContent) => this.loadState(fileContent))} color={'secondary'} className='float-right mr-3'>&#128194;{/*icon-load*/}</Button>
+              {/*eslint-disable-next-line*/}
               <Button onClick={() => game.exportToFile(this.state)} color={'secondary'} className='float-right mr-3'>&#128190;{/*icon-save*/}</Button>
             </CardHeader>
             {/*   Insel auswahl   */}

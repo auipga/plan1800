@@ -12,6 +12,7 @@ export default class ResourceBadge extends Component {
         onClick={(e) => {if (editMode) { fnChangeResourceCount(1) }}}
         onWheel={(e) => {if (editMode) { fnChangeResourceCount(Math.sign(-e.deltaY)); e.preventDefault() }}}
         onContextMenu={(e) => {if (editMode) {fnChangeResourceCount(-1)} e.preventDefault()}}
+        style={{cursor: editMode ? 'pointer' : 'interit'}}
       >
         {count}
         &times;

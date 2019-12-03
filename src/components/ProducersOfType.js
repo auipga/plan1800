@@ -33,7 +33,7 @@ export default class ProducersOfType extends Component {
       ))}
       {usedProducers.length && (unusedProducers.length || lockedProducers.length) ? <hr/> : ''}
       {unusedProducers.length || lockedProducers.length ?
-        <div className='mb-2' style={{maxWidth: 182}}>
+        <div className='mb-2' style={{maxWidth: 178}}>
           <img src={"./icons/Icon_build_menu.png"} alt='' className={'mr-0'} style={{height: 26, width: 26, filter: 'drop-shadow(0 0 1px #ffffff)'}}/>
           {unusedProducers.map((producer, producerKey) => (
             <BuildingButton key={producerKey} producer={producer} isUnlocked={true} fnEnable={recursive => this.props.fnEnableDisabledBuilding(island, producer, recursive)} />

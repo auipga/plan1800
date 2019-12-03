@@ -7,6 +7,7 @@ export default class NeedSwitch extends Component {
     super(props);
     const {need, nIndex} = this.props
 
+    // icon-up, icon-smile
     this.title = need.key + "\n\u25B2" + need.influx[nIndex] + " | $" + need.income[nIndex] + " | \u263B" + need.happiness[nIndex]
   }
 

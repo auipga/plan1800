@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types/';
 import {Button, Col, Input, InputGroup, InputGroupText, InputGroupAddon, Row} from "reactstrap";
-import tiers from "../data/tiers";
 import needs from "../data/needs";
 import NeedSwitch from "./NeedSwitch";
 
@@ -43,6 +42,7 @@ export default class IslandPopulations extends Component {
                           onWheel={e => this.handleWheel(e, island, tierId, -Math.sign(e.deltaY), false)}
                           onClick={e => fnChangeResidences(e, island, tierId, +1, false)}
                           onContextMenu={e => {fnChangeResidences(e, island, tierId, -1, false); e.preventDefault()}}
+                          onMouseEnter={e => e.target.focus()}
                   >
                     {/*<img src={"./icons/upgrade.png"} alt={"\u25B2"} style={{height: 24, width: 24}}/>*/}
                     <img src={"./icons/population/Workforce_" + tierId + ".png"} alt={tierId} style={{height: 30, width: 30}}/>
@@ -52,6 +52,7 @@ export default class IslandPopulations extends Component {
                           onWheel={e => this.handleWheel(e, island, tierId -1 +(Math.sign(e.deltaY) > 0 ? 1 : 0), -Math.sign(e.deltaY), true)}
                           onClick={e => fnChangeResidences(e, island, tierId - 1, +1, true)}
                           onContextMenu={e => {fnChangeResidences(e, island, tierId, -1, true); e.preventDefault()}}
+                          onMouseEnter={e => e.target.focus()}
                   >
                     {/*<img src={"./icons/upgrade.png"} alt={"\u25B2"} style={{height: 24, width: 24}}/>*/}
                     <img src={"./icons/population/Workforce_" + tierId + ".png"} alt={tierId} style={{height: 30, width: 30}}/>

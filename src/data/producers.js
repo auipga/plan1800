@@ -741,7 +741,7 @@ export default [
     productionTime: 90,
     type: "Landwirtschaftliche Produkte",//
     provides: "Pearls",
-    needs: ["coastline", "fertility"],//fertility=pearl_abundance
+    needs: ["coastline", "fertility"],
   },
 
   /**

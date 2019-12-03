@@ -50,7 +50,8 @@ export default class BuildingContextMenu extends Component {
           </DropdownToggle>
 
           <DropdownMenu>
-            <DropdownItem toggle={false} className={'form-inline py-0'}>
+            {buildingCount > 0 ? // productivityBoost
+            <DropdownItem toggle={false} className={'form-inline'}>
               <InputGroup>
                 <InputGroupAddon addonType="prepend">
                   <InputGroupText className='py-0 px-2'>
@@ -65,19 +66,20 @@ export default class BuildingContextMenu extends Component {
                   className='text-center'
                   min={-50}
                   max={+50}
+                  placeholder={0}
                   value={this.props.productivityBoost}
                   onChange={(e) => this.props.fnProductivityBoost(parseInt(e.target.value))} /*Math.min(50, Math.max(-50, x))*/
                   onMouseEnter={e => e.target.focus()}
                 />
 
                 <InputGroupAddon addonType="append">
-                  <InputGroupText className='py-0 px-2'>
+                  <InputGroupText className='py-0 px-1 text-center' style={{width:26}}>
                     %
                   </InputGroupText>
                 </InputGroupAddon>
-
               </InputGroup>
             </DropdownItem>
+              : null}
 
             {electricity && canEletrified ?
               <DropdownItem toggle={false} className={'form-inline '}>
