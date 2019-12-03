@@ -575,6 +575,13 @@ class App extends Component {
                   fnSetIslandName={this.setIslandName}
                 />
               ))}
+              <div className='float-right ml-3' style={{lineHeight: 1.2}}>
+                <li><a href='https://t.me/plan1800'>Telegram Support-Gruppe</a></li>
+                <li><a href='https://forums-de.ubisoft.com/showthread.php/218755-Plan1800-noch-so-ein-Calculator'>ubisoft Forum</a></li>
+              </div>
+              <div className='float-right mx-3' style={{lineHeight: 1.2}}>
+                <li><a href='https://youtu.be/ntDAreoiJA0'>YouTube Anleitung</a></li>
+              </div>
             </CardBody>
           </Card>
           {this.state.islands.filter(island => island.id === this.state.activeIslands[this.state.activeWorld]).map((island, islandKey) => (
