@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import {Button, Card, CardBody, CardHeader, Container} from 'reactstrap';
+import {Button, Card, CardBody, CardHeader, Container, Row, Col} from 'reactstrap';
 import './App.scss'
 import worlds from "./data/worlds";
 import needs from "./data/needs";
 import producers from "./data/producers";
-import ResetButton from "./components/ResetButton";
 import WorldSwitch from "./components/WorldSwitch";
 import IslandButton from "./components/IslandButton";
 import IslandPopulations from "./components/IslandPopulations";
@@ -530,39 +529,46 @@ class App extends Component {
           <Card className={'my-3' + (this.state.darkMode ? ' bg-dark' : '')}>
             {/*   Welt auswahl   */}
             <CardHeader>
-                {worlds.map((world, worldKey) => (
-                  <WorldSwitch
-                    key={world.id}
-                    world={world}
-                    activeWorld={this.state.activeWorld}
-                    unlocked={this.state.unlockedWorlds.includes(world.id)}
-                    islands={this.state.islands}
-                    allPopulation={this.getAllPopulation()}
-                    fnSwitchWorld={this.switchWorld}
-                    fnUnlockWorld={this.unlockWorld}
-                  />
-                ))}
-              <strong className={'d-inline-block mr-3'}>
-                <img src={"./icons/population/Population.png"} alt="" />
-                { this.getAllPopulation().sum() }
-              </strong>
-              <ResetButton resetFunction={this.reset}/>
-              {this.state.islands.length > 3 ?
-              <div className="btn-group">
-                <Button
-                onClick={() =>this.setState({globalBuffs: {expansion: Math.min(3,this.state.globalBuffs.expansion+1)}})}
-                onContextMenu={e => {e.preventDefault(); this.setState({globalBuffs: {expansion: Math.max(0, this.state.globalBuffs.expansion-1)}}) }}
-                >
-                  <img src={'./icons/buffs/expansion_'+this.state.globalBuffs.expansion+'.png'} alt='' />
-                  +{this.expansion_buffs[this.state.globalBuffs.expansion]}
-                </Button>
-              </div> : ''}
-              {/*eslint-disable-next-line*/}
-              <Button onClick={this.toggleDarkMode} color={'primary'} className='float-right mr-3'>&#128161;{/*icon-lamp*/}</Button>
-              {/*eslint-disable-next-line*/}
-              <Button onClick={() => game.loadFromFile((fileContent) => this.loadState(fileContent))} color={'secondary'} className='float-right mr-3'>&#128194;{/*icon-load*/}</Button>
-              {/*eslint-disable-next-line*/}
-              <Button onClick={() => game.exportToFile(this.state)} color={'secondary'} className='float-right mr-3'>&#128190;{/*icon-save*/}</Button>
+              <Row>
+                <Col sm={'auto'}>
+                  {worlds.map((world, worldKey) => (
+                    <WorldSwitch
+                      key={world.id}
+                      world={world}
+                      activeWorld={this.state.activeWorld}
+                      unlocked={this.state.unlockedWorlds.includes(world.id)}
+                      islands={this.state.islands}
+                      allPopulation={this.getAllPopulation()}
+                      fnSwitchWorld={this.switchWorld}
+                      fnUnlockWorld={this.unlockWorld}
+                    />
+                  ))}
+                  <strong className={'d-inline-block mr-3'}>
+                    <img src={"./icons/population/Population.png"} alt="" />
+                    { this.getAllPopulation().sum() }
+                  </strong>
+                </Col>
+                <Col className='text-center'>
+                  {this.state.islands.length > 3 ?
+                    <Button
+                      onClick={() =>this.setState({globalBuffs: {expansion: Math.min(3,this.state.globalBuffs.expansion+1)}})}
+                      onContextMenu={e => {e.preventDefault(); this.setState({globalBuffs: {expansion: Math.max(0, this.state.globalBuffs.expansion-1)}}) }}
+                      className='mr-2 p-1'
+                    >
+                      <img src={'./icons/buffs/expansion_'+this.state.globalBuffs.expansion+'.png'} alt='' />
+                      +{this.expansion_buffs[this.state.globalBuffs.expansion]}
+                    </Button> : ''}
+                </Col>
+                <Col sm={'auto'} className='text-right'>
+                  {/*eslint-disable-next-line*/}
+                  <Button onClick={() => game.exportToFile(this.state)} color={'secondary'} className='mr-2'>&#128190;{/*icon-save*/}</Button>
+                  {/*eslint-disable-next-line*/}
+                  <Button onClick={() => game.loadFromFile((fileContent) => this.loadState(fileContent))} color={'secondary'} className='mr-2'>&#128194;{/*icon-load*/}</Button>
+                  {/*eslint-disable-next-line*/}
+                  <Button onClick={this.toggleDarkMode} color={'primary'} className='mr-2'>&#128161;{/*icon-lamp*/}</Button>
+                  <Button onClick={this.reset} color={'warning'} className='mr-2 py-1 px-2'><img src={'./icons/Icon_traderoutes.png'} alt='reset' style={{width: 28, height: 28}}/></Button>
+                </Col>
+              </Row>
             </CardHeader>
             {/*   Insel auswahl   */}
             <CardBody className={'overflow-auto text-nowrap'}>
