@@ -34,6 +34,9 @@ TieredMap.prototype.toJSON = function() {
 TieredMap.prototype.tiers = function() {
   return Array.from(this.keys())
 }
+TieredMap.prototype.firstTier = function() {
+  return this.tiers()[0]
+}
 TieredMap.prototype.highestTier = function() {
   let highestTier = null
   this.forEach((value, tierId) => {

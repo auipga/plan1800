@@ -1,7 +1,10 @@
 body.bg-secondary {
     color: #ffffff !important;
 }
-
+img {
+    max-width: 30px;
+    max-height: 30px;
+}
 .GoodItem {
     /* same duration for highlight for fade-out */
     transition: all .2s ease-out;

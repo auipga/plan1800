@@ -380,6 +380,7 @@ class App extends Component {
     let buildings = island.buildings;
 
     if (number===null) {
+      // hide producer = unbuilt
       buildings[producer.key] = null
     } else {
       if (number > 0) {
@@ -566,7 +567,7 @@ class App extends Component {
             {/*   Insel auswahl   */}
             <CardBody className={'overflow-auto text-nowrap'}>
               <Button onClick={() => this.addIsland(this.state.activeWorld)} className={'px-1 py-0 mr-2'}>
-                <img src={'./icons/Icon_plus.png'} alt='Hinzufügen' style={{width: 36, height: 36}}/>
+                <img src={'./icons/Icon_plus.png'} alt='Hinzufügen' style={{maxWidth: 36, maxHeight: 36}}/>
               </Button>
               {this.state.islands.filter(island => island.worldId === this.state.activeWorld).map((island, islandKey) => (
                 <IslandButton
@@ -591,7 +592,7 @@ class App extends Component {
               {/*   Inselname & Bevölkerung & Fruchtbarkeiten  */}
               <CardHeader>
                 <strong className={'d-inline-block mr-3'}>
-                  <img src={"./icons/population/Population.png"} alt="" style={{height: 40, width: 40}}/>
+                  <img src={"./icons/population/Population.png"} alt="" />
                   { island.population.sum() }
                 </strong>
 
