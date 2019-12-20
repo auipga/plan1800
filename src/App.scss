@@ -120,3 +120,28 @@ input[type=number] {
     }
 }
 
+.progress-border {
+    border-right-color: black;
+    border-right-style: solid;
+    border-right-width: 1px
+}
+.progress-border {
+    &[aria-valuenow="0.0"],
+    &[aria-valuenow="0"],
+    {
+        border-right-width: 0;
+
+        >* {
+            display: none;
+            //opacity: 0;
+        }
+    }
+    &:not([aria-valuenow="0.0"]):last-of-type,
+    &:not([aria-valuenow="0"]):last-of-type {
+        border-right-width: 0;
+    }
+}
+
+.text-underline {
+    text-decoration: underline;
+}

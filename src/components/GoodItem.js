@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types/';
 import Media from "reactstrap/es/Media";
-import {trans} from "../functions/translation";
 import producers from "../data/producers";
+import GoodMediaObject from "../components/GoodMediaObject";
 
 export default class GoodItem extends Component {
   static highlight = (producer, recursive) => {
@@ -61,10 +61,10 @@ export default class GoodItem extends Component {
              onMouseEnter={(e) => GoodItem.highlight(producer, e.ctrlKey)}
              onMouseLeave={() => GoodItem.highlight(null)}
       >
-        <Media left>
-          <Media object src={"./icons/goods/" + producer.key + ".png"} alt={trans(producer)} title={trans(producer)}
-                 middle style={{height: 30, width: 30}} className='mr-2'
-          />
+        <Media left
+          onClick={this.props.onClick}
+          onContextMenu={this.props.onContextMenu}>
+          <GoodMediaObject producer={producer} mr={true} />
         </Media>
         <Media body className='align-self-center form-inline'>
           {this.props.children}

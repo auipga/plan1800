@@ -4,8 +4,13 @@ import './App.scss'
 import worlds from "./data/worlds";
 import needs from "./data/needs";
 import producers from "./data/producers";
-import WorldSwitch from "./components/WorldSwitch";
-import IslandButton from "./components/IslandButton";
+import WorldExpBar from "./components/WorldExpBar";
+import IslandBar from "./components/IslandBar";
+import ExploreBar from "./components/ExploreBar";
+import ExpeditionBar from "./components/ExpeditionBar";
+import ExpeditionButton from "./components/ExpeditionButton";
+import ExpeditionPreparationBar from "./components/ExpeditionPreparationBar";
+import ExpeditionPreparation from "./components/ExpeditionPreparation";
 import IslandPopulations from "./components/IslandPopulations";
 import Fertilities from "./components/Fertilities";
 import {trans} from "./functions/translation";
@@ -14,6 +19,13 @@ import Producers from "./components/Producers";
 import TieredMap from "./classes/TieredMap";
 import GoodItem from "./components/GoodItem";
 import tiers from "./data/tiers";
+import Settings from "./components/Settings";
+import Support from "./components/Support";
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {fas} from '@fortawesome/free-solid-svg-icons'
+import {fab} from '@fortawesome/free-brands-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+library.add(fas, fab)
 
 const debugEnabled = true
 const jst = JSON.stringify
@@ -32,14 +44,19 @@ class App extends Component {
   }
   initialState = {
     darkMode: false,
+    useTabs: false,
     islands: [],
-    unlockedWorlds: debugEnabled ? [1, 2, 3] : [1],
+    unlockedWorlds: [1],
+    activeSection: "worlds",
     activeWorld: 1,
     activeIslands: {},
     unlockedProducers: [],
     unlockedNonProducers: [],
     globalBuffs: {"expansion": 0},
     trades: [],
+    tradeSyncs: [],//? geht auch ohne...
+    expeditions: [],
+    activeExpeditionPreparations: {},
   }
   expansion_buffs = [0,50,100,200]
 
@@ -78,11 +95,13 @@ class App extends Component {
       return;
     }
     localStorage.clear();
-    const darkMode = this.state.darkMode
-    this.setState(prevState => jcl(this.initialState), () => {
+    const theme = localStorage.getItem('theme')
+    const darkMode = JSON.stringify((this.state.darkMode))
+    this.setState(prevState => this.prepareStateString(jst(this.initialState)), () => {
       if (darkMode) {
         this.toggleDarkMode()
       }
+      localStorage.setItem('theme', theme)
       if (debugEnabled) {
         this.addIsland(1)
       }
@@ -151,9 +170,9 @@ class App extends Component {
     localStorage.clear();
     this.setState(prevState => this.prepareStateString(string), this.persistState);
   }
-  saveState() {
+  saveState(callback = null) {
     // it works but has a smell
-    this.setState(prevState => prevState, this.persistState);
+    this.setState(prevState => prevState, typeof callback === "function" ? callback : this.persistState);
   }
   persistState() {
     if (this.saveLogic.timeout) {
@@ -176,6 +195,10 @@ class App extends Component {
     if (event.shiftKey) { step *= 10 }
     // if (event.altKey)   { step *= 5  }
     return step
+  }
+
+  switchSection = (section) => {
+    this.setState({activeSection: section}, this.persistState)
   }
 
   // Islands and Worlds
@@ -240,12 +263,16 @@ class App extends Component {
     })
   }
   unlockWorld = (worldId) => {
-    this.state.unlockedWorlds.push(worldId)
-
-    this.setState({unlockedWorlds: this.state.unlockedWorlds}, this.persistState)
+    const unlockedWorlds = this.state.unlockedWorlds
+    unlockedWorlds.push(worldId)
+    this.setState({unlockedWorlds: unlockedWorlds}, this.persistState)
+  }
+  lockWorld = (worldId) => {
+    const unlockedWorlds = this.state.unlockedWorlds.filter(id => id !== worldId)
+    this.setState({unlockedWorlds: unlockedWorlds}, this.persistState)
   }
   switchWorld = (worldId) => {
-    this.setState({activeWorld: worldId}, this.persistState)
+    this.setState({activeSection: "worlds", activeWorld: worldId}, this.persistState)
     if (debugEnabled) {
       if (!this.state.islands.filter(i => i.worldId === worldId).length) {
         setTimeout(() => this.addIsland(worldId), 500)
@@ -385,6 +412,82 @@ class App extends Component {
   recalculatePopulation = (island, tierId) => {
     island.population.set(tierId, island.residences.ofTier(tierId) * island.populationPerResidence.ofTier(tierId))
     island.population.add(tierId, island.populationDifference.ofTier(tierId))
+  }
+
+  // Expeditions
+  addExpedition = (expType, skulls, moreData = {}, silentAdd = false) => {
+    let expeditions = this.state.expeditions
+    let increment = expeditions.reduce((prev, next, i) => Math.max(prev, next.id), 0) + 1
+    let newExpeditions = {
+      id: increment,
+      type: expType,
+      skulls: skulls,
+      state: "expedition_preparable",
+      // preparations: [],
+      ...moreData
+    }
+
+    this.setState({expeditions: [...expeditions, newExpeditions]}, () => {
+      this.addPreparation(increment)
+
+      // if (silentAdd) {
+      //   this.persistState()
+      // } else {
+      this.switchExpedition(increment)
+      // }
+    })
+  }
+  switchExpedition = (id) => {
+    this.setState({activeExpedition: id}, this.persistState)
+  }
+  updateExpedition = (newData) => {
+    const expeditions = this.state.expeditions
+    let expedition = this.state.expeditions.find((i) => i.id === newData.id)
+    expedition = {...expedition, ...newData}
+
+    const newExps = [...expeditions.filter(p => p.id !== newData.id), expedition]
+
+    this.setState({expeditions: newExps}, this.persistState)
+  }
+  deleteExpedition = (id) => {
+    let expeditions = this.state.expeditions.filter((i) => i.id !== id)
+
+    this.switchExpedition(null)
+    this.setState({expeditions: expeditions})
+  }
+  addPreparation(expeditionId) {
+    let preparations = this.state.expedition_preparations
+    // let expedition = this.state.expeditions.find((i) => i.id !== expeditionId)
+    // let preparations = expedition.preparations
+    // preparations = preparations ? preparations : []
+    let increment = preparations.reduce((prev, next, i) => Math.max(prev, next.id), 0) + 1
+    let newPreparation = {
+      id: increment,
+      expId: expeditionId,
+    }
+    this.state.expedition_preparations.push(newPreparation)
+    // this.state.expeditions[1] = {
+    //   ...expedition,
+    //   preparations: [...preparations, newPreparation],
+    // }
+
+    this.saveState(() => {this.switchExpeditionPreparation(expeditionId, increment)})
+    // this.setState({expedition_preparations: [...preparations, newPreparation]}, () => {this.switchExpeditionPreparation(expeditionId, increment)})
+  }
+  updateExpeditionPreparation = (id, data) => {
+    const preps = this.state.expedition_preparations
+    let prep = preps.find((i) => i.id === id)
+    prep = {...prep, ...data}
+
+    const newPreps = [...preps.filter(p => p.id !== id), prep]
+
+    this.setState({expedition_preparations: newPreps}, this.persistState)
+  }
+  switchExpeditionPreparation = (expeditionId, id) => {
+    let preparations = this.state.activeExpeditionPreparations
+    preparations[expeditionId] = id
+
+    this.saveState()
   }
 
   // Buildings and Needs
@@ -621,36 +724,50 @@ class App extends Component {
     )
   }
 
+ setGamename = (name) => {
+   this.state.gameName = name
+   this.saveState()
+ }
   render() {
     return (
       <div className="App">
         <Container fluid>
           <Card className={'my-3' + (this.state.darkMode ? ' bg-dark' : '')}>
-            {/*   Welt auswahl   */}
             <CardHeader>
               <Row>
+                {/*   Welt auswahl   */}
                 <Col sm={'auto'}>
-                  {worlds.map((world, worldKey) => (
-                    <WorldSwitch
-                      key={world.id}
-                      world={world}
-                      activeWorld={this.state.activeWorld}
-                      unlocked={this.state.unlockedWorlds.includes(world.id)}
-                      islands={this.state.islands}
-                      allPopulation={this.getAllPopulation()}
-                      fnSwitchWorld={this.switchWorld}
-                      fnUnlockWorld={this.unlockWorld}
-                    />
-                  ))}
-                  <strong className={'d-inline-block mr-3'}>
-                    <img src={"./icons/population/Population.png"} alt="" />
-                    { this.getAllPopulation().sum() }
-                  </strong>
+                  <WorldExpBar
+                    // player={{roles: ["expedition_exploration"]}}
+                    useTabs={this.state.useTabs}
+
+                    unlockedWorlds={this.state.unlockedWorlds}
+
+                    activeWorld={this.state.activeWorld}
+                    fnSwitchWorld={this.switchWorld}
+
+                    expeditions={this.state.expeditions}
+                    expeditionsUnlocked={this.state.unlockedWorlds.length > 1}
+
+                    activeSection={this.state.activeSection}
+                    fnSwitchSection={this.switchSection}
+                  />
                 </Col>
                 <Col className='text-center'>
+
+                  <strong className={'d-inline-block mx-3'}>
+                    <img src={"./icons/population/Population.png"} alt=""/>
+                    {this.getAllPopulation().sum()}
+                  </strong>
+                  {/*<ExpeditionPreparationOldWithButtonAndModal*/}
+                  {/*  unlockedProducers={this.state.unlockedProducers}*/}
+                  {/*  worldId={this.state.activeWorld}*/}
+                  {/*  allPopulation={this.getAllPopulation()}*/}
+                  {/*/>*/}
                   {this.state.islands.length > 3 ?
                     <Button
                       onClick={() =>this.setState({globalBuffs: {expansion: Math.min(3,this.state.globalBuffs.expansion+1)}})}
+                      // onClick={() => this.updateUnlockedEvents()}
                       onContextMenu={e => {e.preventDefault(); this.setState({globalBuffs: {expansion: Math.max(0, this.state.globalBuffs.expansion-1)}}) }}
                       className='mr-2 p-1'
                     >
@@ -688,31 +805,94 @@ class App extends Component {
                   </Settings>
                 </Col>
               </Row>
+              {/*   Insel auswahl   */}
+              <Row className='mt-2'>
+                <Col>
+                  {this.state.activeSection === "expeditions"
+                    ? (<>
+                      <Row>
+                        <Col>
+                          <ExpeditionBar
+                            Tag={this.state.useTabs ? ExpeditionButton : ExpeditionButton}
+
+                            allowAdd={this.state.unlockedWorlds.length > 1 || true}
+                            fnAddExpedition={this.addExpedition}
+
+                            expeditions={this.state.expeditions.sort((a, b) => a.id - b.id)}
+                            activeExpedition={this.state.activeExpedition}
+                            fnSwitchExp={this.switchExpedition}
+                          />
+                        </Col>
+                        <Col sm={'auto'}>
+                          {<ExpeditionPreparationBar
+                            addPreparation={() => this.addPreparation(this.state.activeExpedition)}
+                            preparations={this.state.expedition_preparations.filter(prep => prep.expId === this.state.activeExpedition).sort((a, b) => a.id - b.id)}
+                            activePreparation={this.state.activeExpeditionPreparations[this.state.activeExpedition]}
+                            onClick={this.switchExpeditionPreparation}
+                          />}
+                        </Col>
+                      </Row>
+                    </>) : (<>
+                      {this.state.unlockedWorlds.includes(this.state.activeWorld)
+                        ? (<>
+                          <IslandBar
+                            useTabs={this.state.useTabs}
+                            worldId={this.state.activeWorld}
+                            islands={this.state.islands.filter(island => island.worldId === this.state.activeWorld)}
+                            activeIsland={this.state.activeIslands[this.state.activeWorld]}
+                            onClick={this.switchIsland}
+                            add={() => this.addIsland(this.state.activeWorld)}
+                            fnSetIslandName={this.setIslandName}
+                            fnLockWorld={() => this.lockWorld(this.state.activeWorld)}
+                          />
+                        </>) : (
+                          <ExploreBar
+                            worldId={this.state.activeWorld}
+                            expedition={this.state.expeditions.find(exp => exp.target === this.state.activeWorld) }
+                            expeditions={this.state.expeditions}
+                            islands={this.state.islands.filter(island => island.worldId === this.state.activeWorld)}
+                            fnUnlockWorld={() => this.unlockWorld(this.state.activeWorld)}
+                            fnGoExpedition={(id) => {this.switchExpedition(id); this.switchSection("expeditions")}}
+                          />
+                        )}
+                    </>)}
+                </Col>
+              </Row>
             </CardHeader>
-            {/*   Insel auswahl   */}
-            <CardBody className={'overflow-auto text-nowrap'}>
-              <Button onClick={() => this.addIsland(this.state.activeWorld)} className={'px-1 py-0 mr-2'}>
-                <img src={'./icons/Icon_plus.png'} alt='Hinzufügen' style={{maxWidth: 36, maxHeight: 36}}/>
-              </Button>
-              {this.state.islands.filter(island => island.worldId === this.state.activeWorld).map((island, islandKey) => (
-                <IslandButton
-                  key={island.id}
-                  island={island}
-                  activeIsland={this.state.activeIslands[this.state.activeWorld]}
-                  onClick={this.switchIsland}
-                  fnSetIslandName={this.setIslandName}
-                />
-              ))}
-              <div className='float-right ml-3' style={{lineHeight: 1.2}}>
-                <li><a href='https://t.me/plan1800'>Telegram Support-Gruppe</a></li>
-                <li><a href='https://forums-de.ubisoft.com/showthread.php/218755-Plan1800-noch-so-ein-Calculator'>ubisoft Forum</a></li>
-              </div>
-              <div className='float-right mx-3' style={{lineHeight: 1.2}}>
-                <li><a href='https://youtu.be/ntDAreoiJA0'>YouTube Anleitung</a></li>
-              </div>
-            </CardBody>
           </Card>
-          {this.state.islands.filter(island => island.id === this.state.activeIslands[this.state.activeWorld]).map((island, islandKey) => (
+          {this.state.activeSection === "worlds" && !this.state.unlockedWorlds.includes(this.state.activeWorld) && this.state.expeditions.find(e => (e.target === this.state.activeWorld)) && (
+            <Card className={'my-3' + (this.state.darkMode ? ' bg-dark' : '')}>
+              <ExpeditionPreparation
+                updateExpedition={this.updateExpedition}
+
+                expedition={this.state.expeditions.find(e => (e.target === this.state.activeWorld)) }
+                unlockedProducers={this.state.unlockedProducers}
+                unlockedWorlds={this.state.unlockedWorlds}
+                allPopulation={this.getAllPopulation()}
+                preparation={this.state.expedition_preparations.find(prep => prep.id === this.state.activeExpeditionPreparations[this.state.activeExpedition])}
+                update={data => this.updateExpeditionPreparation(this.state.activeExpeditionPreparations[this.state.activeExpedition], data)}
+                fnUpdate={this.updateExpedition}
+                deleteExpedition={this.deleteExpedition}
+              />
+            </Card>
+          )}
+          {this.state.activeSection === "expeditions" && this.state.activeExpedition && (
+            <Card className={'my-3' + (this.state.darkMode ? ' bg-dark' : '')}>
+              <ExpeditionPreparation
+                updateExpedition={this.updateExpedition}
+
+                expedition={this.state.expeditions.find(e => (e.id === this.state.activeExpedition)) }
+                unlockedProducers={this.state.unlockedProducers}
+                unlockedWorlds={this.state.unlockedWorlds}
+                allPopulation={this.getAllPopulation()}
+                preparation={this.state.expedition_preparations.find(prep => prep.id === this.state.activeExpeditionPreparations[this.state.activeExpedition])}
+                update={data => this.updateExpeditionPreparation(this.state.activeExpeditionPreparations[this.state.activeExpedition], data)}
+                fnUpdate={this.updateExpedition}
+                deleteExpedition={this.deleteExpedition}
+              />
+            </Card>
+          )}
+          {this.state.activeSection === "worlds" && this.state.islands.filter(island => island.id === this.state.activeIslands[this.state.activeWorld]).map((island, islandKey) => (<>
             <Card key={island.id} className={'my-3' + (this.state.darkMode ? ' bg-dark' : '')}>
               {/*   Inselname & Bevölkerung & Fruchtbarkeiten  */}
               <CardHeader>
@@ -766,8 +946,8 @@ class App extends Component {
                   fnSetProductivityBoost={this.setProductivityBoost}
                 />
               </CardBody>
-            </Card>
-          ))}
+             </Card>
+          </>))}
         </Container>
       </div>
     );
