@@ -20,12 +20,13 @@ export default class ProducersOfType extends Component {
         <Building
           key={key}
           island={this.props.island}
+          islands={this.props.islands}
           producer={producer}
           balance={this.props.fnBalance(producer.provides)}
           fnSetBuildingCount={this.props.fnSetBuildingCount}
           fnSetWithElectricity={this.props.fnSetWithElectricity}
-          trades={this.props.trades}
-          fnTrade={this.props.fnTrade}
+          tradeSyncs={this.props.tradeSyncs}
+          fnTradeSync={this.props.fnTradeSync}
           electricity={this.props.electricity}
           productivityBoost={island.productivityBoost[producer.key]}
           fnSetProductivityBoost={this.props.fnSetProductivityBoost}
@@ -33,7 +34,7 @@ export default class ProducersOfType extends Component {
       ))}
       {usedProducers.length && (unusedProducers.length || lockedProducers.length) ? <hr/> : ''}
       {unusedProducers.length || lockedProducers.length ?
-        <div className='mb-2' style={{maxWidth: 178}}>
+        <div className='mb-2' style={{maxWidth: 150}}>
           <img src={"./icons/Icon_build_menu.png"} alt='' className={'mr-0'} style={{height: 26, width: 26, filter: 'drop-shadow(0 0 1px #ffffff)'}}/>
           {unusedProducers.map((producer, producerKey) => (
             <BuildingButton key={producerKey} producer={producer} isUnlocked={true} fnEnable={recursive => this.props.fnEnableDisabledBuilding(island, producer, recursive)} />
@@ -51,7 +52,9 @@ export default class ProducersOfType extends Component {
 ProducersOfType.propTypes = {
   type: PropTypes.string.isRequired,
   island: PropTypes.object.isRequired,
-  trades: PropTypes.arrayOf(PropTypes.object).isRequired,
+  islands: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tradeSyncs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fnTradeSync: PropTypes.func.isRequired,
   fnSetBuildingCount: PropTypes.func.isRequired,
   electricity: PropTypes.bool.isRequired,
   fnSetWithElectricity: PropTypes.func.isRequired,

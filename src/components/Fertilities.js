@@ -4,6 +4,7 @@ import PropTypes from 'prop-types/';
 import worlds from "../data/worlds";
 import ResourceBadge from "./ResourceBadge";
 import FertilitySwitch from "./FertilitySwitch";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export default class Fertilities extends Component {
   constructor(props) {
@@ -43,12 +44,6 @@ export default class Fertilities extends Component {
                 fnChangeResourceCount={(count) => fnChangeResourceCount(island, resource, count)}
               />
             ))}
-            <Button
-              disabled={forceEdit}
-              className={'py-0 mr-1'}
-              color={'info'}
-              onClick={this.toggleEdit}
-            >&#10004;{/*icon-check*/}</Button>
           </>
           : <>
             <Badge color={'secondary'} className={'mr-2 px-2'}>
@@ -64,9 +59,11 @@ export default class Fertilities extends Component {
                 count={island.regionalResources[resource]}
               />
             ))}
-            {/*<Button className={'p-0 mr-1'} color={'transparent'} onClick={this.toggleEdit}>&#9999;/!*icon-edit/pencil*!/</Button>*/}
           </>
         }
+        <Button className={'mx-2 float-right'} size={'sm'} disabled={this.state.edit && forceEdit} onClick={this.toggleEdit}>
+          <FontAwesomeIcon icon={this.state.edit ? "check" : "pencil-alt"} />
+        </Button>
       </span>
     )
   }

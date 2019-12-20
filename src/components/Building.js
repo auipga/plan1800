@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types/';
 import GoodItem from "./GoodItem";
+import {Button} from "reactstrap"
 import BuildingInput from "./BuildingInput";
 import Chart from "./Chart";
 import classNames from 'classnames'
 import RecommendedAddButton from "./RecommendedAddButton";
 import BuildingContextMenu from "./BuildingContextMenu";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export default class Building extends Component {
   render() {
@@ -55,61 +57,58 @@ export default class Building extends Component {
         })
       } />
     }
+    this.tradeSyncs = this.props.tradeSyncs.filter(r => r.good === producer.provides)
+    this.hasSyncs = this.tradeSyncs.find(s => s.islandIDs.includes(island.id)) !== undefined
+    this.removable = !buildingCount && !this.hasSyncs && !balance
 
-    this.trades = this.props.trades.filter(r => r.good === producer.provides && (r.from === island.id || r.to === island.id || r.from === null || r.to === null));
-    this.removable = !buildingCount && !this.trades.length && !balance
-
-    const hasLoadings  = this.trades.find(t => t.from === island.id                       ) !== undefined
-    const hasDroppings = this.trades.find(t => t.from !== null      && t.to === island.id ) !== undefined
-
-    let tradeIcon = null
-    if (hasLoadings && hasDroppings) {
-      tradeIcon = <img src={"./icons/overlays/trade_buy_sell.png"} alt="" className='trade-icon' />
-    } else if (hasLoadings) {
-      tradeIcon = <img src={"./icons/overlays/trade_sell.png"} alt="" className='trade-icon' />
-    } else if (hasDroppings) {
-      tradeIcon = <img src={"./icons/overlays/trade_buy.png"} alt="" className='trade-icon' />
-    }
     return (
-      <label htmlFor={"input_"+producer.key} className='d-block mb-1'
-             onContextMenu={(e) => {e.preventDefault(); this.removable ? fnSetBuildingCount(island, producer, null) : console.log('in use.') }}
-      >
-        <GoodItem producer={producer}>
+      <div className='mb-1'>
+        <GoodItem producer={producer}
+          onClick={() => fnSetBuildingCount(island, producer, buildingCount+1)}
+          onContextMenu={(e) => { e.preventDefault(); fnSetBuildingCount(island, producer, buildingCount-1)} }
+          >
           <BuildingInput
             blend={-buildingBalance}
             boost={this.props.productivityBoost > 0 ? 'up' : this.props.productivityBoost < 0 ? 'down' : null }
-            buildingCount={buildingCount}
+            value={buildingCount}
             electricityIcon={electricityIcon}
             buildingKey={producer.key}
-            islandId={island.id}
-            fnSetBuildingCount={number => fnSetBuildingCount(island, producer, number)}
+            fnBubbleValue={number => fnSetBuildingCount(island, producer, number)}
             max={max}
           />
 
-          <span className={"mr-2 overlay-wrapper " + classNames({'trade-sell' : hasLoadings, 'trade-buy' : hasDroppings})}>
-            {tradeIcon}
-            <Chart balance={balance} max={3}/>
+          {this.removable ?
+            <Button onClick={() => {fnSetBuildingCount(island, producer, null) }} className={'px-1 py-0 mr-2'}>
+              <FontAwesomeIcon icon={'trash'} size={'sm'} fixedWidth style={{margin:1}} />
+            </Button>
+            :
+            <span className={"mr-2 overlay-wrapper"}>
+            {this.hasSyncs ? <img src={"./icons/Icon_traderoutes.png"} alt="" className='trade-icon' /> : ''}
+            <Chart balance={balance} max={4}/>
           </span>
+          }
           {max === 0 || recommendedCount > max ? '' :
             <RecommendedAddButton add={recommendedAdd} action={() => fnSetBuildingCount(island, producer, recommendedCount)} />
           }
+
           <BuildingContextMenu
             island={island}
+            islands={this.props.islands}
             good={producer.provides}
             producer={producer}
             buildingCount={buildingCount}
-            buildingsWithElectricity={buildingsWithElectricity}
+            buildingsWithElectricity={buildingsWithElectricity ? buildingsWithElectricity : 0}
             electricity={this.props.electricity}
             fnSetWithElectricity={number => this.props.fnSetWithElectricity(island, producer, number)}
             canEletrified={canEletrified}
             balance={balance}
-            trades={this.trades}
-            fnTrade={this.props.fnTrade}
-            productivityBoost={this.props.productivityBoost}
+            tradeSyncs={this.tradeSyncs}
+            fnTradeSync={this.props.fnTradeSync}
+            productivityBoost={this.props.productivityBoost ? this.props.productivityBoost : 0}
             fnProductivityBoost={(productivityBoost) => this.props.fnSetProductivityBoost(island, producer, productivityBoost)}
           />
         </GoodItem>
-      </label>
+      </div>
     )
   }
 }
@@ -117,12 +116,13 @@ export default class Building extends Component {
 Building.propTypes = {
   producer: PropTypes.object.isRequired,
   island: PropTypes.object.isRequired,
+  islands: PropTypes.arrayOf(PropTypes.object).isRequired,
   balance: PropTypes.number.isRequired,
   fnSetBuildingCount: PropTypes.func.isRequired,
   electricity: PropTypes.bool.isRequired,
   fnSetWithElectricity: PropTypes.func.isRequired,
-  trades: PropTypes.arrayOf(PropTypes.object).isRequired,
-  fnTrade: PropTypes.func.isRequired,
+  tradeSyncs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fnTradeSync: PropTypes.func.isRequired,
   productivityBoost: PropTypes.number.isRequired,
   fnSetProductivityBoost: PropTypes.func.isRequired,
 };

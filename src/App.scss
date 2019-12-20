@@ -63,6 +63,7 @@ img {
         &.trade-icon{
             top: -4px;
             left: -8px;
+            filter: sepia(1) saturate(3000%) hue-rotate(-170deg)
         }
         &.electricity-icon {
             filter: drop-shadow(0 0 0 black);

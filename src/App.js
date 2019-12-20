@@ -90,12 +90,60 @@ class App extends Component {
   }
   prepareStateString(string) {
     let newState = JSON.parse(string)
+    let tmp_alerts = []
     for (let island of newState.islands) {
       island.residences              = TieredMap.createFromJson(island.residences)
       island.populationPerResidence  = TieredMap.createFromJson(island.populationPerResidence)
       island.population              = TieredMap.createFromJson(island.population)
       island.prohibitedNeeds         = TieredMap.createFromJson(island.prohibitedNeeds)
       island.populationDifference    = TieredMap.createFromJson(island.populationDifference)
+
+      // compatibility with productivityBoost
+      if (!island.hasOwnProperty('productivityBoost')) {
+        island.productivityBoost = {}
+        if (!tmp_alerts.includes("productivityBoost")) {
+          alert("English: Added productivityBoost\nDeutsch: Produktivitäts-Regler hinzugefügt.")
+          tmp_alerts = [...tmp_alerts, "productivityBoost"]
+        }
+      }
+      // compatibility with electricity
+      if (!island.hasOwnProperty('buildingsWithElectricity')) {
+        island.buildingsWithElectricity = {}
+        if (!tmp_alerts.includes("electricity")) {
+          alert("English: Added electricity\nDeutsch: Elektrizität hinzugefügt.")
+          tmp_alerts = [...tmp_alerts, "electricity"]
+        }
+      }
+    }
+
+    // compatibility with tradeSyncs
+    if (!newState.hasOwnProperty('tradeSyncs')) {
+      newState.tradeSyncs = []
+      if (newState.hasOwnProperty('trades') && Array.isArray(newState.trades) && newState.trades.length) {
+        alert("English: Routes have been changed to work in a different way. Please add your routes again!\nDeutsch: Deine alten Routen wurden gelöscht. Bitte lege sie neu an.")
+        // newState.trades = null
+      }
+    }
+
+    // compatibility with expeditions
+    if (!newState.hasOwnProperty('expeditions')) {
+      newState.expeditions = []
+    }
+    if (!newState.hasOwnProperty('expedition_preparations')) {
+      newState.expedition_preparations = []
+    }
+    if (!newState.hasOwnProperty('activeExpeditionPreparations')) {
+      newState.activeExpeditionPreparations = {}
+    }
+    // newState.expeditions = KeyedMap.createFromJson(newState.expeditions)
+
+    // compatibility with button/tab-toggle'
+    if (!newState.hasOwnProperty('useTabs')) {
+      newState.useTabs = false
+    }
+    // compatibility with pages'
+    if (!newState.hasOwnProperty('activeSection')) {
+      newState.activeSection = "worlds"
     }
     return newState
   }
@@ -170,6 +218,10 @@ class App extends Component {
     this.setState({activeIslands: activeIslands}, this.persistState)
   }
   deleteIsland = (islandId) => {
+    if (this.state.tradeSyncs.find(s => s.islandIDs.includes(islandId))) {
+      alert("EN: remove active routes first!\nDE: Aktive Routen müssen gelöscht sein!")
+      return;
+    }
     if (!debugEnabled && !window.confirm('Insel "'+this.state.islands.find((i) => i.id === islandId).name+'" löschen?')) {
       return;
     }
@@ -215,7 +267,7 @@ class App extends Component {
     //     island.population.forEach((pop, tierId) => {
     //       // d("add", island.id, tierId, pop)
     //       if (allPopulation.present(tierId)) {
-    //         allPopulation.add(tierId, this.expansion_buffs[this.state.globalBuffs.expansion])
+    //         allPopulation.plus(tierId, this.expansion_buffs[this.state.globalBuffs.expansion])
     //       }
     //     })
     //   })
@@ -278,6 +330,7 @@ class App extends Component {
     this.saveState()
   }
   postChangeResidences = (island, tierId) => {
+    /*todo fix: [0,0,0,1,0] downgrade [0,0,1,0,0] gelöschte wurst ect. kommt nicht beim ersten change, bei upgrade funktioniert's*/
     const highestFrom0 = tierId > island.population.highestTier() // population not yet calculated / still 0
     const thisFrom0 = !island.population.present(tierId) // population not yet calculated / still 0
     const highestTo0 = tierId > island.residences.highestTier()   // residences already set to 0 in this action
@@ -313,7 +366,7 @@ class App extends Component {
         break
       }
     }
-    this.updateUnlockedProducers(island)
+    this.updateUnlockedEvents(island)
 
     this.saveState()
   }
@@ -335,22 +388,47 @@ class App extends Component {
   }
 
   // Buildings and Needs
-  updateUnlockedProducers = (island) => {
-    const unlockedProducers = producers.filter(p =>
-      // only this world
-      island.population.has(p.tierId) && (
-      // unlocked by higher tier present
-      (p.tierId < island.residences.highestTier())
-      // unlocked by requirement with highest tier
-      || (p.tierId === island.residences.highestTier() && island.population.highestTierValue() >= p.requirement)
-    ))
-
-    unlockedProducers
-      .filter(p => !this.state.unlockedProducers.includes(p.key))
-      .forEach(producer => {
+  updateUnlockedEvents = (island) => {
+    const lockedThings = {
+      worlds: worlds.filter(w => !this.state.unlockedWorlds.includes(w.id) && this.state.expeditions.find(e => e.type === "expedition_exploration" && e.target === w.id) === undefined),
+      // worlds2: worlds.filter(w => this.state.expeditions.getDefault("expedition_planable", []).find(e => (e.type === "expedition_exploration" && e.target === w.id)) === undefined),
+      producers: producers.filter(p => !this.state.unlockedProducers.includes(p.key)),
+      // nonProducers: nonproducers.filter(np => !this.state.unlockedNonProducers.includes(np.key)),
+    }
+    const actions = {
+      worlds: (world) => {
+        this.addExpedition("expedition_exploration", world.exploration.fixedSkulls, {
+          fixedType: "expedition_exploration",
+          target: world.id,
+          ...world.exploration,
+        }, true)
+      },
+      worlds2: (world) => {
+        const old = this.state.expeditions.get("expedition_planable")
+        this.state.expeditions.remove("expedition_planable", old)
+        this.state.expeditions.add("expedition_preparable", {
+          ...old,
+          state: "expedition_preparable",
+        })
+      },
+      producers: (producer) => {
         this.state.unlockedProducers.push(producer.key)
         island.buildings[producer.key] = 0
-      })
+      },
+      nonProducers: (nonProducer) => {
+        this.state.unlockedProducers.push(nonProducer.key)
+        island.buildings[nonProducer.key] = 0
+      },
+    }
+
+    Object.keys(lockedThings).forEach(type => {
+      return lockedThings[type].filter(thing => (
+          // unlocked by higher tier present
+          (thing.tierId < this.getAllPopulation().highestTier())
+          // unlocked by requirement with highest tier
+          || (thing.tierId === island.residences.highestTier() && island.population.highestTierValue() >= thing.requirement)
+        )).forEach(thing => actions[type](thing))
+    })
   }
   updateUnlockedNeeds = (island) => {
     const unlockedNeeds = needs.filter(n =>
@@ -449,6 +527,16 @@ class App extends Component {
   setTrades = (trades) => {
     this.setState({trades: trades}, this.persistState)
   }
+  upsertSync = (good, havingId, islandIDs) => {
+    let trades = this.state.tradeSyncs
+    trades = trades.filter(t => t.good !== good || !t.islandIDs.includes(havingId))
+
+    if (islandIDs.length >= 2) {
+      const newTrade = {good: good, islandIDs: islandIDs}
+      trades = [...trades, newTrade]
+    }
+    this.setState({tradeSyncs: trades}, this.persistState)
+  }
 
   // Resource Balance
   producersReducer = (sum, p, island, hasElectricity) => {
@@ -505,20 +593,31 @@ class App extends Component {
       )
       .reduce((prev, next, i) => prev + island.population.ofTier(next) * need.consumption[i], 0)
   }
-  calculateTradeBalance = (good, island) => {
-    const trades = this.state.trades.filter(t => t.good === good);
-    const loading  = trades.filter(t => t.from === island.id && t.to   !== null).reduce((sum, that) => sum + that.amount, 0);
-    const dropping = trades.filter(t => t.to   === island.id && t.from !== null).reduce((sum, that) => sum + that.amount, 0);
-    return dropping - loading
+  calculateSynced = (good, island) => {
+    const sync = this.state.tradeSyncs.find(t => t.good === good && t.islandIDs.includes(island.id))
+    if (sync === undefined) {
+      return 0
+    }
+    const otherIslandIDs = sync.islandIDs.filter(id => id !== island.id);
+    return otherIslandIDs
+    .reduce((sum, islandID) => sum + this.localBalance(good, this.state.islands.find(i => i.id === islandID)), 0)
   }
-  calculateBalance = (resource, island) => {
+  localBalance = (resource, island) => {
     const hasElectricity = island.buildings["Electricity"] > 0
 
     return (
       + this.productionPerTick(resource, island, hasElectricity)
       - this.consumptionThroughBuildingsPerTick(resource, island, hasElectricity)
       - this.consumptionThroughPopulationPerTick(resource, island)
-      + this.calculateTradeBalance(resource, island)
+    )
+  }
+  calculateBalance = (resource, island) => {
+    return (
+      + this.localBalance(resource, island)
+      + this.calculateSynced(resource, island)
+      // + this.calculateTradeBalance(resource, island)
+      // - this.calculateTradeGive(resource, island)
+      // + this.calculateTradeGet(resource, island)
     )
   }
 
@@ -560,13 +659,33 @@ class App extends Component {
                     </Button> : ''}
                 </Col>
                 <Col sm={'auto'} className='text-right'>
-                  {/*eslint-disable-next-line*/}
-                  <Button onClick={() => game.exportToFile(this.state)} color={'secondary'} className='mr-2'>&#128190;{/*icon-save*/}</Button>
-                  {/*eslint-disable-next-line*/}
-                  <Button onClick={() => game.loadFromFile((fileContent) => this.loadState(fileContent))} color={'secondary'} className='mr-2'>&#128194;{/*icon-load*/}</Button>
-                  {/*eslint-disable-next-line*/}
-                  <Button onClick={this.toggleDarkMode} color={'primary'} className='mr-2'>&#128161;{/*icon-lamp*/}</Button>
-                  <Button onClick={this.reset} color={'warning'} className='mr-2 py-1 px-2'><img src={'./icons/Icon_traderoutes.png'} alt='reset' style={{width: 28, height: 28}}/></Button>
+                  <Button onClick={() => game.exportToFile(this.state)} color={'secondary'} className='mr-2' title="Export">
+                    <FontAwesomeIcon icon="download" />
+                  </Button>
+                  <Button onClick={() => game.loadFromFile((fileContent) => this.loadState(fileContent))} color={'secondary'} className='mr-2' title="Import">
+                    <FontAwesomeIcon icon="upload" />
+                  </Button>
+                  <Button onClick={this.toggleDarkMode} color={'secondary'} className='mr-2'>
+                    <FontAwesomeIcon icon="adjust" />
+                  </Button>
+                  <Button onClick={this.reset} color={'secondary'} className='mr-2' title="Reset">
+                    <FontAwesomeIcon icon="trash" />
+                  </Button>
+                  <Support/>
+                  <Settings>
+                    <p>
+                      <label htmlFor="settings_gamename">
+                        Name of the game:
+                        <input id='settings_gamename' onChange={e => this.setGamename(e.target.value)} value={this.state.gameName}/>
+                      </label>
+                    </p>
+                    <p>
+                      <input type='checkbox' id='tabButtons' checked={this.state.useTabs} onChange={() => this.setState({useTabs: this.state.useTabs !== true}, this.persistState)}/>
+                      <label htmlFor="tabButtons">
+                        use tabs
+                      </label>
+                    </p>
+                  </Settings>
                 </Col>
               </Row>
             </CardHeader>
@@ -597,6 +716,8 @@ class App extends Component {
             <Card key={island.id} className={'my-3' + (this.state.darkMode ? ' bg-dark' : '')}>
               {/*   Inselname & Bevölkerung & Fruchtbarkeiten  */}
               <CardHeader>
+                <Row>
+                  <Col className='pr-0'>
                 <strong className={'d-inline-block mr-3'}>
                   <img src={"./icons/population/Population.png"} alt="" />
                   { island.population.sum() }
@@ -608,8 +729,11 @@ class App extends Component {
                   fnSetFertilities={this.setFertilities}
                   fnChangeResourceCount={this.changeResourceCount}
                 />
-
-                <Button onClick={() => this.deleteIsland(island.id)} size='sm' className='float-right'>&#10005;{/*icon-x*/}</Button>
+                  </Col>
+                  <Col className={'pl-0'} sm={'auto'}>
+                <Button onClick={() => this.deleteIsland(island.id)} size='sm' className='float-right'><FontAwesomeIcon icon="trash" /></Button>
+                  </Col>
+                </Row>
               </CardHeader>
               {/*   Bevölkerungsstufen   */}
               <CardHeader>
@@ -629,8 +753,11 @@ class App extends Component {
                 {/*   Producers   */}
                 <Producers
                   island={island}
+                  islands={this.state.islands}
                   trades={this.state.trades}
                   fnTrade={this.upsertTrade}
+                  tradeSyncs={this.state.tradeSyncs}
+                  fnTradeSync={this.upsertSync}
                   fnBalance={(resource) => this.calculateBalance(resource, island)}
                   fnSetBuildingCount={this.setBuildingCount}
                   fnSetWithElectricity={this.setWithElectricity}

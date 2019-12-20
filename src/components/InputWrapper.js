@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types/';
-import {Input} from "reactstrap";
+import {Input} from 'reactstrap';
 import {Parser} from "expr-eval";
-// import {RGB_Log_Blend} from "../functions/color";
 
 const Min =    (value, _min = 0) => Math.max(_min, value)
 const Max =    (value, _max = 99) => Math.min(_max, value)
@@ -16,8 +15,8 @@ const modifier = (event) => {
   return step
 }
 
-const BuildingInput = (props) => {
-  let [localValue, setLocalValue] = useState(props.value.toString())
+const InputWrapper = (props) => {
+  let [localValue, setLocalValue] = useState(props.value)
   useEffect(() => { setLocalValue(props.value) }, [props.value])
 
   const saveDelayMs = 50
@@ -69,71 +68,58 @@ const BuildingInput = (props) => {
       value = minmax(value, props.min, props.max)
       setLocalValue(value)
 
-      if (saveHandle) {
-        clearTimeout(saveHandle)
-      }
-      setSaveHandle(setTimeout(() => {
+      if (!saveDelayMs) { // todo: überdenken - mega langsam
         props.fnBubbleValue(value)
-      }, saveDelayMs))
+      } else {
+        if (saveHandle) {
+          clearTimeout(saveHandle)
+        }
+        setSaveHandle(setTimeout(() => {
+          props.fnBubbleValue(value)
+        }, saveDelayMs))
+      }
 
     } catch (e) {
       // setLocalValue(value)
-      console.log(e)
+      // todo? add .is-invalid
+      console.log(e.toString())
     }
   }
 
-    if (props.max === 0) {
-      return (
-        <Input id={"input_" + props.buildingKey}
-               type='text'
-               bsSize='sm'
-               className={'BuildingInput mr-2 text-center'}
-               value='&#10005;' // icon-x
-               disabled={true}
-        />
-      )
-    }
+  const leadingPlus = props.leadingPlus && localValue > 0 && !localValue.toString().startsWith('+') ? "+" : ''
 
-    const boostClass = props.boost ? 'overlay-boost boost-'+ props.boost : ''
-
-    return (<div className='overlay-wrapper'>
-      {props.electricityIcon}
+  return (
+    <>
       <Input
-        id={"input_"+props.buildingKey}
-        type='text'
-        bsSize='sm'
-        // style={{
-        //   backgroundColor:
-        //     RGB_Log_Blend(
-        //       Math.min(Math.max(props.blend, 0), 1),
-        //       // 'rgba(100,200,255,0.5)',
-        //       'rgba(100,255,100,0.5)',
-        //       'rgba(255,50,50,0.5)',
-        //     ),
-        // }}
-        className={
-          'BuildingInput mr-2 text-center ' + boostClass
-          + (props.blend > 0 ? ' is-invalid' : '')
-          // + (props.blend < 0 ? ' border-primary' : '')
-        }
-        value={localValue}
+        {...props}
+        value={leadingPlus + localValue}
         onChange={e => setLocalValue(e.target.value)}
         onKeyDown={_handleKeyDown}
         onWheel={_handleWheel}
         onBlur={_save}
       />
-      </div>
-    )
+     {/* {props.slider ?
+        <Input
+          type='range'
+          value={localValue}
+          min={-50}
+          max={+50}
+          onChange={(e) => setLocalValue(e.target.value)}
+        />
+        : ''}*/}
+    </>
+  )
 }
 
-BuildingInput.propTypes = {
-  blend: PropTypes.number,
-  buildingKey: PropTypes.string,
-  boost: PropTypes.number,
-  value: PropTypes.number,
+InputWrapper.propTypes = {
+  value: PropTypes.number.isRequired,
   min: PropTypes.number,
   max: PropTypes.number,
-  fnBubbleValue: PropTypes.func,
+  leadingPlus: PropTypes.bool,
+  fnBubbleValue: PropTypes.func.isRequired,
+
+  disabled: PropTypes.bool,
+  className: PropTypes.string,
 }
 
-export default BuildingInput
+export default InputWrapper

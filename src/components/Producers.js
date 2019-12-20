@@ -22,8 +22,9 @@ export default class Producers extends Component {
             <ProducersOfType
               type={type}
               island={island}
-              trades={this.props.trades}
-              fnTrade={this.props.fnTrade}
+              islands={this.props.islands}
+              tradeSyncs={this.props.tradeSyncs}
+              fnTradeSync={this.props.fnTradeSync}
               unlockedProducers={producers.filter(p => this.props.unlockedProducers.includes(p.key) && island.population.has(p.tierId) )}
               lockedProducers={producers.filter(p => !this.props.unlockedProducers.includes(p.key) && island.population.has(p.tierId) )}
               fnSetBuildingCount={this.props.fnSetBuildingCount}
@@ -42,7 +43,9 @@ export default class Producers extends Component {
 
 Producers.propTypes = {
   island: PropTypes.object.isRequired,
-  trades: PropTypes.arrayOf(PropTypes.object).isRequired,
+  islands: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tradeSyncs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  fnTradeSync: PropTypes.func.isRequired,
   fnSetBuildingCount: PropTypes.func.isRequired,
   fnSetWithElectricity: PropTypes.func.isRequired,
   fnEnableDisabledBuilding: PropTypes.func.isRequired,

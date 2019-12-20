@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types/';
-import {Button, Col, Input, InputGroup, InputGroupText, InputGroupAddon, Row} from "reactstrap";
+import {Button, Col, InputGroup, InputGroupText, InputGroupAddon, Row} from "reactstrap";
 import needs from "../data/needs";
 import NeedSwitch from "./NeedSwitch";
+import InputWrapper from "./InputWrapper";
 
 export default class IslandPopulations extends Component {
   handleWheel = (event, island, tierId, direction, move = false) => {
@@ -60,16 +61,15 @@ export default class IslandPopulations extends Component {
                 }
               </InputGroupAddon>
 
-              <Input
+              <InputWrapper
                 value={island.residences.get(tierId)}
                 className={'text-center px-0'}
-                onChange={e => fnSetResidences(island, tierId, e.target.value)}
-                onMouseEnter={e => e.target.focus()}
-                onWheel={e => this.handleWheel(e, island, tierId, -Math.sign(e.deltaY))}
+                fnBubbleValue={value => fnSetResidences(island, tierId, value)}
+                max={1e4}
               />
 
               <InputGroupAddon addonType="append">
-                <InputGroupText className='py-1 px-1' style={{lineHeight: 1.1, minWidth: 52}}>
+                <InputGroupText className='py-0 px-1' style={{lineHeight: 1.1, minWidth: 52}}>
                   <small className='mx-auto' onWheel={e => this.handleWheelDiff(e, island, tierId, -Math.sign(e.deltaY))}>
                     &times;{island.populationPerResidence.get(tierId)}{popDiffText}<br/>
                     <b>{popSum}</b></small>
