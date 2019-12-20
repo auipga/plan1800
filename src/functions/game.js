@@ -4,10 +4,10 @@ export const exportToFile = (state) => {
   const filename = "plan1800_"+getFormattedTime()+"_"+state.gameName+".json"
   const contentType = "application/json;charset=utf-8;"
   if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-    var blob = new Blob([decodeURIComponent(encodeURI(data))], {type: contentType})
+    const blob = new Blob([decodeURIComponent(encodeURI(data))], {type: contentType})
     navigator.msSaveOrOpenBlob(blob, filename)
   } else {
-    var a = document.createElement('a')
+    const a = document.createElement('a')
     a.download = filename
     a.href = 'data:' + contentType + ',' + encodeURIComponent(data)
     a.target = '_blank'
@@ -45,13 +45,18 @@ export const loadFromFile = (callback) => {
 
 // https://stackoverflow.com/a/44485468/816362
 function getFormattedTime() {
-  var now = new Date()
-  var y = now.getFullYear()
-  // JavaScript months are 0-based.
-  var m = now.getMonth() + 1
-  var d = now.getDate()
-  var h = now.getHours()
-  var mi = now.getMinutes()
-  var s = now.getSeconds()
-  return "" + y + m + d + "_" + h + mi + s
+  const now = new Date()
+  const y = now.getFullYear()
+  const M = now.getMonth() + 1 // months are 0-based
+  const d = now.getDate()
+  const h = now.getHours()
+  const m = now.getMinutes()
+  const s = now.getSeconds()
+  return "" + y
+            + (M < 10 ? '0'+M : M)
+            + (d < 10 ? '0'+d : d)
+            + "_"
+            + (h < 10 ? '0'+h : h)
+            + (m < 10 ? '0'+m : m)
+            + (s < 10 ? '0'+s : s)
 }

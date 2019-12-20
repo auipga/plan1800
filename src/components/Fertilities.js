@@ -46,7 +46,7 @@ export default class Fertilities extends Component {
             ))}
           </>
           : <>
-            <Badge color={'secondary'} className={'mr-2 px-2'}>
+            <Badge color={'secondary'} pill className={'mr-2 px-2'}>
               {possibleFertilities.filter(key => island.fertilities.includes(key)).map(fertility => (<React.Fragment key={fertility}>
                 <img src={"./icons/goods/" + fertility + ".png"} alt={fertility} title={fertility} style={{width: 22, height: 22}} className={'mx-1'}/>
               </React.Fragment>))}

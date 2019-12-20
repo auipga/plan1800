@@ -2,8 +2,7 @@ export default [
   {
     id: 1,
     key: "oldWorld",
-    i10n: {en: "Old World", de: "Alte Welt"},
-    img: "old-world.png",
+    i10n: {en: "The Old World", de: "Die Alte Welt"},
     socialClassIDs: [1, 2, 3, 4, 5],
     tierId: 1,
     requirement: 0,
@@ -13,8 +12,7 @@ export default [
   {
     id: 2,
     key: "newWorld",
-    i10n: {en: "New World", de: "Neue Welt"},
-    img: "new-world.png",
+    i10n: {en: "The New World", de: "Die Neue Welt"},
     socialClassIDs: [6, 7],
     tierId: 3,
     requirement: 1,
@@ -25,7 +23,6 @@ export default [
     id: 3,
     key: "capTrelawny",
     i10n: {en: "Cap Trelawny", de: "Kap Trelawny"},
-    img: "cap-trelawny.png",
     socialClassIDs: [1, 2, 3, 4, 5],
     tierId: 3,
     requirement: 750,
