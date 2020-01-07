@@ -11,7 +11,6 @@ import KeyedMap from "../classes/KeyedMap"
 import expedition_supplies from "../data/expedition_supplies"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import ExpeditionAdvise from "./ExpeditionAdvise"
-import ExpeditionAdvise_useState from "./ExpeditionAdvise_useState"
 import * as ex from '../functions/expeditions'
 import {orDefault} from '../functions/helpers'
 import classNames from 'classnames'

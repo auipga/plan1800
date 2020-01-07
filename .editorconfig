@@ -1,0 +1,16 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = space
+insert_final_newline = false
+max_line_length = 120
+tab_width = 4
+
+[{composer.lock,.eslintrc,bowerrc,.babelrc,jest.config,.stylelintrc,*.jsb2,*.jsb3,*.json}]
+indent_size = 2
+
+[*.js]
+indent_size = 2
