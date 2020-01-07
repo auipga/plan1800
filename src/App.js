@@ -133,6 +133,14 @@ class App extends Component {
           tmp_alerts = [...tmp_alerts, "electricity"]
         }
       }
+      // compatibility with replaceInputs
+      if (!island.hasOwnProperty('replaceInputs')) {
+        island.replaceInputs = []
+        if (!tmp_alerts.includes("replaceInputs")) {
+          alert("English: Added replaced input materials.\nDeutsch: Ersetzte Ausgangsmaterialien hinzugefügt.")
+          tmp_alerts = [...tmp_alerts, "replaceInputs"]
+        }
+      }
     }
 
     // compatibility with tradeSyncs
@@ -218,6 +226,7 @@ class App extends Component {
       buildings: {},
       buildingsWithElectricity: {},
       productivityBoost: {},
+      replaceInputs: [],
       unlockedNeeds: [],
       prohibitedNeeds: new TieredMap(world.socialClassIDs, [])
     }
@@ -549,7 +558,7 @@ class App extends Component {
       })
 
     const keys = unlockedNeeds.reduce((all, need) => [...all, need.key], [])
-    const keysWithMarketplace = keys.length ? keys : ["Marketplace"]
+    const keysWithMarketplace = keys.length ? keys : (island.worldId === 4 ? ["Canteen"] : ["Marketplace"])
     if (island.unlockedNeeds.length !== keysWithMarketplace.length) {
       island.unlockedNeeds = keysWithMarketplace
       return true
@@ -676,13 +685,28 @@ class App extends Component {
       .reduce((sum, p) => this.producersReducer(sum, p, island, hasElectricity), 0)
   }
   consumptionThroughBuildingsPerTick = (resource, island, hasElectricity) => {
+    const isConsumingResource = p => {
+      if (island.replaceInputs.length) {
+        const replacementTo = island.replaceInputs.find(r => r.target === p.key && r.NewInput === resource)
+        if (replacementTo) {
+          return p.needs.includes(replacementTo.OldInput)
+        }
+
+        const replacementFrom = island.replaceInputs.find(r => r.target === p.key && r.OldInput === resource)
+        if (replacementFrom) {
+          return false
+        }
+      }
+      return p.needs.includes(resource)
+    }
+
     return producers
       .filter(p => island.buildings[p.key] !== undefined) // noch nie gebaut
-      .filter(p => p.needs.includes(resource)) // isConsumingResource
+      .filter(isConsumingResource)
       .reduce((sum, p) => this.producersReducer(sum, p, island, hasElectricity), 0)
   }
   consumptionThroughPopulationPerTick = (resource, island) => {
-    let need = needs.find(n => n.key === resource && island.population.has(n.tierIDs[0]))
+    let need = needs.find(n => n.key === resource && island.residences.has(n.tierIDs[0]))
     if (!need) {
       return 0
     }
@@ -694,7 +718,7 @@ class App extends Component {
         // && island.population.present(id)
         && !island.prohibitedNeeds.ofTier(id).includes(resource)
       )
-      .reduce((prev, next, i) => prev + island.population.ofTier(next) * need.consumption[i], 0)
+      .reduce((prev, next, i) => prev + island.residences.ofTier(next) * need.consumption[i] * 60, 0)
   }
   calculateSynced = (good, island) => {
     const sync = this.state.tradeSyncs.find(t => t.good === good && t.islandIDs.includes(island.id))
@@ -893,6 +917,7 @@ class App extends Component {
             </Card>
           )}
           {this.state.activeSection === "worlds" && this.state.islands.filter(island => island.id === this.state.activeIslands[this.state.activeWorld]).map((island, islandKey) => (<>
+            {/*{JSON.stringify(island.replaceInputs)}*/}
             <Card key={island.id} className={'my-3' + (this.state.darkMode ? ' bg-dark' : '')}>
               {/*   Inselname & Bevölkerung & Fruchtbarkeiten  */}
               <CardHeader>
@@ -942,7 +967,8 @@ class App extends Component {
                   fnSetBuildingCount={this.setBuildingCount}
                   fnSetWithElectricity={this.setWithElectricity}
                   fnEnableDisabledBuilding={this.enableDisabledBuilding}
-                  unlockedProducers={this.state.unlockedProducers}
+                  // unlockedProducers={this.state.unlockedProducers}
+                  unlockedProducers={producers.map(p => p.key)}
                   fnSetProductivityBoost={this.setProductivityBoost}
                 />
               </CardBody>

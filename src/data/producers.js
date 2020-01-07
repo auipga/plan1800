@@ -104,6 +104,9 @@ export default [
     type: "Konsumgüter",
     provides: "Sausages",
     needs: ["Pigs"],
+    replacable: [
+      {OldInput: "Pigs", NewInput: ["Beef"]},//191388 Maxime Graves
+    ],
   },
   {
     key: "Grain",
@@ -140,6 +143,9 @@ export default [
     type: "Konsumgüter",
     provides: "Bread",
     needs: ["Flour"],
+    replacable: [
+      {OldInput: "Flour", NewInput: ["Grain"]},//Bäcker
+    ],
   },
   {
     key: "Iron",
@@ -203,6 +209,9 @@ export default [
     type: "Konsumgüter",
     provides: "Soap",
     needs: ["Tallow"],
+    replacable: [
+      {OldInput: "Tallow", NewInput: ["Wood"]},//191318 Parfümeurin Prunella
+    ],
   },
   {
     key: "Hops",
@@ -261,6 +270,9 @@ export default [
     type: "Baumaterial",
     provides: "Windows",
     needs: ["Glass", "Wood"],
+    replacable: [
+      {OldInput: "Glass", NewInput: ["Quartz_sand"]},//Glasmacher
+    ],
   },
   {
     key: "Beef",
@@ -288,6 +300,9 @@ export default [
     type: "Zwischenprodukte",
     provides: "Goulash",
     needs: ["Beef", "Red_peppers"],
+    replacable: [
+      {OldInput: "Beef", NewInput: ["Pigs"]},//Marcel Forcas, Rezeptarchivarin
+    ],
   },
   {
     key: "Canned_food",
@@ -297,6 +312,10 @@ export default [
     type: "Konsumgüter",
     provides: "Canned_food",
     needs: ["Goulash", "Iron"],
+    replacable: [
+      {OldInput: "Goulash", NewInput: ["Pigs"]},//191406 Michel der Sternekoch
+      {OldInput: "Iron", NewInput: ["Flour"]},//191407 Mrs. Mayson
+    ],
   },
   {
     key: "Coal",
@@ -315,6 +334,9 @@ export default [
     type: "Konsumgüter",
     provides: "Sewing_machines",
     needs: ["Furnace", "Wood"],
+    replacable: [
+      {OldInput: "Furnace", NewInput: ["Iron"]},//Dario
+    ],
   },
   {
     key: "Rum",
@@ -351,6 +373,10 @@ export default [
     type: "Konsumgüter",
     provides: "Fur_coats",
     needs: ["Cotton_fabric", "Furs"],
+    replacable: [
+      {OldInput: "Furs", NewInput: ["Iron"]},//192039 Franke, der Modeguru
+      {OldInput: "Cotton_fabric", NewInput: ["Wool"]},//192039 Franke, der Modeguru, 101348 Kostümbildnerin
+    ],
   },
 
   /**
@@ -369,10 +395,19 @@ export default [
     key: "Electricity",
     tierId: 4,
     requirement: 1,
-    productionTime: 1/Infinity,
+    productionTime: 5,
     type: "Konsumgüter",
     provides: "Electricity",
     needs: ["Oil"],
+  },
+  {
+    key: "Oil",
+    tierId: 4,
+    requirement: 1,
+    productionTime: 15,
+    type: "Rohmaterial",
+    provides: "Oil",
+    needs: ["deposit"],
   },
   {
     key: "Reinforced_concrete",
@@ -382,6 +417,9 @@ export default [
     type: "Baumaterial",
     provides: "Reinforced_concrete",
     needs: ["Furnace", "Cement"],
+    replacable: [
+      {OldInput: "Cement", NewInput: ["Clay"]},//Zementierer
+    ],
   },
   {
     key: "Copper",
@@ -418,12 +456,15 @@ export default [
     type: "Konsumgüter",
     provides: "Glasses",
     needs: ["Glass", "Brass"],
+    replacable: [
+      {OldInput: "Brass", NewInput: ["Wood"]},//Gerhard Fuchs
+    ],
   },
   {
     key: "Steam_motors",
     tierId: 4,
     requirement: 500,
-    productionTime: 45,
+    productionTime: 90,
     type: "Baumaterial",
     provides: "Steam_motors",
     needs: ["Furnace", "Brass", "Electricity"],
@@ -450,7 +491,7 @@ export default [
     key: "Advanced_weapons",
     tierId: 4,
     requirement: 500,
-    productionTime: 60,
+    productionTime: 120,
     type: "Baumaterial",
     provides: "Advanced_weapons",
     needs: ["Dynamite", "Brass", "Electricity"],
@@ -468,10 +509,13 @@ export default [
     key: "Penny_farthings",
     tierId: 4,
     requirement: 500,
-    productionTime: 15,
+    productionTime: 30,
     type: "Konsumgüter",
     provides: "Penny_farthings",
     needs: ["Caoutchouc", "Furnace", "Electricity"],
+    replacable: [
+      {OldInput: "Furnace", NewInput: ["Iron"]},//Dario
+    ],
   },
   {
     key: "Gold_ore",
@@ -504,10 +548,13 @@ export default [
     key: "Pocket_watches",
     tierId: 4,
     requirement: 1000,
-    productionTime: 45,
+    productionTime: 90,
     type: "Konsumgüter",
     provides: "Pocket_watches",
     needs: ["Gold", "Glass", "Electricity"],
+    replacable: [
+      {OldInput: "Gold", NewInput: ["Brass"]},//101323 Chiara
+    ],
   },
   {
     key: "Filaments",
@@ -577,22 +624,37 @@ export default [
     needs: ["otherWorld"],
   },
   {
+    key: "Pearls",
+    tierId: 5,
+    requirement: 1750,
+    productionTime: Infinity,
+    type: "Rohmaterial",
+    provides: "Pearls",
+    needs: ["otherWorld"],
+  },
+  {
     key: "Jewellery",
     tierId: 5,
     requirement: 1750,
     productionTime: 30,
     type: "Konsumgüter",
     provides: "Jewellery",
-    needs: ["Gold", "Pearl"],
+    needs: ["Gold", "Pearls"],
+    replacable: [
+      {OldInput: "Gold", NewInput: ["Gold_ore"]},//Goldschmied Gilbert, Illustrer Gemmologe
+    ],
   },
   {
     key: "Gramophones",
     tierId: 5,
     requirement: 3000,
-    productionTime: 60,
+    productionTime: 120,
     type: "Konsumgüter",
     provides: "Gramophones",
     needs: ["Wood_veneers", "Brass", "Electricity"],
+    replacable: [
+      {OldInput: "Wood_veneers", NewInput: ["Timber"]},//11354 Johan der Erfinder
+    ],
   },
   {
     key: "Chassis",
@@ -607,10 +669,13 @@ export default [
     key: "Steam_carriages",
     tierId: 5,
     requirement: 5000,
-    productionTime: 30,
+    productionTime: 60,
     type: "Konsumgüter",
     provides: "Steam_carriages",
     needs: ["Steam_motors", "Chassis", "Electricity"],
+    replacable: [
+      {OldInput: "Steam_motors", NewInput: ["Filaments"]},//Susannah
+    ],
   },
 
 
@@ -661,6 +726,9 @@ export default [
     type: "Konsumgüter",
     provides: "Fried_plantains",
     needs: ["Plantains", "Fish_Oil"],
+    replacable: [
+      {OldInput: "Fish_Oil", NewInput: ["Cocoa"]},//191356 Meisterkonditor
+    ],
   },
   {
     key: "Cotton",
@@ -739,7 +807,7 @@ export default [
     tierId: 6,
     requirement: 300,
     productionTime: 90,
-    type: "Landwirtschaftliche Produkte",//
+    type: "Rohmaterial",
     provides: "Pearls",
     needs: ["coastline", "fertility"],
   },
@@ -791,6 +859,10 @@ export default [
     type: "Konsumgüter",
     provides: "Tortillas",
     needs: ["Corn", "Beef"],
+    replacable: [
+      {OldInput: "Beef", NewInput: ["Fish_Oil"]},//191386 Mole-Meister
+      {OldInput: "Corn", NewInput: ["Plantains"]},//19142 Maiskönig
+    ],
   },
   {
     key: "Coffee_beans",
@@ -820,6 +892,15 @@ export default [
     needs: ["deposit"],
   },
   {
+    key: "Oil_6",
+    tierId: 7,
+    requirement: 600,
+    productionTime: 15,
+    type: "Rohmaterial",
+    provides: "Oil",
+    needs: ["deposit"],
+  },
+  {
     key: "Felt",
     tierId: 7,
     requirement: 600,
@@ -836,6 +917,9 @@ export default [
     type: "Konsumgüter",
     provides: "Bowler_hats",
     needs: ["Cotton_fabric", "Felt"],
+    replacable: [
+      {OldInput: "Felt", NewInput: ["Alpaca_wool"]},//Hutmeister
+    ],
   },
   {
     key: "Beer_6",
@@ -863,6 +947,9 @@ export default [
     type: "Konsumgüter",
     provides: "Cigars",
     needs: ["Wood_veneers", "Tobacco"],
+    replacable: [
+      {OldInput: "Wood_veneers", NewInput: ["Timber"]},//190642 Torcedor Lucia
+    ],
   },
   {
     key: "Wood_veneers_6",
@@ -894,7 +981,7 @@ export default [
   {
     key: "Cocoa",
     tierId: 7,
-    requirement: 1500,// AND (?) 1750 of 5
+    requirement: 1500,
     productionTime: 60,
     type: "Landwirtschaftliche Produkte",
     provides: "Cocoa",
@@ -908,5 +995,265 @@ export default [
     type: "Konsumgüter",
     provides: "Chocolate",
     needs: ["Sugar", "Cocoa"],
+    replacable: [
+      {OldInput: "Sugar", NewInput: ["Coffee_beans"]},//191332 Qualitätschocolatier
+    ],
+  },
+
+
+  /**
+   * Explorers
+   */
+  {
+    key: "Charcoal_kiln_8",
+    tierId: 8,
+    requirement: 0,
+    productionTime: 30,
+    type: "Rohmaterial",
+    provides: "Coal",
+    needs: [],
+    needs_fertility: "Trees",
+    needs_extra: ["trees"],
+  },
+  {
+    key: "Heater",
+    tierId: 8,
+    requirement: 0,
+    productionTime: 30,
+    type: "Konsumgüter",
+    provides: "Heat",//+32
+    needs: ["Coal"],
+    replacable: [
+      {OldInput: "Coal", NewInput: ["Wood"]},//Knisterde Batterie Nr. 2205
+    ],
+  },
+  {
+    key: "Wood_8",
+    tierId: 8,
+    requirement: 0,
+    productionTime: 15,
+    type: "Rohmaterial",
+    provides: "Wood",
+    needs: [],
+    needs_fertility: "Trees",
+    needs_extra: ["Heat", "trees"],
+  },
+  {
+    key: "Timber_8",
+    tierId: 8,
+    requirement: 0,
+    productionTime: 15,
+    type: "Baumaterial",
+    provides: "Timber",
+    needs: ["Wood"],
+  },
+  {
+    key: "Whale_Oil",
+    tierId: 8,
+    requirement: 100,
+    productionTime: 60,
+    type: "Landwirtschaftliche Produkte",
+    provides: "Whale_Oil",
+    needs: ["fertility"],
+    needs_fertility: "Whale_Oil",
+    extra: ["Heat", "coastline"],
+  },
+  {
+    key: "Caribou_Meat",
+    tierId: 8,
+    requirement: 100,
+    productionTime: 60,
+    type: "Landwirtschaftliche Produkte",
+    provides: "Caribou_Meat",
+    needs: ["fertility"],
+    needs_fertility: "Caribou_Meat",
+    extra: ["Heat", "trees"],
+  },
+  {
+    key: "Pemmican",
+    tierId: 8,
+    requirement: 100,
+    productionTime: 60,
+    type: "Konsumgüter",
+    provides: "Pemmican",
+    needs: ["Caribou_Meat", "Whale_Oil"],
+    extra: ["Heat"],
+  },
+  {
+    key: "Goose_Feathers",
+    tierId: 8,
+    requirement: 500,
+    productionTime: 120,
+    type: "Landwirtschaftliche Produkte",
+    provides: "Goose_Feathers",
+    needs: [],
+    extra: ["Heat"],
+  },
+  {
+    key: "Seal_Skin",
+    tierId: 8,
+    requirement: 500,
+    productionTime: 30,
+    type: "Landwirtschaftliche Produkte",
+    provides: "Seal_Skin",
+    needs: ["fertility"],
+    needs_fertility: "Seal_Skin",
+    extra: ["Heat", "coastline"],
+  },
+  {
+    key: "Sleeping_Bags",
+    tierId: 8,
+    requirement: 500,
+    productionTime: 60,
+    type: "Konsumgüter",
+    provides: "Sleeping_Bags",
+    needs: ["Goose_Feathers", "Seal_Skin"],
+    extra: ["Heat"],
+  },
+  {
+    key: "Brass_8",
+    tierId: 8,
+    requirement: 500,
+    productionTime: Infinity,
+    type: "Zwischenprodukte",
+    provides: "Brass",
+    needs: ["otherWorld"],
+  },
+  {
+    key: "Copper_8",
+    tierId: 8,
+    requirement: 500,
+    productionTime: Infinity,
+    type: "Rohmaterial",
+    provides: "Copper",
+    needs: ["otherWorld"],
+  },
+  {
+    key: "Oil_Lamps",
+    tierId: 8,
+    requirement: 500,
+    productionTime: 60,
+    type: "Konsumgüter",
+    provides: "Oil_Lamps",
+    needs: ["Whale_Oil", "Brass"],
+    extra: ["Heat"],
+    replacable: [
+      {OldInput: "Brass", NewInput: ["Copper"]},//116162 Kerzenform
+    ],
+  },
+  {
+    key: "Schnapps_8",
+    tierId: 8,
+    requirement: 500,
+    productionTime: Infinity,
+    type: "Konsumgüter",
+    provides: "Schnapps",
+    needs: ["otherWorld"],
+  },
+
+  /**
+   * Technicians
+   */
+  {
+    key: "Canned_food_9",
+    tierId: 9,
+    requirement: 300,
+    productionTime: Infinity,
+    type: "Konsumgüter",
+    provides: "Canned_food",
+    needs: ["otherWorld"],
+  },
+  {
+    key: "Bear_Fur",
+    tierId: 8,
+    requirement: 300,
+    productionTime: 90,
+    type: "Landwirtschaftliche Produkte",
+    provides: "Bear_Fur",
+    needs: ["fertility"],
+    needs_fertility: "Bear_Fur",
+    extra: ["Heat", "trees"],
+  },
+  {
+    key: "Parkas",
+    tierId: 8,
+    requirement: 300,
+    productionTime: 90,
+    type: "Konsumgüter",
+    provides: "Parkas",
+    needs: ["Bear_Fur", "Seal_Skin"],
+    extra: ["Heat"],
+  },
+  {
+    key: "Furs_9",
+    tierId: 9,
+    requirement: 300,
+    productionTime: 15,
+    type: "Landwirtschaftliche Produkte",
+    provides: "Furs",
+    needs: ["fertility"],
+    needs_fertility: "Bear_Fur",
+    extra: ["Heat", "trees"],
+  },
+  {
+    key: "Huskies",
+    tierId: 9,
+    requirement: 750,
+    productionTime: 120,
+    type: "Landwirtschaftliche Produkte",
+    provides: "Huskies",
+    needs: [],
+    extra: ["Heat"],
+  },
+  {
+    key: "Sleds",
+    tierId: 9,
+    requirement: 750,
+    productionTime: 60,
+    type: "Zwischenprodukte",
+    provides: "Sleds",
+    needs: ["Seal_Skin", "Wood"],
+    extra: ["Heat"],
+  },
+  {
+    key: "Husky_Sleds",
+    tierId: 9,
+    requirement: 750,
+    productionTime: 60,
+    type: "Konsumgüter",
+    provides: "Husky_Sleds",
+    needs: ["Huskies", "Sleds"],
+    extra: ["Heat"],
+  },
+  {
+    key: "Coffee_9",
+    tierId: 9,
+    requirement: 750,
+    productionTime: Infinity,
+    type: "Konsumgüter",
+    provides: "Coffee",
+    needs: ["otherWorld"],
+  },
+  {
+    key: "Gold_ore_9",
+    tierId: 9,
+    requirement: 750,
+    productionTime: 60,
+    type: "Rohmaterial",
+    provides: "Gold_ore",
+    needs: ["deposit"],
+    needs_fertility: "Gold_ore",
+    extra: ["Heat"],
+  },
+  {
+    key: "Gas",
+    tierId: 9,
+    requirement: 750,
+    productionTime: 270,
+    type: "Baumaterial",
+    provides: "Gas",
+    needs: ["deposit"],
+    needs_fertility: "Gas",
+    extra: ["Heat", "deposit"],
   },
 ]

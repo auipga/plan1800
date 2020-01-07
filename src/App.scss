@@ -1,3 +1,18 @@
+* {
+    //transition: all 2s ease-in;
+}
+:hover {
+    //box-shadow: inset 0 0 5px #f98e44;
+    //background-color: black;
+    //outline: 1px solid red;
+}
+input.onWheel {
+    //cursor: url("icons/overlays/productivity_up.png") 25 0, text;
+}
+*.onWheel {
+    //cursor: url("icons/overlays/productivity_up.png") 25 0, auto !important;
+}
+
 body.bg-secondary {
     color: var(--light) !important;
 }

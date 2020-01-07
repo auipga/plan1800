@@ -19,8 +19,8 @@ export default class Building extends Component {
     const buildingCount = island.buildings[producer.key]
 
     buildingBalance = balance*producer.productionTime/60
-    // recommendedCount = Math.ceil(island.buildings[producer.key] - buildingBalance);
-    // recommendedAdd = recommendedCount - island.buildings[producer.key];
+    // recommendedCount = Math.ceil(buildingCount - buildingBalance);
+    recommendedAdd = recommendedCount - buildingCount;
 
     if (producer.needs.includes("deposit")) {
       max = island.regionalResources[producer.key]
@@ -36,7 +36,8 @@ export default class Building extends Component {
       || producer.key === "Wood"
       || producer.key === "Fish"
       || producer.key === "Electricity"
-      || producer.tierId > 5 // Old World todo: this is not ready for the passage
+      || producer.key === "Oil"
+      || producer.tierId > 5
       || producer.needs.includes("otherWorld") // fake building, used as trade receiver only
     )
 
@@ -63,7 +64,7 @@ export default class Building extends Component {
 
     return (
       <div className='mb-1'>
-        <GoodItem producer={producer}
+        <GoodItem producer={producer} replaceInputs={island.replaceInputs}
           onClick={() => fnSetBuildingCount(island, producer, buildingCount+1)}
           onContextMenu={(e) => { e.preventDefault(); fnSetBuildingCount(island, producer, buildingCount-1)} }
           >
@@ -84,10 +85,11 @@ export default class Building extends Component {
             :
             <span className={"mr-2 overlay-wrapper"}>
             {this.hasSyncs ? <img src={"./icons/Icon_traderoutes.png"} alt="" className='trade-icon' /> : ''}
-            <Chart balance={balance} max={4}/>
+            {producer.key !== "Electricity" && producer.key !== "Heater" && <Chart balance={balance} max={4}/>}
           </span>
           }
           {max === 0 || recommendedCount > max ? '' :
+            // @todo: recursive, auch wenn wurst hochdrehen, dann schweine auch (e.ctrlKey)
             <RecommendedAddButton add={recommendedAdd} action={() => fnSetBuildingCount(island, producer, recommendedCount)} />
           }
 

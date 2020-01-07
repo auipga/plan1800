@@ -8,11 +8,12 @@ export default class Producers extends Component {
   render() {
     const {island, fnBalance} = this.props
     let types = [
-      "Konsumgüter",
-      "Baumaterial",
-      "Rohmaterial",
-      "Landwirtschaftliche Produkte",
-      "Zwischenprodukte",
+      // Oil: Strategic Resources
+      "Konsumgüter", // Consumer Goods
+      "Baumaterial", // Construction Materials
+      "Rohmaterial", //// Basic Resources
+      "Landwirtschaftliche Produkte", //// Basic Resources
+      "Zwischenprodukte", // Intermediate Goods
     ]
 
     return (

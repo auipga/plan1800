@@ -34,8 +34,15 @@ TieredMap.prototype.toJSON = function() {
 TieredMap.prototype.tiers = function() {
   return Array.from(this.keys())
 }
+TieredMap.prototype.tier = function(index = 0) {
+  return this.tiers()[index]
+}
 TieredMap.prototype.firstTier = function() {
   return this.tiers()[0]
+}
+TieredMap.prototype.lastTier = function() {
+  const tiers = this.tiers()
+  return tiers[tiers.length-1]
 }
 TieredMap.prototype.highestTier = function() {
   let highestTier = null
@@ -73,12 +80,23 @@ TieredMap.prototype.gte = function(tierId, value) {
 TieredMap.prototype.present = function(tierId) {
   return this.gte(tierId, 0)
 }
-TieredMap.prototype.add = function(tierId, value) {
-  const newValue = this.get(tierId) + value
-  const newValueButMinimum0 = Math.max(newValue, 0);
+TieredMap.prototype.add = function(tierId, value, allowNegative = false) {
+  const oldValue = this.get(tierId)
+  if (Array.isArray(oldValue)) {
+    this.set(tierId, [...oldValue, value])
+    return
+  }
+  const newValue = oldValue + value
+  const newValueButMinimum0 = allowNegative ? newValue : Math.max(newValue, 0);
   const overflow = newValue - newValueButMinimum0;
   this.set(tierId, newValueButMinimum0)
   return overflow
+}
+TieredMap.prototype.remove = function(tierId, value) {
+  const oldValue = this.get(tierId)
+  const newValue = oldValue.filter(f => f !== value);
+  this.set(tierId, newValue)
+  return newValue
 }
 TieredMap.prototype.sub = function(tierId, value) {
   return this.add(tierId, -value)

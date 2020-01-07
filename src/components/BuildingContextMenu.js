@@ -1,9 +1,10 @@
 import React, {useState} from 'react'
 import PropTypes from 'prop-types/'
 import classnames from 'classnames'
-import {Button, Popover, PopoverHeader, PopoverBody, Input, InputGroup, InputGroupAddon, TabContent, TabPane, Nav, NavItem, NavLink} from "reactstrap"
+import {Button, Popover, PopoverHeader, PopoverBody, Input, InputGroup, InputGroupAddon, TabContent, TabPane, Nav, NavItem, NavLink, ButtonGroup} from "reactstrap"
 import InputWrapper from "./InputWrapper";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import GoodIcon from "./GoodIcon";
 
 const BuildingContextMenu = (props) => {
   const {island, good, tradeSyncs, fnTradeSync} = props
@@ -26,12 +27,17 @@ const BuildingContextMenu = (props) => {
       name: "Routes",
       icon: "sync",
       img: "./icons/Icon_traderoutes.png",
-      hidden: props.islands.length === 1 || good === "Electricity"
+      hidden: props.islands.length === 1 || good === "Electricity" || good === "Heat"
     }, //  sync sync-alt retweet share-alt-square
     {
       name: "Productivity",
       icon: "tachometer-alt",
-      hidden: !buildingCount || good === "Electricity"
+      hidden: !buildingCount || good === "Electricity" || good === "Heat"
+    },
+    {
+      name: "replaced_inputs",
+      icon: "random", // exchange-alt
+      hidden: /*!buildingCount || */props.producer.replacable === undefined || props.producer.replacable.length === 0
     },
   ]
 
@@ -62,7 +68,7 @@ const BuildingContextMenu = (props) => {
   }
 
   return (<>
-      <Button id={'popover_'+props.producer.key} type='button' className={'px-1 py-0 mr-2'}>
+      <Button id={'popover_'+props.producer.key} type='button' className={'px-1 py-0 mr-1'}>
         {/*caret-right sliders-h bars ellipsis-v */}
         <FontAwesomeIcon icon={'sliders-h'} color={'#dddddd'}/>
         {/*<FontAwesomeIcon icon={'caret-right'}/>*/}
@@ -200,6 +206,47 @@ const BuildingContextMenu = (props) => {
             <TabPane tabId="Items">
               <p className='mb-2 font-italic text-muted'>Create Handelskammern</p>
               to be implemented
+            </TabPane>
+            <TabPane tabId="replaced_inputs">
+              <p className='mb-2 font-italic text-muted'>Replace input materials</p>
+
+              {props.producer.replacable && props.producer.replacable.map(r => (
+                <ButtonGroup className='my-2 d-block' size={'sm'}>
+                  <Button
+                    className={'p-1'}
+                    active={!island.replaceInputs.find(ri => ri.target === props.producer.key && ri.OldInput === r.OldInput)}
+                    onClick={() => { island.replaceInputs = island.replaceInputs.filter(ri => ri.target !== props.producer.key || ri.OldInput !== r.OldInput) ; props.fnProductivityBoost(props.productivityBoost) }}
+                  >
+                    <GoodIcon good={r.OldInput}/>
+                  </Button>
+                  {r.NewInput.map(ni => (
+                    <Button
+                      className={'p-1'}
+                      active={island.replaceInputs.find(ri => ri.target === props.producer.key && ri.OldInput === r.OldInput && ri.NewInput === ni)}
+                      onClick={() => { island.replaceInputs = [...island.replaceInputs.filter(ri => ri.target !== props.producer.key || ri.OldInput !== r.OldInput), {target: props.producer.key, OldInput: r.OldInput, NewInput: ni}] ; props.fnProductivityBoost(props.productivityBoost) }}
+                    >
+                      <GoodIcon good={ni}/>
+                    </Button>
+                  ))}
+                </ButtonGroup>
+              ))}
+              {/*
+              {props.producer.replacable && (
+                <p>
+                  <input type="radio" name=''/>
+                  default
+                </p>
+              ) &&
+              props.producer.replacable.map(r => (
+                <p>
+                  <input type="radio" name=''/>
+                  <GoodIcon good={r.OldInput}/>
+                  <FontAwesomeIcon icon='chevron-right' fixedWidth/>
+                  <FontAwesomeIcon icon='angle-right'/>
+                  <GoodIcon good={r.NewInput}/>
+                </p>
+              ))}
+*/}
             </TabPane>
           </TabContent>
         </PopoverBody>
