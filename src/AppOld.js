@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Card, CardBody, CardHeader, Container, Row, Col} from 'reactstrap';
-import './App.scss'
+import './AppOld.scss'
 import worlds from "./data/worlds";
 import needs from "./data/needs";
 import producers from "./data/producers";
@@ -41,7 +41,7 @@ const dd = debugEnabled ? (...foo) => <div className='d-inline-block font-italic
 // todo s1: RecommendedAddButton wenn 1 Lehm -> 2 Ziegelei :)
 // todo e1: hell dunkler machen
 // todo:
-class App extends Component {
+class AppOld extends Component {
   saveLogic = {
     waitMs: 500,
     timeout: null
@@ -1056,4 +1056,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default AppOld;

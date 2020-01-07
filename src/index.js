@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import AppOld from './AppOld';
 
 // css
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render(
-  <App/>,
+  <AppOld/>,
   document.getElementById('root')
 );
