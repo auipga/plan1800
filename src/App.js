@@ -27,7 +27,7 @@ import {fab} from '@fortawesome/free-brands-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 library.add(fas, fab)
 
-const debugEnabled = true
+const debugEnabled = !true //
 const jst = JSON.stringify
 const jpa = JSON.parse
 const jcl = foo => jpa(jst(foo)) // clone function
@@ -37,6 +37,10 @@ const d = debugEnabled ? cl : () => null
 // eslint-disable-next-line
 const dd = debugEnabled ? (...foo) => <div className='d-inline-block font-italic text-break'>{foo}</div> : () => null
 
+// todo s2: negative balance ignorieren bis Änderung, z.B. bei Holz
+// todo s1: RecommendedAddButton wenn 1 Lehm -> 2 Ziegelei :)
+// todo e1: hell dunkler machen
+// todo:
 class App extends Component {
   saveLogic = {
     waitMs: 500,
@@ -90,6 +94,10 @@ class App extends Component {
     document.addEventListener('keyup',   e => { this.setState({modifier: this.modifier(e)}) })
   }
 
+  fullReset = () => {
+    localStorage.clear()
+    document.location.reload()
+  }
   reset = () => {
     if (!debugEnabled && !window.confirm('Start from beginning?')) {
       return;
@@ -153,6 +161,10 @@ class App extends Component {
     }
 
     // compatibility with expeditions
+    if (!newState.hasOwnProperty('globalBuffs')) {
+      newState.globalBuffs = {"expansion": 0}
+    }
+    // compatibility with expeditions
     if (!newState.hasOwnProperty('expeditions')) {
       newState.expeditions = []
     }
@@ -171,6 +183,14 @@ class App extends Component {
     // compatibility with pages'
     if (!newState.hasOwnProperty('activeSection')) {
       newState.activeSection = "worlds"
+    }
+    if (!1) {
+      newState.unlockedWorlds = [1]
+      newState.activeSection = "worlds"
+      newState.activeExpedition = null
+      newState.expeditions = []
+      newState.expedition_preparations = []
+      newState.activeExpeditionPreparations = {}
     }
     return newState
   }
@@ -406,6 +426,37 @@ class App extends Component {
 
     this.saveState()
   }
+  postChangeResidences_ = (island, tierId, direction) => {
+    if (tierId === island.residences.highestTier()) {
+      let tierPop = island.population.ofTier(tierId)
+
+      const allTierNeeds = needs.filter(n => n.tierIDs[0] === tierId)
+      const unlockedTierNeeds = allTierNeeds.filter(n => tierPop >= n.requirement)
+      const   lockedTierNeeds = allTierNeeds.filter(n => tierPop < n.requirement)
+
+      this.recalculatePopulation(island, tierId)
+      tierPop = island.population.ofTier(tierId)
+
+      if (direction > 0) {
+        const unlock = lockedTierNeeds.filter(n => tierPop >= n.requirement)
+        unlock.forEach(n => {
+          d("unlock", n.key)
+          island.unlockedNeeds.push(n.key)
+          island.populationPerResidence.add(n.tierIDs[0], n.influx[0])
+          this.recalculatePopulation(island, tierId)
+        })
+      }
+      if (direction < 0) {
+        const lock = unlockedTierNeeds.filter(n => tierPop < n.requirement)
+        lock.forEach(n => {
+          d("lock", n.key)
+          island.unlockedNeeds = island.unlockedNeeds.filter(u => u !== n.key)
+          island.populationPerResidence.sub(n.tierIDs[0], n.influx[0])
+          this.recalculatePopulation(island, tierId)
+        })
+      }
+    }
+  }
   updatePopulationPerResidence(island, tierId) {
     const relevantNeeds = needs.filter(n =>
       island.unlockedNeeds.includes(n.key)                       // unlocked on this island
@@ -501,6 +552,7 @@ class App extends Component {
 
   // Buildings and Needs
   updateUnlockedEvents = (island) => {
+    // 3,750: exp rettung + exp kap
     const lockedThings = {
       worlds: worlds.filter(w => !this.state.unlockedWorlds.includes(w.id) && this.state.expeditions.find(e => e.type === "expedition_exploration" && e.target === w.id) === undefined),
       // worlds2: worlds.filter(w => this.state.expeditions.getDefault("expedition_planable", []).find(e => (e.type === "expedition_exploration" && e.target === w.id)) === undefined),
@@ -565,6 +617,30 @@ class App extends Component {
     }
     return false
   }
+  updateUnlockedNeed_ = (need, island) => {
+    // d('updateUnlockedNeeds')
+    const pop = island.population
+    let needed = false
+    const firstTierID = need.tierIDs[0];
+
+    if (!needed) {
+      needed = pop.ofTier(firstTierID) >= need.requirement;
+    }
+    if (!needed && firstTierID < Math.max(...pop.keys())) { // wenn das nächste Tier noch zur selben Welt gehört
+      needed = pop.present(firstTierID+1)
+    }
+    if (!needed) {
+      needed = pop.present(firstTierID) && pop.sumAbove(firstTierID)
+    }
+    if (needed) {
+      if (!island.unlockedNeeds.includes(need.key)) {
+        this.enableDisabledBuilding(island, producers.find(p => p.key === need.key))
+        island.unlockedNeeds.push(need.key)
+      }
+    } else if (island.unlockedNeeds.includes(need.key)) {
+      island.unlockedNeeds = island.unlockedNeeds.filter(n => n !== need.key)
+    }
+  };
   setBuildingCount = (island, producer, number) => {
     let buildings = island.buildings;
 
