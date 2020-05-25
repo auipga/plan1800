@@ -1,6 +1,10 @@
 .idea/
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# copyright content must not be added!
+/public/images/**/*.png
+/public/icons/**/*.png
+
 # dependencies
 /node_modules
 /.pnp

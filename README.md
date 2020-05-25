@@ -32,3 +32,6 @@ gelesen. Darüber hinaus mit Ihrem Support geschrieben, der mich wiederum aussch
 Daraus werde ich jedoch nicht schlau und habe nun im Sinne der Community entschieden, meinen Quellcode - mit Ausnahme 
 der Assets - doch hier zu veröffentlichen. Sollte ich hiermit gegen diese oder eine andere Bestimmung verstoßen, 
 werde ich dieses Repository umgehend unsichtbar machen.
+
+##### folders `public/icons` and `public/images`
+These folders have been removed using this method: https://stackoverflow.com/a/32886427/816362
