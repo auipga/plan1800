@@ -1,7 +1,7 @@
 // https://stackoverflow.com/a/51215842/816362
 export const exportToFile = (state) => {
   const data = JSON.stringify(state, null, " ")
-  const filename = "plan1800_"+getFormattedTime()+"_"+state.gameName+".json"
+  const filename = "plan1800-DEV_"+getFormattedTime()+"_"+(state.personal.nameOfMatch||'unbenannt').replace(" ","_")+".json"
   const contentType = "application/json;charset=utf-8;"
   if (window.navigator && window.navigator.msSaveOrOpenBlob) {
     const blob = new Blob([decodeURIComponent(encodeURI(data))], {type: contentType})
@@ -32,11 +32,13 @@ export const loadFromFile = (callback) => {
     reader.onload = function (evt) {
       const fileContent = evt.target.result
       // const jsonObj = JSON.parse(fileContent)
+      // callback(jsonObj)
+      // callback(JSON.parse(fileContent))
       callback(fileContent)
     }
     reader.onerror = function (evt) {
-      alert('error. see console.')
       console.log(evt)
+      alert('error. see console.')
     }
   })
 

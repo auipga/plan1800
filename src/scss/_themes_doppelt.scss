@@ -1,0 +1,95 @@
+@media screen and (-ms-high-contrast: active) {
+    /* CSS Code, wenn High Contrast aktiv */
+}
+/*
+ * Theme
+ */
+
+@mixin theme($variant) {
+    .HeaderCard,
+    .Island-Card,
+    {
+        @extend .bg-#{$variant};
+    }
+}
+
+body.theme-dark {
+    background-color: var(--secondary);
+    color: var(--light);
+
+    .HeaderCard, .Island-Card, .jumbotron {
+        background-color: var(--dark);
+    }
+    .ProducersOfType img.buildingtypes {
+        //filter: sepia(1) saturate(3000%) grayscale(1) contrast(0);
+    }
+}
+body.theme-light {
+    background-color: var(--white);
+    color: var(--dark);
+
+    .HeaderCard, .Island-Card, .jumbotron {
+        background-color: var(--light);
+    }
+    .ProducersOfType img.buildingtypes {
+        filter: sepia(1) saturate(3000%) grayscale(1) contrast(0);
+    }
+}
+
+body.theme-auto,
+body:not(.theme-dark):not(.theme-light),
+{
+    @media (prefers-color-scheme: dark) {
+        background-color: var(--secondary);
+        color: var(--light);
+
+        .HeaderCard, .Island-Card, .jumbotron {
+            background-color: var(--dark);
+        }
+        .ProducersOfType img.buildingtypes {
+            //filter: sepia(1) saturate(3000%) grayscale(1) contrast(0);
+        }
+    }
+    @media (prefers-color-scheme: light) {
+        background-color: var(--white);
+        color: var(--dark);
+
+        .HeaderCard, .Island-Card, .jumbotron {
+            background-color: var(--light);
+        }
+        .ProducersOfType img.buildingtypes {
+            filter: sepia(1) saturate(3000%) grayscale(1) contrast(0);
+        }
+
+    }
+    @media (prefers-color-scheme: no-preference) {
+        background-color: var(--white);
+        color: var(--dark);
+
+        .HeaderCard, .Island-Card, .jumbotron {
+            background-color: var(--light);
+        }
+        .ProducersOfType img.buildingtypes {
+            filter: sepia(1) saturate(3000%) grayscale(1) contrast(0);
+        }
+    }
+}
+
+
+
+/*
+.HeaderCard,
+.Island-Card,
+{
+    body.theme-dark & {
+        @extend .bg-dark
+    }
+    body.theme-light & {
+        @extend .bg-white
+    }
+    body.theme-auto & {
+        @extend .bg-white
+    }
+}
+*/
+

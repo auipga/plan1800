@@ -1,0 +1,109 @@
+@media screen and (-ms-high-contrast: active) {
+    /* CSS Code, wenn High Contrast aktiv */
+}
+
+$hi-colors: (
+    "neededBy":       #63f7a6, // #98f9c5,
+    "needs":          #f98e44,
+    "self":           #a4b7f9,
+    "extraOutput":    #33e7ff,
+);
+
+
+body {
+    background-color: var(--white);
+    color: var(--dark);
+
+    .HeaderCard, .Island-Card, .jumbotron {
+        background-color: var(--light);
+    }
+    .IslandSharing img,
+    .ProducersOfType img.buildingtypes {
+        filter: sepia(1) saturate(3000%) grayscale(1) contrast(0);
+    }
+
+    @each $hi, $color in $hi-colors {
+        .hi-#{$hi} { //sind innerhalb von: .Good, .Building, .BuildingButton, span.help {}
+            transition: all .1s ease-out;
+            @if ($hi == 'neededBy' or $hi == 'needs') {
+                box-shadow: inset 0 0 2px $color, 0 0 5px $color;
+                //transition: all .5s ease-out;
+            } @else {
+                box-shadow: inset 0 0 5px 0 $color;
+            }
+        }
+    }
+
+    .Paypal-modal {
+        .forDark {
+            display: none;
+        }
+
+        .forLight {
+            display: block;
+        }
+    }
+}
+
+body.theme-light {
+    @each $hi, $color in $hi-colors {
+        .hi-#{$hi} {
+            background-color: transparentize($color, 0.7);
+        }
+    }
+}
+
+body.theme-dark {
+    background-color: var(--secondary);
+    color: var(--light);
+
+    .HeaderCard, .Island-Card, .jumbotron {
+        background-color: var(--dark);
+    }
+    .ProducersOfType img.buildingtypes {
+        //filter: sepia(1) saturate(3000%) grayscale(1) contrast(0);
+    }
+    .Paypal-modal {
+        div {
+            background-color: var(--dark);
+            color: var(--light);
+        }
+        .forDark {display: block;}
+        .forLight {display: none;}
+    }
+}
+
+body.theme-auto,
+body:not(.theme-dark):not(.theme-light),
+{
+    @media (prefers-color-scheme: dark) {
+        background-color: var(--secondary);
+        color: var(--light);
+
+        .HeaderCard, .Island-Card, .jumbotron {
+            background-color: var(--dark);
+        }
+        .ProducersOfType img.buildingtypes {
+            //filter: sepia(1) saturate(3000%) grayscale(1) contrast(0);
+        }
+    }
+}
+
+
+
+/*
+.HeaderCard,
+.Island-Card,
+{
+    body.theme-dark & {
+        @extend .bg-dark
+    }
+    body.theme-light & {
+        @extend .bg-white
+    }
+    body.theme-auto & {
+        @extend .bg-white
+    }
+}
+*/
+

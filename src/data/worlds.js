@@ -1,20 +1,21 @@
 export default [
-  {
+  { // "The Old World"
     id: 1,
-    key: "oldWorld",
-    i10n: {en: "The Old World", de: "Die Alte Welt"},
-    socialClassIDs: [1, 2, 3, 4, 5],
+    GUID: 180023,
+    worldTypeId: 1,
+    // socialClassIDs: [1, 2, 3, 4, 5],
     tierId: 1,
     requirement: 0,
-    fertilities: ["Potato", "Grain", "Hops", "Red_peppers", "Furs", "Saltpeter", "Grapes"],
-    regionalResources: ["Clay", "Iron", "Coal", "Zinc", "Copper", "Cement", "Oil"],
-    hasNewsEffect: true,
+    fertilities: ["Potato", "Grain", "Hops", "Red_peppers", "Furs", "Grapes", "Saltpeter"],
+    resources: ["Clay", "Iron", "Coal", "Zinc", "Copper", "Cement", "Oil"],
+    hasPropogandaEffect: true,
+    dlc: false,
   },
-  {
+  { // "The New World"
     id: 2,
-    key: "newWorld",
-    i10n: {en: "The New World", de: "Die Neue Welt"},
-    socialClassIDs: [6, 7],
+    GUID: 180025,
+    worldTypeId: 2,
+    // socialClassIDs: [6, 7],
     tierId: 3,
     requirement: 1,
     exploration: {
@@ -22,14 +23,15 @@ export default [
       duration: 35,// days \\ not yet in use!
     },
     fertilities: ["Plantains", "Sugar_cane", "Cotton", "Cocoa", "Corn", "Caoutchouc", "Coffee_beans", "Pearls", "Tobacco"],
-    regionalResources: ["Clay_6", "Oil_6", "Gold_ore_6"],
-    hasNewsEffect: true,
+    resources: ["Clay_6", "Oil_6", "Gold_ore_6"],
+    hasPropogandaEffect: true,
+    dlc: false,
   },
-  {
+  { // "Cap Trelawny"
     id: 3,
-    key: "capTrelawny",
-    i10n: {en: "Cap Trelawny", de: "Kap Trelawny"},
-    socialClassIDs: [1, 2, 3, 4, 5],
+    GUID: 803518, // en missing
+    worldTypeId: 1,
+    // socialClassIDs: [1, 2, 3, 4, 5],
     tierId: 3,
     requirement: 750,
     exploration: {
@@ -38,15 +40,16 @@ export default [
       // fixedAdvises: 1 ["Hunting", "Diplomacy", "Navigation"], //
       duration: 1,
     },
-    fertilities: ["Potato", "Grain", "Hops", "Red_peppers", "Furs", "Saltpeter", "Grapes"],
-    regionalResources: ["Clay", "Iron", "Coal", "Zinc", "Copper", "Cement", "Oil"],
-    hasNewsEffect: true,
+    fertilities: ["Potato", "Grain", "Hops", "Red_peppers", "Furs", "Grapes", "Saltpeter"],
+    resources: ["Clay", "Iron", "Coal", "Zinc", "Copper", "Cement", "Oil"],
+    hasPropogandaEffect: true,
+    dlc: 1,
   },
-  {
+  { // "The Arctic"
     id: 4,
-    key: "Arctic",
-    i10n: {en: "The Arctic", de: "Die Arktis"},
-    socialClassIDs: [8, 9],
+    GUID: 'The Arctic',
+    worldTypeId: 3,
+    // socialClassIDs: [8, 9],
     tierId: 4,
     requirement: 1,
     exploration: {
@@ -62,7 +65,8 @@ export default [
       "Bear_Fur",
       "Furs",
     ], // trees?
-    regionalResources: [
+
+    resources: [
       // Arktische Hochinsel / max 4
       "Gas", // immer 13
 
@@ -70,6 +74,7 @@ export default [
       "Gold_ore_9", // immer 1-2
       // Gas Gold entweder oder
     ],
-    hasNewsEffect: false,
+    hasPropogandaEffect: false,
+    dlc: 3,
   },
 ]

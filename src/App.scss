@@ -1,1 +1,528 @@
 @import "scss/bootstrap/bootstrap";
+@import "./scss/bootstrap/hidden";
+@import "./scss/helpers";
+@import "./scss/themes";
+@import "./scss/cursors";
+
+
+$icon-size: 32px;
+$stock-icon-size: 30px;
+$need-icon-size: 26px;
+$workforce-icon-size: 26px; //schön: 32px;
+$buildingtype-icon-size: 33px;
+
+
+$producer-input-height: 30px;
+$producer-input-width: 38px !important; //50px; schön
+$population-input-height: 30px;
+$population-input-width: 50px;
+
+$chart-size: 30px;
+
+
+
+.Paypal-modal {
+    .modal-header {
+        align-items: center;
+    }
+    .modal-body {
+        a.paypal {
+            @extend .btn, .btn-primary, .mr-2;
+        }
+    }
+    .modal-footer {
+        justify-content: center;
+    }
+}
+/*
+ * globale Elemente
+ */
+body {
+    img {
+        height: $icon-size;
+        width: $icon-size;
+    }
+
+    .DataInput {
+        @extend .form-control, .d-inline-block, .p-1, .text-center;
+
+        height: $population-input-height;
+        width: 50px;
+    //}
+    //input[type="text"] {
+        background-color: rgba(255, 255, 75, 0.3);
+        color: rgb(33, 37, 41);
+        font-size: .875rem;
+        &:disabled {
+            background-color: rgba(255, 255, 75, 0.2);
+        }
+    }
+
+    .ProducerInput { /*weil auch in popover*/
+        height: $producer-input-height;
+        width: $producer-input-width;
+        @extend .mx-1;
+    }
+
+    .PopulationInput {
+        //@extend .mx-1;
+    }
+
+    .ResourceInputWrap {
+        @extend .d-inline-block, .mr-3, .mb-1;
+
+        .ResourceInput {
+            @extend .ml-1;
+            height: $producer-input-height;
+            width: 28px;
+        }
+    }
+
+    .productivity_percent {
+        @extend .d-inline-block, .text-center;
+        width: 36px;
+    }
+
+    .PopoverWithTabsWrap {
+        @extend .d-inline-block;
+        //@extend .mx-1;
+    }
+
+    img.GoodMediaObject {
+        height: $icon-size;
+        width: $icon-size;
+    }
+
+    .Chart {
+        @extend .d-inline-block;
+        height: $chart-size;
+        width: $chart-size;
+    }
+
+    button[disabled] {
+        cursor: inherit;
+    }
+
+    button.sm {
+        //@extend .btn;
+        @extend .px-1, .py-0;
+        //vertical-align: inherit;
+
+        &:not(.btn-nocolor):not(.btn-primary):not(.btn-success):not(.btn-info):not(.btn-warning):not(.btn-danger):not(.danger) {
+            @extend .btn-secondary;
+        }
+
+        &.danger {
+            @extend .btn-danger;
+        }
+
+
+        //&:not(:last-child) {
+        //    @extend .mr-1;
+        //}
+
+        > img {
+            height: 29px;
+            width: 29px;
+        }
+    }
+
+    .ItemSelect {
+        border: 1px solid black;
+
+        > select {
+            width: 57px;
+            border-left: 0px;
+            border-right: 0px;
+            border-top: 0px;
+        }
+    }
+
+    .CultureSelect {
+        input[type="checkbox"] {
+            @extend .mr-1;
+        }
+    }
+
+    div.description {
+        @extend .font-italic, .text-muted, .mb-2;
+        &.variant1 {
+            @extend .mb-1;
+        }
+    }
+
+    .PopoverWithTabs { /*popover wird direkt im body gerendert*/
+        button.sm {
+            &:not(:last-child) {
+                @extend .mr-1;
+            }
+        }
+
+        &.BuildingContextMenu-popover {
+            /*popover wird direkt im body gerendert*/
+            .ProducerArea {
+                @extend .text-nowrap;
+                @extend .mb-1;
+
+                .OptimizationToolbar {
+                    @extend .d-inline-block, .float-right;
+                }
+                .SetDefaultArea {
+                    //@extend .mr-0;
+                    //@extend .mr-1;
+                }
+
+                .SetElectricity {
+                    width: 22px;
+                    @extend .mr-0, .ml-1;
+                }
+
+                .ProductivityInput {
+                    @extend .mx-1;
+                    width: $producer-input-width + 5;
+                    &:invalid {
+                        box-shadow: 0 0 0 2px lighten($red, 30%);
+
+                    }
+                }
+
+                .ProducerInput {
+                    /*bei global*/
+                }
+
+                .ItemSelect {
+                    @extend .d-inline-block;
+
+                    &:first-of-type {
+                        @extend .ml-1;
+                    }
+
+                    &:last-of-type {
+                        @extend .mr-1;
+                    }
+                }
+            }
+
+                label.IslandSharing {
+                    //margin-left: 0;
+                    margin-bottom: 0;
+                    //vertical-align: text-bottom;
+
+                    input {
+                        //margin-left: 0;
+                    }
+                }
+
+            .IslandSync {
+                @extend .d-flex;
+
+                .DataInput {
+                    @extend .mx-1;
+                }
+            }
+        }
+
+        @extend .d-inline-block;
+
+        .tabIcon {
+            height: 28px;
+            width: 28px;
+        }
+
+        .popover {
+            max-width: none;
+
+            .popover-header {
+                @extend .p-0, .border-0;
+                min-width: 216px;
+
+                .nav-link {
+                    height: 30px
+                }
+            }
+
+            .tab-pane {
+                min-height: 80px;
+
+                hr {
+                    @extend .my-2;
+                }
+                div.description {
+                    //globel
+                }
+
+                > div:last-of-type {
+                    @extend .mb-1;
+                }
+            }
+        }
+    }
+
+    .BuildingButton {
+        @extend .p-0, .mr-0;
+    }
+
+    /* {
+        !* same duration for highlight for fade-out *!
+        transition: all .2s ease-out;
+
+        &.hi-neededBy {
+            box-shadow: inset 0 0 2px #98f9c5, 0 0 5px #98f9c5;
+            //background-color: #98f9c5;
+            //transition: all 1s ease-in-out;
+            transition: all .1s ease-out; !*debug only*!
+        }
+
+        &.hi-needs {
+            box-shadow: inset 0 0 2px #f98e44, 0 0 5px #f98e44;
+            //background-color: #f98e44;
+            //transition: all 1s ease-in;
+            transition: all .1s ease-out; !*debug only*!
+        }
+
+        &.hi-self {
+            box-shadow: inset 0 0 5px 0 #a4b7f9;
+            transition: all .1s ease-out;
+        }
+
+        &.hi-extraOutput {
+            box-shadow: inset 0 0 5px 0 #21e2ff;
+            transition: all .1s ease-out;
+        }
+    }*/
+
+    input.uuid {
+        width: 295px;
+    }
+
+    .scroll-icon {
+        background-image: url("data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMTAwIDEwMDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwYXRoIGQ9Ik0zMiw0MXYxOGMwLDkuOSw4LjEsMTgsMTgsMThjOS45LDAsMTgtOC4xLDE4LTE4VjQxYzAtOS45LTguMS0xOC0xOC0xOEM0MC4xLDIzLDMyLDMxLjEsMzIsNDF6IE01MCwyN2M3LjcsMCwxNCw2LjMsMTQsMTQgIHYxOGMwLDcuNy02LjMsMTQtMTQsMTRzLTE0LTYuMy0xNC0xNFY0MUMzNiwzMy4zLDQyLjMsMjcsNTAsMjd6Ij48L3BhdGg+PHBhdGggZD0iTTUwLDQ0YzEuMSwwLDItMC45LDItMnYtNmMwLTEuMS0wLjktMi0yLTJzLTIsMC45LTIsMnY2QzQ4LDQzLjEsNDguOSw0NCw1MCw0NHoiPjwvcGF0aD48cGF0aCBkPSJNNDguNiw5Mi40QzQ5LDkyLjgsNDkuNSw5Myw1MCw5M3MxLTAuMiwxLjQtMC42bDUtNWMwLjgtMC44LDAuOC0yLDAtMi44cy0yLTAuOC0yLjgsMEw1MCw4OC4ybC0zLjYtMy42ICBjLTAuOC0wLjgtMi0wLjgtMi44LDBjLTAuOCwwLjgtMC44LDIsMCwyLjhMNDguNiw5Mi40eiI+PC9wYXRoPjxwYXRoIGQ9Ik00OC42LDcuNmwtNSw1Yy0wLjgsMC44LTAuOCwyLDAsMi44QzQ0LDE1LjgsNDQuNSwxNiw0NSwxNnMxLTAuMiwxLjQtMC42bDMuNi0zLjZsMy42LDMuNkM1NCwxNS44LDU0LjUsMTYsNTUsMTYgIHMxLTAuMiwxLjQtMC42YzAuOC0wLjgsMC44LTIsMC0yLjhsLTUtNUM1MC42LDYuOCw0OS40LDYuOCw0OC42LDcuNnoiPjwvcGF0aD48L3N2Zz4=");
+    }
+}
+
+.HeaderCard,
+.Island-Card,
+{
+    @extend .my-3;
+}
+
+.HeaderCard {
+    .WorldBar,
+    {
+        @extend .bar;
+
+        //@extend .mb-2;
+        .WorldButton {
+            //@extend .mr-0;
+        }
+    }
+
+    .WorldButton,
+    .IslandButton,
+    {
+        @extend .mr-2, .mb-2;
+    }
+
+    .WorldButton {
+        > img {
+            filter: sepia(1) saturate(3000%) hue-rotate(-55deg) drop-shadow(0 0 1px red);
+            height: 30px;
+            width: 30px;
+        }
+    }
+
+    .IslandBar {
+        @extend .my-n2;
+        //@extend .overflow-auto, .text-nowrap;
+
+        > .addIsland,
+        > .unlock {
+            //@extend .py-0; // für mit <Icon>
+            @extend .mr-2, .mb-2, .px-2;
+        }
+    }
+}
+
+//10 14 /  15 8
+
+
+.Island-Card {
+    .Island-Header {
+
+    }
+
+    img.need { // .NeedSwitch
+        height: $need-icon-size;
+        width: $need-icon-size;
+    }
+
+    .Population {
+        .IslandPopulationHeader {
+
+        }
+        .IslandWorkforce {
+            .PopulationInput {
+                width: $population-input-width + 10;
+            }
+        }
+
+        .AreaPopulation {
+            .UpgradeButton {
+                @extend .btn, .btn-link;
+                @extend .mx-1, .p-0;
+                &:hover {
+                    @extend .btn-light;
+                }
+
+                img {
+                    @extend .i16;
+                    filter: grayscale(1) contrast(0);
+
+                }
+            }
+
+            .PopulationTownhallItems {
+                @extend .mt-1;
+                @extend .d-inline-block;
+
+                .ItemSelect {
+                    @extend .d-inline-block;
+
+                    &:first-of-type {
+                        @extend .ml-1;
+                    }
+
+                    &:last-of-type {
+                        @extend .mr-1;
+                    }
+                }
+
+                select {
+                    @extend .d-inline-block, .mr-1, .border-dark, .border-left-0, .border-bottom-0
+                }
+            }
+        }
+
+        .IslandWorkforce,
+        .IslandNeeds,
+        .AreaPopulation,
+        {
+            @extend .mb-2; //, .mr-2;
+
+            button {
+                //@extend .small, .mb-1;
+                //@extend .w-100;
+            }
+
+
+        }
+
+        .PopulationInput {
+            height: $population-input-height;
+            width: $population-input-width;
+        }
+    }
+
+    .Production {
+        .ColStocks {
+            max-width: 260px;
+
+            .sm {
+                img {
+                    //@extend .mr-1;
+                    height: 25px;
+                    width: 25px;
+                }
+            }
+
+
+            .Good {
+                @extend .mb-1, .d-inline-block;
+                @extend .mr-2;
+
+                .media-left {
+                    //@extend .mr-2;
+                    img.GoodMediaObject {
+                        height: $stock-icon-size;
+                        width: $stock-icon-size;
+                    }
+                }
+
+                .media-body {
+                    @extend .align-self-center;
+                    //@extend .form-inline;
+                }
+            }
+        }
+
+        .ColProducersOfType {
+            //max-width: 238px;
+            max-width: 310px;
+
+            &.col-sm { // sm={type==='Konsumgüter' ? '' : 'auto'}
+                .Building {
+                    //@extend .d-inline-block;
+                    //@extend .text-nowrap;
+                }
+            }
+
+            .ProducersOfType {
+                //-webkit-columns: 2;
+                //-moz-columns: 2;
+                //columns: 1;
+                //max-width: 238px;
+                //max-height: 800px;
+
+                > img.buildingtypes {
+                    @extend .d-block, .mb-3;
+                    @extend .mx-auto;
+                    //@extend .text-center;
+
+                    //@extend .mr-1;
+                    height: $buildingtype-icon-size;
+                    width: $buildingtype-icon-size;
+                }
+
+
+                .Building {
+                    @extend .form-inline;
+                    padding: 0.10rem;
+                    margin: 0.05rem;
+                    //@extend .d-inline-block;
+                    //@extend .text-nowrap;
+                    //@extend .align-self-center;
+
+                    .media-body {
+                        @extend .form-inline;
+
+                        .trash-button {
+                            @extend .px-1, .py-0, .mr-1;
+                            width: 30px;
+                        }
+
+                        .Chart {
+                            @extend .mr-1;
+                        }
+                    }
+
+                    .PopoverWithTabsWrap {
+                        > button {
+                            @extend .mr-1;
+                        }
+
+                        .BuildingContextMenu-popover {
+                            /*popover wird direkt im body gerendert*/
+                        }
+                    }
+                }
+
+                .build-icon {
+                    height: 26px;
+                    width: 26px;
+                    filter: drop-shadow(0 0 1px var(--white));
+                }
+            }
+        }
+    }
+
+}

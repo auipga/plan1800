@@ -1,0 +1,30 @@
+html {
+    overflow: -moz-scrollbars-vertical;
+    overflow-y: scroll;
+}
+
+
+/*
+ * .i10 - .i40 für img
+ */
+@for $i from 10 through 40 {
+    .i#{$i} {
+        width: 0px + $i !important;
+        height: 0px + $i !important;
+    }
+}
+
+
+.text-underline {
+    text-decoration: underline;
+}
+
+select {
+    &:disabled {
+        @extend .text-muted, .font-italic;
+    }
+}
+
+.bar {
+    @extend .text-nowrap, .d-inline-block;
+}

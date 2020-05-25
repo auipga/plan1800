@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types/';
+// import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 export default class NeedSwitch extends Component {
@@ -26,7 +26,7 @@ export default class NeedSwitch extends Component {
 
     return (
       <img src={"./icons/goods/" + needKey + ".png"} alt={needKey} title={this.title}
-           className={'mr-1 need ' + classNames({"prohibited": !enabled, "locked": !needed})}
+           className={'NeedSwitch mr-1 need ' + classNames({"prohibited": !enabled, "locked": !needed})}
            onClick={toggle}
       />
     )
@@ -34,9 +34,9 @@ export default class NeedSwitch extends Component {
 }
 
 NeedSwitch.propTypes = {
-  need: PropTypes.object.isRequired,
-  nIndex: PropTypes.number.isRequired,
-  needed: PropTypes.bool.isRequired,
-  prohibitedNeeds: PropTypes.array.isRequired,
-  fnSetIslandProhibitedNeeds: PropTypes.func.isRequired,
+  // need: PropTypes.object.isRequired,
+  // nIndex: PropTypes.number.isRequired,
+  // needed: PropTypes.bool.isRequired,
+  // prohibitedNeeds: PropTypes.array.isRequired,
+  // fnSetIslandProhibitedNeeds: PropTypes.func.isRequired,
 };

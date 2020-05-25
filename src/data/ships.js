@@ -13,6 +13,7 @@ export default [
     },
     price: { buy: 5000, sell: -0 },
     unlock: {tierId: 1, requirement: 0},
+    influence: {costs: 0, category: undefined},
   },
   {
     key: "Schooner",
@@ -21,6 +22,7 @@ export default [
     expeditionBonus: { Might: 0, Navigation: 20, PerkTradeShip: 1, PerkSailingShip: 1, unknown: 10,/**/ },
     price: { buy: 5000, sell: 2500 },
     unlock: {tierId: 2, requirement: 150},
+    influence: {costs: 1, category: 'trade'},
   },
   {
     key: "Gunboat",
@@ -29,6 +31,7 @@ export default [
     expeditionBonus: { Might: 10, Navigation: 20, PerkMilitaryShip: 1, PerkSailingShip: 1, },
     price: { buy: 12500, sell: 6750 },
     unlock: {tierId: 2, requirement: 150},
+    influence: {costs: 2, category: 'military'},
   },
   {
     key: "Frigate",
@@ -37,6 +40,7 @@ export default [
     expeditionBonus: { Might: 20, Navigation: 10, PerkMilitaryShip: 1, PerkSailingShip: 1, },
     price: { buy: 20000, sell: 10000 },
     unlock: {tierId: 3, requirement: 1},
+    influence: {costs: 4, category: 'military'},
   },
   {
     key: "Clipper",
@@ -45,6 +49,7 @@ export default [
     expeditionBonus: { Might: 0, Navigation: 20, PerkTradeShip: 1, PerkSailingShip: 1, unknown: 50,/**/ },
     price: { buy: 15000, sell: 7500 },
     unlock: {tierId: 3, requirement: 750},
+    influence: {costs: 2, category: 'trade'},
   },
   {
     key: "Ship-of-the-line",//Liner
@@ -53,6 +58,7 @@ export default [
     expeditionBonus: { Might: 50, Navigation: 0, PerkMilitaryShip: 1, PerkSailingShip: 1, unknown: 20,/**/ },
     price: { buy: 25000, sell: -12500 },
     unlock: {tierId: 3, requirement: 750},
+    influence: {costs: 8, category: 'military'},
   },
   {
     key: "Cargo_ship",
@@ -61,6 +67,7 @@ export default [
     expeditionBonus: { Might: 0, Navigation: 20, PerkTradeShip: 1, PerkSteamShip: 1, },
     price: { buy: 25000, sell: -12500 },
     unlock: {tierId: 4, requirement: 500},
+    influence: {costs: 3, category: 'trade'},
   },
   {
     key: "Battle_cruiser",
@@ -69,6 +76,7 @@ export default [
     expeditionBonus: { Might: 70, Navigation: 0, PerkMilitaryShip: 1, PerkSteamShip: 1, },
     price: { buy: 25000, sell: -12500 },
     unlock: {tierId: 4, requirement: 500},
+    influence: {costs: 12, category: 'military'},
   },
   {
     key: "Oil_tanker",
@@ -77,6 +85,7 @@ export default [
     expeditionBonus: { Might: 0, Navigation: 0, PerkTradeShip: 1, PerkSteamShip: 1, },
     price: { buy: 25000, sell: -12500 },
     unlock: {tierId: 4, requirement: 500},
+    influence: {costs: 5, category: 'trade'},
   },
   {
     key: "Monitor",
@@ -85,6 +94,7 @@ export default [
     expeditionBonus: { Might: 30, Navigation: 20, PerkMilitaryShip: 1, PerkSteamShip: 1, },
     price: { buy: 25000, sell: -12500 },
     unlock: {tierId: 5, requirement: 1},
+    influence: {costs: 6, category: 'military'},
   },
   {
     key: "Airship",
@@ -93,6 +103,7 @@ export default [
     expeditionBonus: { Might: -1, Navigation: -1, },
     price: { buy: 2, sell: -1 },
     unlock: {tierId: 9, requirement: 500},
+    influence: {costs: 5, category: 'trade'},
   },
   {
     key: "Great_eastern",
@@ -101,5 +112,6 @@ export default [
     expeditionBonus: { Might: 50, Navigation: 50, PerkMilitaryShip: 1, PerkSteamShip: 1, },
     price: { buy: 25000, sell: -12500 },
     unlock: {item: "Specialist: Rohit Bhargava, the Naval Architect (presumed)"},
+    influence: {costs: 0, category: undefined},
   },
 ]

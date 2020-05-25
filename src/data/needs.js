@@ -17,7 +17,7 @@ export default [
     tierIDs: [1, 2],
     requirement: 50,
     consumption_old: [2/800, 2/800],// produces 2t/m and satisfies 800 people
-    consumption: [0.0004166667, 0.0008333334],
+    consumption: [0.0004166667, 0.0008333334], // per residence and second
     influx: [3, 3],
     income: [1, 2],
     happiness: [0, 0],

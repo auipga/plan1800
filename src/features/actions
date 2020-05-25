@@ -1,0 +1,35 @@
+just to copy actions to the redux console
+
+
+{ type: 'IO_CONNECT', payload:{token:'abc'} }
+
+Debug
+{ type: 'STATE_RESET',   payload: {} }
+{ type: 'STATE_SAVE_AS', payload: {name:'save1'} }
+{ type: 'STATE_LOAD',    payload: {name:'save1'} }
+
+{ type: 'personal/island', payload: { id: 3 } }
+{ type: 'personal/upsert', payload: { onlineToken: 'abc', username: 'default' } }
+{ type: 'personal/upsert', payload: { onlineToken: 'abc', username: 'CG1' } }
+{ type: 'personal/upsert', payload: { onlineAutoRejoin: false } }
+
+{type: 'sharings/add', payload: {GUID: 10, source: 1, target: 2} }
+{type: 'sharings/remove', payload: {GUID: 10, source: 1, target: 2} }
+
+{ type: 'debug/destroy', payload: 'show_xxx' }
+
+{ type: 'islands/destroy', payload: { islandId: 10 } }
+productivity
+residences
+
+{ type: 'routes/upsert', payload: { sourceIslandId: 1, targetIslandId: 2, GUID: 1010294, number: null } }
+
+{ type: 'islands/destroy', payload: { islandId: 10 } }
+
+areas
+{ type: 'areas/destroy', payload: { areaId: 41 } }
+
+
+{ type: 'producers/update', payload: { where: (x)=>x.areaId===2 && x.GUID===1010266, set:{io:[{good: 1010197, Cycle: 2}]}}}
+
+{ type: 'producers/changeByProductivity', payload: { where: (x)=>x.areaId===2 && x.GUID===1010266, set:{io:[{good: 1010197, Cycle: 2}]}}}

@@ -1,0 +1,38 @@
+//@import "~bootstrap/scss/variables"; // unnötig aber klickbar :)
+
+//$white:    #f11ff1;
+// Grid breakpoints
+//
+// Define the minimum dimensions at which your layout will change,
+// adapting to different screen sizes, for use in media queries.
+
+
+$grid-breakpoints: (
+  xxs: 0,//
+  xs: 384px,//
+  //xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+);
+
+// Grid containers
+//
+// Define the maximum width of `.container` for different screen sizes.
+
+$container-max-widths: (
+  xs: 360px,//
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px
+);
+
+
+// original/unchanged:
+$displays: none, inline, inline-block, block, table, table-row, table-cell, flex, inline-flex !default;
+/* for .only-large { @extend .d-none, .d-sm-inherit } */
+$displays: append($displays, inherit);
+
+$popover-max-width:                 100%; //276px !default;

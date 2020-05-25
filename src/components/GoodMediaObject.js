@@ -1,11 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types/';
+import React, {memo} from 'react';
+import PropTypes from 'prop-types';
 import {trans} from "../functions/translation";
 import {Media} from "reactstrap";
 import {isObject} from "reactstrap/es/utils";
 
 const GoodMediaObject = (props) => {
-  const {producer, px, middle = false, mr = false} = props
+  const {producer} = props
+
   let {good} = props
   let title = good
 
@@ -15,11 +16,9 @@ const GoodMediaObject = (props) => {
   }
 
   return (
-    <Media object middle={middle}
+    <Media object
       src={"./icons/goods/" + good + ".png"}
-      className={props.className + (mr ? ' mr-2' : '')}
-      // className={'producer '+classNames({"locked": !isUnlocked})}
-      style={px === undefined ? {} : {height: px, width: px}}
+      className={props.className + ' GoodMediaObject'}
       alt={title}
       title={title}
     />
@@ -29,10 +28,7 @@ const GoodMediaObject = (props) => {
 GoodMediaObject.propTypes = {
   producer: PropTypes.object,
   good: PropTypes.string,
-  mr: PropTypes.bool,
-  middle: PropTypes.bool,
-  px: PropTypes.number,
   className: PropTypes.string,
 }
 
-export default GoodMediaObject
+export default memo(GoodMediaObject)

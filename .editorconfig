@@ -14,3 +14,7 @@ indent_size = 2
 
 [*.js]
 indent_size = 2
+
+[*.xml]
+max_line_length = 50000
+indent_size = 2

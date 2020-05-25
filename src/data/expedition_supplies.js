@@ -55,6 +55,20 @@ export default {
   Wood:                  { Crafting:        10                },
   Wool:                  { Crafting:        10                },
   Work_clothes:          { Medicine:        20                },
+  Bärenfell:             { Hunting:         20, Melee: 10     },
+  Huskys:                { Hunting:         20                },
+  Oil:                   { Extra_rations:    5                },
+  Rentierfleisch:        { Extra_rations:   10                },
+  Pemmikan:              { Extra_rations:   10                },
+  Gänsefedern:           { Extra_rations:   10                },
+  Schlafsäcke:           { Extra_rations:   10                },
+  Parkas:                { Extra_rations:   10                },
+  Walöl:                 { Crafting:        10                },
+  Robbenfelle:           { Crafting:        10                },
+  Schlitten:             { Crafting:        10                },
+  Hundeschlitten:        { Crafting:        15                },
+  Gas:                   { Crafting:        20                },
+  Öllampen:              { Faith:           10                },
 }
 // eslint-disable-next-line
 const types3 = {
