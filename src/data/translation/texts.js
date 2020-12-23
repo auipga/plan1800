@@ -7,7 +7,15 @@ const anno_strings = {
     142451: "Erntedankfest",
     20110: "Städtischer Karneval",
     111831: "Das Fest der Vernunft",
-
+    /*
+     * - data from annolayouts.de/data/texts_de.json
+     * - regex search-replace:
+     *   search: `\{\n      \"GUID\"\: (\d+)\,\n      \"Text\"\: \"(.*)\"\n    \}`
+     *   replace: `$1: "$2"`
+     * - sort lines
+     * - compare new data with the folowing lines,
+     *   ensure to remove encoding problems
+     */
     220: "Dr. Hugo Mercier",
     1089: "Robustes und verlässliches Handelsschiff mit hoher Frachtkapazität.",
     1105: "Frachtplätze",
@@ -3146,7 +3154,15 @@ const anno_strings = {
     142451: "Harvest Festival",
     20110: "Town Carnival",
     111831: "Festival of Reason",
-
+    /*
+     * - data from annolayouts.de/data/texts_en.json
+     * - regex search-replace:
+     *   search: `\{\n      \"GUID\"\: (\d+)\,\n      \"Text\"\: \"(.*)\"\n    \}`
+     *   replace: `$1: "$2"`
+     * - sort lines
+     * - compare new data with the folowing lines,
+     *   ensure to remove encoding problems
+     */
     30: "Worker",
     220: "Dr. Hugo Mercier",
     1089: "A sturdy and reliable trade ship, with a large cargo capacity.",
