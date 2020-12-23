@@ -7,11 +7,7 @@ const anno_strings = {
     142451: "Erntedankfest",
     20110: "Städtischer Karneval",
     111831: "Das Fest der Vernunft",
-    // 116070: "Unaaq",
-    // 116130: "Inuit-Näherin",
-    // 116132: "Geübter Inuit-Näher",
-    // 116164: "Gløgg-Spender",
-    // 800032: "Kampfkraft",
+
     220: "Dr. Hugo Mercier",
     1089: "Robustes und verlässliches Handelsschiff mit hoher Frachtkapazität.",
     1105: "Frachtplätze",
@@ -3150,8 +3146,7 @@ const anno_strings = {
     142451: "Harvest Festival",
     20110: "Town Carnival",
     111831: "Festival of Reason",
-    // 190595: "Electric Glass Producer",
-    // 191083: "Elk",
+
     30: "Worker",
     220: "Dr. Hugo Mercier",
     1089: "A sturdy and reliable trade ship, with a large cargo capacity.",
