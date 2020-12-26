@@ -2,8 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 
-// eslint-disable-next-line no-unused-vars
-import {Button, Input} from "reactstrap";
+import {Button} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 import DataInput from "../../../global/DataInput";

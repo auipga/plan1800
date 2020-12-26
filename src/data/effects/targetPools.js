@@ -1441,8 +1441,8 @@ export const residenceItemTargetGUIDs = (worldtypeId) => {
       ];
     case 2:
       return [
-        101254,/* 6 Jornalero-Haus */
-        101255,/* 7 Obrero-Haus */
+        101254, /* 6 Jornalero-Haus */
+        101255, /* 7 Obrero-Haus */
         192446, /* 5,7 Investoren- und Obrerohäuser */
         190762, /* 1-7 Wohngebäude */
       ];

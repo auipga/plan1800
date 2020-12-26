@@ -78,6 +78,17 @@ const andere = [
 ]
 
 export default [
+  /*
+  *
+  * replace 1:
+  * \{\n          "Product": (\d+),\n          "Amount": (\d+)\n        \}
+  * {"Product": $1, "Amount": $2}
+  *
+  * replace 2:
+  * \{\n          "Ingredient": (\d+),\n          "Amount": (\d+)\n        \}
+  * {"Ingredient": $1, "Amount": $2}
+  *
+  * */
   /**
    * Farmers
    */
