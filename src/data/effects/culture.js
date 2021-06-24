@@ -102,10 +102,10 @@ export const festivals = [
         Productivity: 50,
         Maintenance: -100,
         AdditionalOutput: [
-          {Product: 1010257, Cycle: 99/*todo*/, Amount: 1}, //rum
-          {Product:  120016, Cycle: 99/*todo*/, Amount: 1}, //champagne
-          {Product: 1010259, Cycle: 99/*todo*/, Amount: 1}, //cigars
-          {Product: 1010258, Cycle: 99/*todo*/, Amount: 1}, //chocolate
+          {Product: 1010257, Cycle: 8, Amount: 1}, //rum
+          {Product:  120016, Cycle: 9, Amount: 1}, //champagne
+          {Product: 1010259, Cycle: 10, Amount: 1}, //cigars
+          {Product: 1010258, Cycle: 11, Amount: 1}, //chocolate
         ],
       },
     ]
@@ -144,8 +144,30 @@ export const festivals = [
     GUID: 111831,
     filename: 'Festival_of_Reason.png',
     name: "Das Fest der Vernunft", //"Festival of Reason",
-    effects: [
-
+    effectsToIsland: [
+      {
+        Attractiveness: +250,
+        Happiness: +25,
+      },
+    ],
+    effectsToResidences: [ // like TownHall, ArticLodge
+      {
+        targetGUIDs: [190762],
+        attribute: 'GoodConsumptionUpgrade',
+        GoodConsumptionUpgrade: [
+          {ProvidedNeed: 1010214, AmountInPercent: -100}, //schnapps
+          {ProvidedNeed: 1010216, AmountInPercent: -100}, //beer
+          {ProvidedNeed: 1010257, AmountInPercent: -100}, //rum
+          {ProvidedNeed: 120016,  AmountInPercent: -100}, //champagne
+        ],
+      }
+    ],
+    effectsToProducers: [ // like TradeUnion, HarbourMasters, ArticLodge
+      {
+        targetGUIDs: ['alle'],//
+        Productivity: +20,
+        Maintenance: -10,
+      },
     ]
   },
 ]

@@ -47,7 +47,8 @@ const ProducerSumInput = (props) => {
 ProducerSumInput.propTypes = {
   // GUID: PropTypes.number.isRequired,
   GUID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired, //nur wegen fake_buildings z.B. GUID: "112690_1"
-  firstArea: PropTypes.object.isRequired,
+  firstArea: PropTypes.object.isRequired, //todo kann weg + da wo es herkommt
+  disabled: PropTypes.bool,
 }
 
 export default ProducerSumInput

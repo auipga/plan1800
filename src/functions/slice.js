@@ -140,7 +140,7 @@ export const changeByCulture = (state, action) => {
       const resolvedTargetGUIDs = resolveTargetGUIDs(eff.targetGUIDs)
       const findTarget = x => findTargetLocationXor(x, {islandId, areaId, pGUID}, resolvedTargetGUIDs)
 
-      newState = applyEffects(state, findTarget, relevantEffects, {GUID, ...eff}, isRemoval)
+      newState = applyEffects(newState, findTarget, relevantEffects, {GUID, ...eff}, isRemoval, additional?.deltaPalaceLevel)
     }
   })
 

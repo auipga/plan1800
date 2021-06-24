@@ -47,7 +47,7 @@ export default [
   },
   { // "The Arctic"
     id: 4,
-    GUID: 'The Arctic',
+    GUID: 180045,
     worldTypeId: 3,
     // socialClassIDs: [8, 9],
     tierId: 4,

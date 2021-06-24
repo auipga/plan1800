@@ -28,7 +28,7 @@ const ResetButton = (props) => {
     <Button
       size={props.size}
       disabled={props.disabled}
-      onClick={reset} color={'secondary'} className='mr-2' title={!props.withLabel && text_plan_ucf('close')}>
+      onClick={reset} color={'secondary'} className='mr-2' title={props.withLabel ? text_plan_ucf('close') : null}>
       <FontAwesomeIcon icon="times" fixedWidth />
       {props.withLabel&&` ${text_plan_ucf('close')}`}
     </Button>

@@ -140,11 +140,11 @@ const LoadSave = () => {
             </div>
 
             <div>
-              <Button onClick={load} color={'secondary'} className='mr-2' size='sm' disabled={!selection} title={withLabel ? false : text_plan_ucf('load')}>
+              <Button onClick={load} color={'secondary'} className='mr-2' size='sm' disabled={!selection} title={withLabel ? null : text_plan_ucf('load')}>
                 <FontAwesomeIcon icon="check"/> {withLabel && text_plan_ucf('load')}
               </Button>
 
-              <Button onClick={trash} color={'secondary'} size='sm' disabled={!selection} title={withLabel ? false : text_plan_ucf('trash')}>
+              <Button onClick={trash} color={'secondary'} size='sm' disabled={!selection} title={withLabel ? null : text_plan_ucf('trash')}>
                 <FontAwesomeIcon icon="trash-alt"/> {withLabel && text_plan_ucf('trash')}
               </Button>
             </div>

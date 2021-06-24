@@ -52,15 +52,19 @@ const itemCollectionSlice = createSlice({
       return obj.push(state, genObj(islandId, areaId, slot, GUID))
     },
     removeItem: (state, action) => {
-      const {areaId, slot} = action.payload
+      const {areaId, usageIn, slot} = action.payload
 
       const x = state.find(a => a.areaId === areaId && a.slot === slot)
       if (!x) {
         return /*state*/
       }
 
-      action.asyncDispatch({type: 'residences/changeByItem', payload: {areaId, GUID: x.GUID, isRemoval: true}})
-      action.asyncDispatch({type: 'producers/changeByItem', payload: {areaId, GUID: x.GUID, isRemoval: true}})
+      if (usageIn === 'ArticLodge' || usageIn === 'TownHall') {
+        action.asyncDispatch({type: 'residences/changeByItem', payload: {areaId, GUID: x.GUID, isRemoval: true}})
+      }
+      if (usageIn === 'ArticLodge' || usageIn === 'TradeUnion' || usageIn === 'HarbourMasters') {
+        action.asyncDispatch({type: 'producers/changeByItem', payload: {areaId, GUID: x.GUID, isRemoval: true}})
+      }
 
       return state.filter(a => a.areaId !== areaId || a.slot !== slot)
     },

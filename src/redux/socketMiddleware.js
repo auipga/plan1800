@@ -105,7 +105,7 @@ const socketMiddleware = () => {
     })
   }
   const doLeave = (store) => {
-    store.dispatch(ioStartFailed()) // same as left
+    store.dispatch(ioDisconnect()) // same as left
     if (socket) {
       socket.emit('leave')
       socket.off('action')

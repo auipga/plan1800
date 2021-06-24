@@ -44,16 +44,16 @@ const BuildingContextMenu = (props) => {
     }, //  sync sync-alt retweet share-alt-square
   ]
 
-  // const sum = useSelector(state => state.producerSums.find(x => x.islandId === activeIslandId && x.GUID === GUID))
+  const visible = tabs.filter(t => !t.hidden).length > 0
 
   return (<div className={'PopoverWithTabsWrap '+id}>
       <Button id={'popover_'+id} type='button' className='sm' onClick={blur} tabIndex="-1"
-              // disabled={!sum} überbleibsel
+              disabled={!visible}
       >
         {/*caret-right sliders-h bars ellipsis-v */}
         <FontAwesomeIcon icon={'sliders-h'} color={'#dddddd'}/>
       </Button>
-      <PopoverWithTabs id={id} tabs={tabs} placement='right-start' className={'BuildingContextMenu-popover'}>
+      {visible && <PopoverWithTabs id={id} tabs={tabs} placement='bottom-start' className={'BuildingContextMenu-popover'}>
 
         <TabPane tabId="Items">
           <div className='description'>{text_plan('description-area')}</div>{/*Create Trade Unions*/}
@@ -73,7 +73,7 @@ const BuildingContextMenu = (props) => {
           </div>
         </TabPane>
 
-      </PopoverWithTabs>
+      </PopoverWithTabs>}
     </div>
   )
 }

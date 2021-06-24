@@ -14,7 +14,7 @@ const hours = sum([/*ab 1.5.20:*/5, /*ab 1.4.20:*/23+41/60, 497+0/60, 15+20/60, 
 
 const paypalLink = (amount, text) => (<li>
   <ReactGA.OutboundLink
-    eventLabel={amount}
+    eventLabel={amount.toString()}
     to={'https://paypal.me/transfeld/'+amount} rel="noopener noreferrer" target="_blank"
     className='paypale'
   >{text}{amount && ` (${amount} €)`}</ReactGA.OutboundLink>

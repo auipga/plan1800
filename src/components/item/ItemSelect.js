@@ -23,7 +23,7 @@ const ItemSelect = (props) => {
     const value = parseInt(e.target.value)
 
     if (isNaN(value)) {
-      dispatch(itemCollectionSlice.removeItem({areaId, slot}))
+      dispatch(itemCollectionSlice.removeItem({areaId, usageIn, slot}))
     } else {
       dispatch(itemCollectionSlice.setItem({islandId: activeIslandId, areaId, usageIn, slot, GUID: value}))
     }
