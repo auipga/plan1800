@@ -1,14 +1,16 @@
-export default [
-  {
-    GUID: 1010343,
-    tierId: 1, // Farmers
-    Inputs: [
-      {GUID: 120020, Amount: 0.0, influx: 5},
-      {GUID: 1010200, Amount: 0.0004166667, influx: 3},
-      {GUID: 1010216, Amount: 0.000555556, influx: 0},
-      {GUID: 1010237, Amount: 0.000512821, influx: 2},
-    ]
-  },
+import {producers} from "./worldGeneration/buildings";
+
+const needsOfProducts = [
+{
+  GUID: 1010343,
+  tierId: 1, // Farmers
+  Inputs: [
+    {GUID: 120020, Amount: 0.0, influx: 5},
+    {GUID: 1010200, Amount: 0.0004166667, influx: 3},
+    {GUID: 1010216, Amount: 0.000555556, influx: 0},
+    {GUID: 1010237, Amount: 0.000512821, influx: 2},
+  ]
+},
   {
     GUID: 1010344,
     tierId: 2, // Workers
@@ -132,3 +134,13 @@ export default [
   },
 
 ]
+
+export const producersNeededPerTier = needsOfProducts.map(n => ({
+    GUID: n.GUID,
+    producerGUIDs: n.Inputs.map(
+      i => producers.filter(p => p.OutputProduct === i.GUID)?.map(x=>x.GUID)
+    ).flat()
+  })
+)
+
+export default needsOfProducts

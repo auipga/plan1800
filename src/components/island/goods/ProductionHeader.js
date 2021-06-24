@@ -14,6 +14,8 @@ import {producers} from "../../../data/worldGeneration/buildings";
 import {text_anno, text_plan, text_plan_ucf} from "../../../data/translation/texts";
 import {blur} from "../../../functions/helpers";
 import * as personalSlice from "../../../features/personalSlice";
+import needsOfProducts from "../../../data/needsOfProducts";
+import * as hl from "../../../functions/highlight";
 
 
 const ProductionHeader = (props) => {
@@ -24,6 +26,7 @@ const ProductionHeader = (props) => {
   const activeIslandId = useSelector(state => state.personal.islandId)
   // const island = useSelector(state => state.islands.find(i => i.id === activeIslandId))
 
+  const show_highlights = useSelector(state => state.debug).includes('show_highlights')
   const collapsed = useSelector(state => state.personal.collapsed)
   const c = 'Production'
   const dispatch = useDispatch()
@@ -51,6 +54,12 @@ const ProductionHeader = (props) => {
     blur(e)
     document.querySelectorAll('.BuildingButton'+preset).forEach(elem => elem.click())
   }
+  const handleMouseEnter = (populaGUID) => show_highlights &&
+    hl.highlight({GUID: populaGUID}, {
+      needed: needsOfProducts.find(n => n.GUID === populaGUID).Inputs.map(i => i.GUID),
+      provided: []
+    })
+  const handleMouseLeave = () => show_highlights && hl.highlight(null)
 
 
   return (
@@ -63,13 +72,13 @@ const ProductionHeader = (props) => {
       </Button>
 
       {props.isExpanded ? <span className='float-right'>
-        <FontAwesomeIcon icon='question-circle' fixedWidth className='text-muted' title={text_plan('buildPreset')} />
-
-        {worldType.workforceGUIDs.map((wId, key) => (
+        {worldType.popResGUIDs.map((populaGUID, key) => (
           <Button
-            key={wId}
-            className='sm mr-1' onClick={e => buildPreset(e, '.workforce-'+wId)}
-            title={text_anno(worldType.workforceGUIDs[key])}
+            key={populaGUID}
+            className='sm mr-1' onClick={e => buildPreset(e, '.neededBy-'+populaGUID)}
+            title={text_anno(worldType.populaGUIDs[key])}
+            onMouseEnter={e=>handleMouseEnter(populaGUID)}
+            onMouseLeave={e=>handleMouseLeave()}
           >
             <img src={"./icons/population/Workforce_" + worldType.socialClassIDs[key] + ".png"} alt='' className='i21'/>
           </Button>

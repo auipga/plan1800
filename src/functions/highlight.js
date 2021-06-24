@@ -1,3 +1,5 @@
+import {producersNeededPerTier} from "../data/needsOfProducts";
+
 const classname = {needs: 'hi-needs', neededBy: 'hi-neededBy', self: 'hi-self', extraOutput: 'hi-extraOutput'}
 const allHiClasses = Object.values(classname)
 const allHiSelector = allHiClasses.map(classname => `.${classname}`).join(', ')
@@ -12,6 +14,10 @@ export const workforceClasses = (producer) => {
   const workforceId = producer.Maintenance.find(m => workforceGUIDs.includes(m.Product))?.Product
   return workforceId ? (' workforce-'+workforceId) : ''
 }
+export const neederClasses = (producer) => producersNeededPerTier
+  .filter(n => n.producerGUIDs.includes(producer.GUID))
+  .map(pNPT => (' neededBy-'+pNPT.GUID)).join(' ')
+
 
 export const relevantGoodsBasic = (producer) => ({provided: [producer.OutputProduct], needed: producer.InputProducts})
 export const relevantGoodsAdvanced = (producers) => ({
@@ -39,11 +45,11 @@ export const highlight = (producer, relevantGoods) => {
   if (producer.GUID === 1010298) addClass(classname.self, '#prod1010304') // Köhlerei -> Kohlemine
 
   // needs / rot
-  addClass(classname.needs, relevantGoods.needed.map(gGUID => `.output-${gGUID}`).join(', '))
+  addClass(classname.needs, relevantGoods.needed?.map(gGUID => `.output-${gGUID}`).join(', '))
   // neededBy / grün
-  addClass(classname.neededBy, relevantGoods.provided.map(gGUID => `.input-${gGUID}`).join(', '))
+  addClass(classname.neededBy, relevantGoods.provided?.map(gGUID => `.input-${gGUID}`).join(', '))
   // extraOutput / blub
-  addClass(classname.extraOutput, relevantGoods.provided.filter(gGUID=>gGUID!==producer.OutputProduct).map(gGUID => `.main-output-${gGUID}`).join(', '))
+  addClass(classname.extraOutput, relevantGoods.provided?.filter(gGUID=>gGUID!==producer.OutputProduct).map(gGUID => `.main-output-${gGUID}`).join(', '))
 
   /*
      // stock: needs / rot
