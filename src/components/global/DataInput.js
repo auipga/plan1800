@@ -75,6 +75,7 @@ const DataInput = (props) => {
       // onWheel={handleWheel} /*doofX*/
       onKeyDown={handleKeyPress}
       disabled={props.disabled}
+      readOnly={props.readonly}
       title={props.title}
       // onTouchStart={e => console.log(e.type)}
       // onTouchCancel={e => console.log(e.type)}
@@ -94,6 +95,7 @@ DataInput.propTypes = {
 
   pattern: PropTypes.string,
   disabled: PropTypes.bool,
+  readonly: PropTypes.bool,
   title: PropTypes.string,
 }
 

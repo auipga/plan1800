@@ -19,7 +19,8 @@ const BuildingContextMenu = (props) => {
   const countIslands = useSelector(state => state.islands.length, shallowEqual)
 
 
-  const {GUID, producer_disabled} = props
+  const {producer} = props
+  const {GUID} = producer
   const id = 'BuildingContextMenu_'+GUID
 
   const tabs = [
@@ -28,13 +29,13 @@ const BuildingContextMenu = (props) => {
       // icon: "tools",
       img: "./icons/buildings/Trade_Union.png",
       // img: "./allicons/Icons/icon_guildhouse_2d_0.png",
-      hidden: producer_disabled
+      hidden: producer.disabled || producer.itemsDisabled
     }, // angle-double-up
     {
       name: "Sharings",
       icon: "sync",
       img: "./icons/Icon_traderoutes.png",
-      hidden: countIslands === 1
+      hidden: countIslands === 1 || producer.sharingDisabled
     }, //  sync sync-alt retweet share-alt-square
     {
       name: "Routes",

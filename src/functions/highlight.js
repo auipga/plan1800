@@ -8,8 +8,14 @@ export const ioClasses = (producer, relevantGoods) => (' main-output-'+producer.
   + relevantGoods.provided.reduce((classNames, good) => classNames+' output-'+good, '')
   + relevantGoods.needed.reduce((classNames, good) => classNames+' input-'+good, '')
 )
+const alternativeProducers = [
+  [1010298, 1010304],    // Kohlemine, Köhlerei
+  ["1010318_1", 124739], // (Fortschrittliche) Baumwollweberei
+  ["1010340_1", 124737], // (Fortschrittliche) Rumbrennerei
+  ["101252_1", 124738],  // (Fortschrittliche) Kaffeerösterei
+]
 
-const workforceGUIDs = [1010052, 1010115, 1010116, 1010117, 1010366, 1010367, 112653, 112654]
+const workforceGUIDs = [1010052, 1010115, 1010116, 1010117, 1010366, 1010367, 112653, 112654, 114340, 114341, 124478]
 export const workforceClasses = (producer) => {
   const workforceId = producer.Maintenance.find(m => workforceGUIDs.includes(m.Product))?.Product
   return workforceId ? (' workforce-'+workforceId) : ''
@@ -41,8 +47,11 @@ export const highlight = (producer, relevantGoods) => {
 
   // (stock:) self / blau
   addClass(classname.self, `#prod${producer.GUID}`)
-  if (producer.GUID === 1010304) addClass(classname.self, '#prod1010298') // Kohlemine -> Köhlerei
-  if (producer.GUID === 1010298) addClass(classname.self, '#prod1010304') // Köhlerei -> Kohlemine
+  alternativeProducers.forEach(value => {
+    const [alt1, alt2] = value
+    if (producer.GUID === alt1) addClass(classname.self, '#prod'+alt2)
+    if (producer.GUID === alt2) addClass(classname.self, '#prod'+alt1)
+  })
 
   // needs / rot
   addClass(classname.needs, relevantGoods.needed?.map(gGUID => `.output-${gGUID}`).join(', '))

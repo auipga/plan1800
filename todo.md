@@ -1,3 +1,44 @@
+
+
+
+DLC Reiche Ernte:
+- [x] Silos
+  - [x] Verbrauch von Weizen, Mais, Teff
+- [x] Traktoren
+    - [x] Verbrauch von Öl
+    - [x] Anzahl Scheunen
+- [x] Gelehrte
+
+​ entfernen
+- [x] ProductionHeader: Gebäude bauen, die die jeweilige Stufe braucht statt bearbeitet
+
+DLC Land der Löwen / Enbesa:
+- Fruchtbarkeiten / Ressourcen/Slots
+
+DLC Paläste der Macht:
+- Palast / Ministerien / Effekte
+
+
+- [x] kleine, unrelevante Optimierungen
+- [x] Neue und geänderte Items
+- [x] Neue Gebäude
+- [x] Neue Bedürfnisse
+- [x] Neue Kultur-Sets
+- [x] Neue Effekt-Targets f. Kultur, Items
+- [x] Traktoren und Silos
+- [x] 
+- [ ] Palast
+- [ ] Icons für Routen/Shares, Boost: Strom|Silo|Traktor
+- [ ] Zeitung
+- [ ] traders
+- [ ] berechnung in balance.js für Silos machen?
+- [ ] Routen: Inselliste scrollbar <BuildingContextMenu:69>
+- [ ] Routen nur wohin sinnvoll <IslandSharings>
+~~- [ ] Konsumgüter neu anordnen, Luxusgüter als 2. Spalte?, nach Stufen gruppieren, per world einstellbar~~
+- [ ] 
+
+YouTube Videos mit Zeit-Bereich embedden
+
 # Effekte
 
 ### Trigger
@@ -6,6 +47,11 @@
 - [x] Feste    (inselweit)
 - [ ] Zeitung  (teil-global)
 - [ ] Buffs    (global)
+- [ ] Palast   (teil?-global)
+- [x] Silo, Traktor
+- [ ] Item-Effekt: liefert Elektrizität
+- [x] kleine, unrelevante Optimierungen
+
 
 ### Sockel
 - [ ] Optimierungen:
@@ -25,6 +71,7 @@
     - [x] Produktivität
     - [x] Ersetzte Ausgangsmaterialien
     - [x] Zusatzwaren
+    - [ ] liefert Elektrizität (radius)
 - [ ] Rathaus
     - [ ] Zusatzversorgung
         - Erhält x wenn y (x = Gebäude|Gut)
@@ -57,7 +104,6 @@
     - [ ] Zusatzeinkommen
     - [ ] Arbeitskräfte pro Haus
     - [ ] Einwohner max. + Zusätzliche Einwohner (durch Gut) 
-- [ ] liefert Elektrizität (radius)
 - [ ] Zwischenfallrisiko (insel, opti)
 - [ ] Attraktivität (radius, insel)
 - [ ] Mehr Besucher (radius, insel)

@@ -1,6 +1,6 @@
 import worlds from "../data/worlds";
 import {producers} from "../data/worldGeneration/buildings";
-import {autoincrement} from "./obj";
+import {autoincrement, push} from "./obj";
 
 import {delay} from "./helpers";
 import track from "./tracking";
@@ -13,7 +13,13 @@ import * as producerSlice from "../features/producerSlice";
 import * as areaSlice from "../features/areaSlice";
 import * as productivitySlice from "../features/productivitySlice";
 import * as sharingSlice from "../features/sharingSlice";
+import tiers from "../data/tiers";
+import {genResidenceCount} from "../features/residenceSlice";
 
+const log = (msg) => {
+  console.log(msg)
+  track.data(msg)
+}
 
 export const rebuildGameFromVeryOld = (store, dispatch, data, callback) => {
   track.disable()
@@ -306,4 +312,105 @@ export const rebuildGameFromVeryOld = (store, dispatch, data, callback) => {
       callback()
     })
   })
+}
+
+export const update2020_12_26 = (state) => {
+  console.log('Running update 2020-12-26')
+
+  state.personal.version = {GU: 9.2, date: "2020-12-26"}
+
+  // update electricity notation:
+  // old: producer.e = ["area"]
+  // new: producer.boosts = ["electricity"]
+  state.producers.forEach(i => {
+    if (i.hasOwnProperty("e")) {
+      if (Array.isArray(i.e) && i.e.includes('area')) {
+        // add new notation
+        i.boosts = ['electricity']
+        /* this is a different approach, which is not in use:
+          // unapply effect of electricity
+          dispatch(producerSlice.changeByBoost({areaId: i.areaId, boostId: 'electricity', isRemoval: true}))
+          // remove old notation
+          delete i.e
+          // apply new (notation + effect)
+          dispatch(producerSlice.toggleBoost({areaId: i.areaId, GUID: i.GUID, boost: 'electricity'}))
+        */
+        console.log(' - Updating electricity in world '+i.worldId+', island '+i.islandId+', area '+i.areaId+' ('+i.d_name+')')
+      }
+
+      // remove old notation
+      delete i.e
+
+    }
+  })
+
+  console.log('Done.')
+}
+
+export const update2020_12_27 = (state) => {
+  console.log('Running update 2020-12-27')
+
+  state.personal.version = {GU: 9.2, date: "2020-12-27"}
+
+  // add residenceCounts for scholars:
+
+  const tier12 = tiers.find(t => t.id === 12)
+
+  state.residences.filter(a => a.tierId === 5).forEach(r5 => {
+    if (state.residences.find(a => a.areaId === r5.areaId && a.tierId === 12)) {
+      console.log(' - skip (area '+r5.areaId+')')
+      return
+    }
+
+    const area = {
+      id: r5.areaId,
+      worldId: r5.worldId,
+      islandId: r5.islandId,
+    }
+
+    const residencesForTier12 = genResidenceCount(area, tier12)
+    console.log(' - Adding scholars to world '+area.worldId+', island '+area.islandId+', area '+area.id)
+
+    state.residences = push(state.residences, residencesForTier12)
+  })
+
+  console.log('Done.')
+}
+
+export const update2020_12_27_2 = (state) => {
+  console.log('Running update 2020-12-27_2')
+
+  state.personal.version = {GU: 9.2, date: "2020-12-27_2"}
+
+  const changedGUIDs = {
+    // ebensas silo, fuel, tractor
+    "269957_4": 119025,
+    "118571_4": 119028,
+    "269839_4": 119026,
+  }
+
+  state.producers.filter(p => changedGUIDs.hasOwnProperty(p.GUID)).forEach(p => {
+    const ps = state.producerSums.find(s => s.islandId === p.islandId && s.GUID === p.GUID)
+    console.log(' - Updating GUID from '+ps.GUID+' to '+changedGUIDs[p.GUID]+' ('+p.d_name+') [producerSum] world '+p.worldId+', island '+p.islandId+', area '+p.areaId)
+    ps.GUID = changedGUIDs[p.GUID]
+
+    console.log(' - Updating GUID from '+p.GUID+' to '+changedGUIDs[p.GUID]+' ('+p.d_name+') [producer] world '+p.worldId+', island '+p.islandId+', area '+p.areaId)
+    p.GUID = changedGUIDs[p.GUID]
+  })
+
+  console.log('Done.')
+}
+
+
+export const update2020_12_28 = (state) => {
+  console.log('Running update 2020-12-28')
+
+  state.personal.version = {GU: 9.2, date: "2020-12-28"}
+
+  state.areas.filter(a => a.hasOwnProperty('hasElectricity')).forEach(area => {
+    delete area.hasElectricity
+    console.log(' - Removing obsolete area.hasElectricity world '+area.worldId+', island '+area.islandId+', area '+area.id)
+  })
+
+  console.log('Done.')
 }

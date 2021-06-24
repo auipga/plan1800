@@ -113,3 +113,4 @@ export default {
 
   ],
 }
+// Berechnung: https://t.me/c/1497830754/99

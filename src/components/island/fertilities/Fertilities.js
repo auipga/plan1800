@@ -45,6 +45,7 @@ const Fertilities = (props) => {
         ))}
       </div>
 
+      {possibleResources.length > 0 && (<>
       <hr/>
       <div className="description">{text_plan_ucf('resources')}</div>
       {possibleResources.map((resource,key) => (<React.Fragment key={key}>
@@ -56,6 +57,7 @@ const Fertilities = (props) => {
           // count={island.resources[resource] || 0} /*compat */
         />
       </React.Fragment>))}
+      </>)}
 
       <hr/>
       <div className="description font-weight-bold"

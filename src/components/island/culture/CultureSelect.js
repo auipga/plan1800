@@ -71,14 +71,14 @@ const CultureSelect = (props) => {
             //. name='festival' // weil radio
           />
           {/*{type==='festivals' && <img src={icon} className={type==='festivals' ? 'i30' : 'i20'} alt={''}/>}*/}
-          <img src={icon} className={type==='festivals' ? 'i30' : 'i20'} alt={''}/>{' '}
+          <img src={i.FileName ? ('./allicons/'+i.FileName) :icon} className={type==='festivals' ? 'i30' : 'i20'} alt={''}/>{' '}
           <span className='text-capitalize'>{text_anno(i.GUID).toLowerCase()}</span>
         </label>
       )
     })}
 
     {/*{type==='festivals' && <div className='my-2 text-info'>Todo: Timer mit Restlaufzeit</div>}*/}
-    {/*{type!=='festivals' && <div className='my-2 text-info'>Todo: Individuelle Icons, <br/>Highlight betroffener Gebäude</div>}*/}
+    {/*{type!=='festivals' && <div className='my-2 text-info'>Todo: Highlight betroffener Gebäude</div>}*/}
 
   </div>)
 }

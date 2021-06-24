@@ -18,6 +18,7 @@ import routesSlice from "../features/routesSlice";
 import sharingSlice from "../features/sharingSlice";
 
 import track from "../functions/tracking";
+import {update2020_12_26, update2020_12_27, update2020_12_27_2, update2020_12_28} from "../functions/game_convert";
 
 const persistConfig = {
   key: "root",
@@ -65,6 +66,7 @@ const wrappedRootReducer = (state, action) => {
         islandId: null,
         islandIds: {1:null, 2:null, 3:null, 4:null},
         collapsed: [],
+        version: {GU: 9.2, date: "2020-12-27"},
       }
     }
     track.data('Reset')
@@ -84,6 +86,21 @@ const wrappedRootReducer = (state, action) => {
     state = {...filteredState, personal: {...personal, ...mergePersonal}, debug}
     // state = {...loadedState}
     track.data('Loaded')
+
+    // apply updates
+    if (!mergePersonal.hasOwnProperty('version')) {
+      update2020_12_26(state)
+    }
+    if (state.personal.version.date === "2020-12-26") {
+      update2020_12_27(state)
+    }
+    if (state.personal.version.date === "2020-12-27") {
+      update2020_12_27_2(state)
+    }
+    if (state.personal.version.date === "2020-12-27_2") {
+      update2020_12_28(state)
+    }
+
   }
   return rootReducer(state, action);
 };

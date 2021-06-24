@@ -10,6 +10,7 @@ import Iconss from "../debug/Iconss";
 import DeleteIslandButton from "./DeleteIslandButton";
 import CultureMenus from "./culture/CultureMenus";
 import CultureMenu from "./culture/CultureMenu";
+import PalaceMenu from "./palace/PalaceMenu";
 import Fertilities from "./fertilities/Fertilities";
 import IslandPopulation from "./population/IslandPopulation";
 import IslandPopulationHeader from "./population/IslandPopulationHeader";
@@ -59,6 +60,7 @@ const Island = (props) => {
           {/*<Col className={'pl-0'}>*/}
           {/*</Col>*/}
           <Col className={'pl-0'} sm={'auto'}>
+            {(activeWorldId === 1 || activeWorldId === 3) && <PalaceMenu/>}
             <CultureMenu/>
             <DeleteIslandButton/>
           </Col>

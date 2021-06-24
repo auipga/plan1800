@@ -29,15 +29,17 @@ const Building = (props) => {
 
   const {producer, firstArea} = props
 
+  const producerDisabled = producer?.disabled || producer.inputDisabled
+
   const dispatch = useDispatch()
   const handleTrashClick = () => dispatch(producerSlice.destroy({areaId: firstArea.id, GUID: producer.GUID}))
   const handleMediaClick = e => {
-    if (producer?.disabled) return
+    if (producerDisabled) return
     dispatch(producerSlice.change({islandId: activeIslandId, GUID: producer.GUID, pState: 'running', delta: modifier(e)}))
   }
   const handleMediaContextMenu = e => {
     e.preventDefault()
-    if (producer?.disabled) return
+    if (producerDisabled) return
     dispatch(producerSlice.change({islandId: activeIslandId, GUID: producer.GUID, pState: 'running', delta: -modifier(e)}))
   }
 
@@ -78,7 +80,7 @@ const Building = (props) => {
           <ProductMediaObject product={producer}/>
         </Media>
         <Media body>
-          <ProducerSumInput GUID={producer.GUID} firstArea={firstArea} disabled={producer?.disabled}/>
+          <ProducerSumInput GUID={producer.GUID} firstArea={firstArea} disabled={producerDisabled}/>
           {thisProducers.length > 1 || thisProducers[0].number > 0 || balance || tradingBalance || sharings.length ?
             <Chart2 balance={balance} tradingBalance={tradingBalance}/>
             :
@@ -88,7 +90,7 @@ const Building = (props) => {
               <FontAwesomeIcon icon={'trash'} size={'sm'} fixedWidth />
             </Button>
           }
-          {!hide_BuildingContextMenu && <BuildingContextMenu GUID={producer.GUID} producer_disabled={producer?.disabled}/>}
+          {!hide_BuildingContextMenu && <BuildingContextMenu producer={producer} GUID={producer.GUID} producer_disabled={producerDisabled}/>}
         </Media>
       </Media>
   )

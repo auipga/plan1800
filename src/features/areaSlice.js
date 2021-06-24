@@ -29,10 +29,10 @@ const areaSlice = createSlice({
 
       const area = addID(genArea(worldId, islandId, usage), autoincrement(state))
       if (area.usage === 'TownHall' || area.usage === 'ArticLodge') {
-        action.asyncDispatch({type: "residences/create", payload: {area}})
+        action.asyncDispatch({type: "residences/create", payload: {area, copyExistingEffects: true}})
       }
       if (area.usage !== 'TownHall' && producerGUID !== undefined) {
-        action.asyncDispatch({type: "producers/create", payload: {area, GUID: producerGUID}})
+        action.asyncDispatch({type: "producers/create", payload: {area, copyExistingEffects: true, GUID: producerGUID}})
         if (asDefault) {
           action.asyncDispatch({type: "producers/setDefault", payload: {islandId: area.islandId, GUID: producerGUID, areaId: area.id, pState: 'running'}})
         }
@@ -49,8 +49,8 @@ const areaSlice = createSlice({
       const objs = possibleUsages.map((usage) => (
         addID(genArea(worldId, islandId, usage), increment++)
       ))
-      action.asyncDispatch({ type: "residences/create", payload: {area: objs[0]} }) //TownHall
-      // action.asyncDispatch({ type: "producers/createAll", payload: {area: objs[1]} }) //TradeUnion
+      action.asyncDispatch({ type: "residences/create", payload: {area: objs[0], copyExistingEffects: false} }) //TownHall
+      // action.asyncDispatch({ type: "producers/createAll", payload: {area: objs[1], copyExistingEffects: false} }) //TradeUnion
       return [...state, ...objs]
     },
     destroy: (state, action) => {

@@ -9,8 +9,8 @@ import DataInput from "../../../global/DataInput";
 
 import * as producerSlice from "../../../../features/producerSlice";
 import {blur, ensureMinMax} from "../../../../functions/helpers";
-import {isInPool} from "../../../../data/effects/targetPools";
 import {text_plan} from "../../../../data/translation/texts";
+import boosts from "../../../../data/effects/boosts";
 
 
 const ProducerInput = (props) => {
@@ -21,9 +21,8 @@ const ProducerInput = (props) => {
   const activeIslandId = useSelector(state => state.personal.islandId)
 
 
-  const {areaId, GUID} = props
-
-  const canBeElectrified = (activeWorldId === 1 || activeWorldId === 3) && isInPool(GUID, 193875) //todo: wenn Baumaterial der NW separat wäre, reicht isInPool
+  const {areaId, GUID, boost} = props
+  const boostId = 'boost_by_'+boost
 
   const dispatch = useDispatch()
   // holt sich immer die erste area, sonst noch ein .sort(sortByNumberField('areaId'))
@@ -51,12 +50,10 @@ const ProducerInput = (props) => {
     blur(e)
     dispatch(producerSlice.setDefault({islandId: activeIslandId, GUID, areaId}))
   }
-  const electricityEnabled = x.e?.includes('area')
-  const handleSetElectricity = e => {
+  const boostEnabled = x.boosts?.includes(boost)
+  const handleToggleBoost = e => {
     blur(e)
-    // const location = props.isNoArea ? {islandId: activeIslandId} : {areaId}
-    // dispatch(producerSlice.changeByElectricity({location, isRemoval: 1}))
-    dispatch(producerSlice.toggleElectricity({areaId}))
+    dispatch(producerSlice.toggleBoost({areaId, GUID, boost}))
   }
 
   return (<>
@@ -83,16 +80,16 @@ const ProducerInput = (props) => {
     />
     {debug.includes('show_productivity_percent') &&
     <span className={'productivity_percent'+(x.Productivity <= 0 || x.Productivity === 100 ? ' text-muted' : '')}>{Math.max(0, x.Productivity)}%</span>}
-    {canBeElectrified && !props.isNoArea && <Button
-      className='sm btn-nocolor SetElectricity'
-      // disabled={props.isNoArea}
-      color={electricityEnabled ? 'secondary' : 'light'}
-      active={!electricityEnabled}
-      onClick={handleSetElectricity}
-      title={text_plan('connect-to-electricity')}>
-      {/*<FontAwesomeIcon icon={props.isNoArea ? 'bolt' : 'plug'} color={'#dddddd'}/>*/}
-      <FontAwesomeIcon icon='plug'/>
-    </Button>}
+    {!props.isNoArea && boost !== null && <Button
+        className='sm btn-nocolor booster'
+        // disabled={props.isNoArea}
+        color={boostEnabled ? 'secondary' : 'light'}
+        active={!boostEnabled}
+        onClick={handleToggleBoost}
+        title={text_plan('connect-to-'+boost)}>
+        <FontAwesomeIcon icon={boosts.find(b => b.GUID === boostId)?.icon} />
+      </Button>
+    }
   </>)
 }
 
@@ -100,6 +97,7 @@ ProducerInput.propTypes = {
   areaId: PropTypes.number.isRequired,
   // GUID: PropTypes.number.isRequired,
   GUID: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired, //nur wegen fake_buildings z.B. GUID: "112690_1"
+  boost: PropTypes.oneOf(["electricity", "silo", "tractor", null]),
 }
 
 export default ProducerInput

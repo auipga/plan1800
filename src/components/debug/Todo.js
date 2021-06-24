@@ -4,6 +4,7 @@ import {Button, TabPane} from "reactstrap"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 import PopoverWithTabs from "../global/PopoverWithTabs";
+import {applyEffects} from "../../functions/slice";
 
 const Todo = () => {
   const id = 'Todo'
@@ -39,17 +40,34 @@ const Todo = () => {
         <div className='description'>Updates (changelog):</div>
 
         <div>
-          <div className='text-underline'>24.04.20:</div>
+          <div className='text-underline'>28.12.20:</div>
           <ul>
-            <li>Fix: Geschützfabrik verbraucht Messing statt Stahl</li>
+            <li>DLC: Reiche Ernte</li>
+            <li>DLC: Land der Löwen</li>
+            <li>DLC: Paläste der Macht (WIP)</li>
+            <li>Fix: <i>Das Fest der Vernunft</i> berechnet jetzt die richtige Menge an Zusatzwaren</li>
+            <li>Fix: Neu gebaute Rathäuser berechnen bereits aktivierte Kultur-Sets (Rückwirkend gefixt)
+            <br/>newState = applyEffects(newState,
+            <br/></li>
           </ul>
         </div>
 
         <div className='altes'>
           <div>
+            <div className='text-underline'>24.04.20:</div>
+            <ul>
+              <li>Fix: Geschützfabrik verbraucht Messing statt Stahl</li>
+            </ul>
+          </div>
+          <div>
             <div className='text-underline'>17.04.20:</div>
             <ul>
-              <li>Vierter Item-Slot</li>
+              <li>Vierter Item-Slot
+                <br/>
+                <small>
+                  (Zwischenlösung für die Ministeriumseffekte <i>Gewerkschaftsförderung</i>, <i>Freigeisterreform</i> und <i>Hafenverwaltung</i>)
+                </small>
+              </li>
             </ul>
           </div>
         <div>

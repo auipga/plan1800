@@ -9,7 +9,7 @@ import {ensureMinMax} from "../functions/helpers";
 
 
 const genNeed = (good, factor, amount) => ({good, factor, amount})
-const genResidenceCount = (area, tier) => {
+export const genResidenceCount = (area, tier) => {
   const newObj = {
     areaId: area.id,
     worldId: area.worldId,   // for debugging oder so
@@ -28,7 +28,13 @@ const residenceSlice = createSlice({
   reducers: {
     // add/remove counts
     create: (state, action) => {
-      const {area} = action.payload
+      const {area, copyExistingEffects} = action.payload
+
+      // effects anwenden, die es vorher schon gab: insel-fest, Palast
+      if (copyExistingEffects) {
+        action.asyncDispatch({type: "culture/copyToResidence", payload: {area}})
+        action.asyncDispatch({type: "islands/copyToResidence_palace", payload: {area}})
+      }
 
       const worldType = worldTypes.find(wt => wt.worldIDs.includes(area.worldId))
       const objs = tiers.filter(t => t.worldTypeId === worldType.id).map(tier => genResidenceCount(area, tier))
@@ -136,6 +142,16 @@ const residenceSlice = createSlice({
       )
     },
 
+    connect: (state, action) => {
+      const p = action.payload
+      const findTarget = x => x.areaId === p.areaId && x.tierId === p.tierId
+
+      //todo:
+      //action.asyncDispatch({type: "residences/ re calc needs", payload: {areaId: p.areaId, tierId: p.tierId}})
+
+      return slice.updateElementAction(state, ({payload: {where: findTarget, set: {[p.connectTo]: !p.reverse}}}))
+    },
+
     changeByItem: slice.changeByItem,
     changeByCulture: slice.changeByCulture,
 
@@ -146,6 +162,6 @@ const residenceSlice = createSlice({
   initialState: []
 })
 
-export const { create, destroy, setNumber, change, move, update } = residenceSlice.actions
+export const { create, destroy, setNumber, change, move, update, connect } = residenceSlice.actions
 
 export default residenceSlice

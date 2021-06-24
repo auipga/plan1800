@@ -35,7 +35,7 @@ const PopoverWithTabs = (props) => {
 
   return (
     <Popover
-      className={'PopoverWithTabs ' + id+'-popover ' + props.className}
+      className={'PopoverWithTabs ' + id+'-popover ' + props.className??''}
       placement={placement}
       trigger={!debug.includes('popover_no_close') ? trigger : 'click'}
       target={'popover_'+id}
@@ -49,7 +49,7 @@ const PopoverWithTabs = (props) => {
             <NavItem key={tab.name} title={tab.name}>
               <NavLink
                 className={classnames({ active: activeTab === tab.name, "py-1": !!tab.icon, "py-0": !tab.icon })}
-                onMouseEnter={() => { toggleActiveTab(tab.name) }}
+                onClick={() => { toggleActiveTab(tab.name) }}
               >
                 {tab.icon
                   ? <FontAwesomeIcon icon={tab.icon} fixedWidth color={'#343a40'}/>

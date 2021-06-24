@@ -172,9 +172,11 @@ body {
                     //@extend .mr-1;
                 }
 
+                .booster {
+                    @extend .mr-0, .ml-1;
+                }
                 .SetElectricity {
                     width: 22px;
-                    @extend .mr-0, .ml-1;
                 }
 
                 .ProductivityInput {
@@ -230,14 +232,25 @@ body {
         }
 
         .popover {
+            background-color: rgba(255,255,255,0.85);
             max-width: none;
 
             .popover-header {
+                background-color: rgba(0,0,0,0.05);
+
                 @extend .p-0, .border-0;
                 min-width: 216px;
 
                 .nav-link {
-                    height: 30px
+                    height: 30px;
+
+                    &.active {
+                        background-color: rgba(255,255,255,0.5);
+                        //background-color: transparent;
+                    }
+                    &:not(.active) {
+                        //background-color: rgba(0,0,0,0.1);
+                    }
                 }
             }
 
@@ -377,7 +390,16 @@ body {
                 img {
                     @extend .i16;
                     filter: grayscale(1) contrast(0);
+                }
+            }
 
+            .PalaceConnectButton {
+                @extend .btn, .btn-secondary;
+                @extend .mx-1, .p-0;
+
+                img {
+                    @extend .i16;
+                    //filter: grayscale(1) contrast(0);
                 }
             }
 

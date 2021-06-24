@@ -14,18 +14,19 @@ const genObj = (islandId, type, GUID) => {
 
 const initialState = []
 
-function asyncApplyCulture(action, location, GUID, thing, isRemoval=false) {
-  asyncApplyCultureToProducers(action, location, GUID, thing, isRemoval)
-  asyncApplyCultureToResidences(action, location, GUID, thing, isRemoval)
-  // asyncApplyCultureToIsland(action, location, GUID, thing, isRemoval)
+// get's used for palace too
+export function asyncApplyCulture(action, location, GUID, thing, isRemoval=false, additional) {
+  asyncApplyCultureToProducers(action, location, GUID, thing, isRemoval, additional)
+  asyncApplyCultureToResidences(action, location, GUID, thing, isRemoval, additional)
+  // asyncApplyCultureToIsland(action, location, GUID, thing, isRemoval, additional
 }
-function asyncApplyCultureToProducers(action, location, GUID, thing, isRemoval=false) {
+export function asyncApplyCultureToProducers(action, location, GUID, thing, isRemoval=false, additional) {
   if (thing.hasOwnProperty('effectsToProducers') && thing.effectsToProducers.length)
-    action.asyncDispatch({type: 'producers/changeByCulture', payload: {...location, GUID, effects: thing.effectsToProducers, isRemoval}})
+    action.asyncDispatch({type: 'producers/changeByCulture', payload: {...location, GUID, effects: thing.effectsToProducers, isRemoval, additional}})
 }
-function asyncApplyCultureToResidences(action, location, GUID, thing, isRemoval=false) {
+export function asyncApplyCultureToResidences(action, location, GUID, thing, isRemoval=false, additional) {
   if (thing.hasOwnProperty('effectsToResidences') && thing.effectsToResidences.length)
-    action.asyncDispatch({type: 'residences/changeByCulture', payload: {...location, GUID, effects: thing.effectsToResidences, isRemoval}})
+    action.asyncDispatch({type: 'residences/changeByCulture', payload: {...location, GUID, effects: thing.effectsToResidences, isRemoval, additional}})
 }
 // function asyncApplyCultureToIsland(action, location, GUID, thing, isRemoval=false) {
   // if (thing.hasOwnProperty('effectsToIsland') && thing.effectsToIsland.length)
@@ -89,6 +90,16 @@ const cultureSlice = createSlice({
         const thing = allCulture.find(c => c.hasOwnProperty('GUID') && c.GUID === X.GUID)
         if (thing)
           asyncApplyCultureToProducers(action, {areaId: area.id, pGUID}, X.GUID, thing)
+      })
+    },
+    copyToResidence: (state, action) => {
+      const {area} = action.payload
+
+      const Xs = state.filter(a => a.islandId === area.islandId)
+      Xs.forEach(X => {
+        const thing = allCulture.find(c => c.hasOwnProperty('GUID') && c.GUID === X.GUID)
+        if (thing)
+          asyncApplyCultureToResidences(action, {areaId: area.id}, X.GUID, thing)
       })
     },
     filterByIslandId: slice.filterByIslandId,

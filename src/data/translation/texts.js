@@ -3154,6 +3154,8 @@ const anno_strings = {
     142451: "Harvest Festival",
     20110: "Town Carnival",
     111831: "Festival of Reason",
+
+    269602: "Local Department",
     /*
      * - data from annolayouts.de/data/texts_en.json
      * - regex search-replace:
@@ -5770,11 +5772,19 @@ const plan_strings = {
     'workload-adjustment': 'Arbeitsbedingungen anpassen\n-50 bis +50 Prozent',
     'workload-reset': 'Arbeitsbedingungen zurücksetzen',
     'connect-to-electricity': 'Diesen Bereich an den Strom anschließen',
+    'connect-to-silo': 'Diesen Bereich mit Silos versorgen',
+    'connect-to-tractor': 'Diesen Bereich mit Traktoren beackern',
 
     'culture-festivals': 'Feltivals',
     'culture-zoo': 'Zoo-Sets',
     'culture-museum': 'Museums-Sets',
     'culture-botanica': 'Botanika-Sets',
+
+    'Palace-build': 'Palast bauen',
+    'Palace-destroy': 'Palast abreißen',
+    'Ministry-build': 'Regionalministerium bauen',
+    'Ministry-destroy': 'Regionalministerium abreißen',
+    'Ministry-destroy-all': 'Alle Regionalministerien abreißen',
 
     'anarchist': 'Der Anarchist - Dr. Hugo Mercier',
     'sunken-treasures': 'Gesunkene Schätze',
@@ -5856,11 +5866,19 @@ const plan_strings = {
     'workload-adjustment': 'Adjust working conditions\n-50 up to +50 percent',
     'workload-reset': 'Reset working conditions',
     'connect-to-electricity': 'Connect this area to electricity',
+    'connect-to-silo': 'Boost with silos',
+    'connect-to-tractor': 'Boost with tractor barns',
 
     'culture-festivals': 'Feltivals',
     'culture-zoo': 'Zoo',
     'culture-museum': 'Museum',
     'culture-botanica': 'Botanica',
+
+    'Palace-build': 'Build Palace',
+    'Palace-destroy': 'Destroy Palace',
+    'Ministry-build': 'Build Local Department',
+    'Ministry-destroy': 'Destroy Local Department',
+    'Ministry-destroy-all': 'Destroy all Local Departments',
 
     'anarchist': 'The Anarchist - Dr. Hugo Mercier',
     'sunken-treasures': 'Sunken Treasures',
@@ -5883,7 +5901,7 @@ const plan_strings = {
 export const isDE = (navigator.language || navigator.userLanguage).toLowerCase().startsWith('de')
 export const lang = isDE ? 'de': 'en';
 
-const ucfirst = (s) => {
+export const ucfirst = (s) => {
   if (typeof s !== 'string') return ''
   return s.charAt(0).toUpperCase() + s.slice(1)
 }

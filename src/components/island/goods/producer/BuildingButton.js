@@ -28,7 +28,7 @@ const BuildingButton = (props) => {
   const handleClick = () => {
     hl.highlight(null)
     dispatch(producerSumSlice.create({islandId: activeIslandId, GUID: producer.GUID}))
-    dispatch(producerSlice.create({area: firstArea, GUID: producer.GUID, isDefault: true}))
+    dispatch(producerSlice.create({area: firstArea, GUID: producer.GUID, copyExistingEffects: true, isDefault: true}))
   }
   const relevantGoods = hl.relevantGoodsBasic(producer)
   const handleMouseEnter = () => show_highlights && hl.highlight(producer, relevantGoods)
@@ -38,7 +38,7 @@ const BuildingButton = (props) => {
   return (
     <Button
       id={'prod'+producer.GUID}
-      className={'BuildingButton'+hl.ioClasses(producer, relevantGoods) + hl.workforceClasses(producer)}
+      className={'BuildingButton'+hl.ioClasses(producer, relevantGoods) + hl.workforceClasses(producer) + hl.neederClasses(producer)}
       color={'link'}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}

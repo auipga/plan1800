@@ -1,6 +1,8 @@
 import * as obj from "./obj";
 import items from "../data/effects/items";
 import {resolveTargetGUIDs} from "../data/effects/targetPools";
+import {producers} from "../data/worldGeneration/buildings";
+import boosts from "../data/effects/boosts";
 
 export const updateElementAction = (state, {payload: {where: isTarget, set: attrs}}) => {
   return state.map(x => isTarget(x) ? obj.update(x, attrs) : x)
@@ -129,16 +131,30 @@ export const changeByItem = (state, action) => {
     return applyEffects(state, findTarget, relevantEffects, item, isRemoval)
   }
 }
-export const changeByCulture = (state, action) => {
+export const changeByBoost = (state, action) => {
+  const {boostId, areaId, isRemoval = false} = action.payload
+
+  const boost = boosts.find(i => i.GUID === boostId)
+  const relevantEffects = supportedEffects.filter(se => boost.hasOwnProperty(se.thingKey))
+  if (relevantEffects.length) {
+    const findTarget = x => x.areaId === areaId
+
+    return applyEffects(state, findTarget, relevantEffects, boost, isRemoval)
+  }
+}
+export const changeByCulture/*and Palace*/ = (state, action) => {
   const {effects, GUID, pGUID, isRemoval = false} = action.payload
-  const {islandId, areaId} = action.payload // wahlweise
+  const {islandId, areaId, areaIDs, worldIDs} = action.payload // wahlweise
+  console.log(action.payload)
+  const {additional} = action.payload
+  console.log(additional?.deltaPalaceLevel)
   let newState = [...state]
 
   effects.forEach(eff => {
     const relevantEffects = supportedEffects.filter(se => eff.hasOwnProperty(se.thingKey))
     if (relevantEffects.length && eff.hasOwnProperty('targetGUIDs')) {
       const resolvedTargetGUIDs = resolveTargetGUIDs(eff.targetGUIDs)
-      const findTarget = x => findTargetLocationXor(x, {islandId, areaId, pGUID}, resolvedTargetGUIDs)
+      const findTarget = (x => findTargetLocationXor(x, {islandId, areaId, areaIDs, worldIDs, pGUID}, resolvedTargetGUIDs));
 
       newState = applyEffects(newState, findTarget, relevantEffects, {GUID, ...eff}, isRemoval, additional?.deltaPalaceLevel)
     }
@@ -151,8 +167,10 @@ export const findTargetLocationXor = (x, location, resolvedTargetGUIDs) => {
   return (
     (location.pGUID === undefined ^ x.GUID === location.pGUID) &&
     (location.areaId === undefined ^ x.areaId === location.areaId) &&
+    (location.areaIDs === undefined ^ location.areaIDs?.includes(x.areaId)) &&
     (location.islandId === undefined ^ x.islandId === location.islandId) &&
     (location.worldId === undefined ^ x.worldId === location.worldId) &&
+    (location.worldIDs === undefined ^ location.worldIDs?.includes(x.worldId)) &&
     // (location.propaganda === true ^ x.worldId <= 3) && // todo: entfernt weil keine items für die arktis funktionierten
     resolvedTargetGUIDs.includes(x.GUID)
     // && x.pState === 'running'
@@ -161,14 +179,26 @@ export const findTargetLocationXor = (x, location, resolvedTargetGUIDs) => {
 
 const effectApplyer = {
   'plus-minus': (targetKey, thingKey) => (x, thing, isRemoval) => {
+    // console.log(x, thing, isRemoval)
     return x[targetKey] + thing[thingKey] * (isRemoval?-1:1)
+  },
+  'plus-minus-times': (targetKey, thingKey) => (x, thing, isRemoval, deltaPalaceLevel) => {
+    return x[targetKey] + thing[thingKey] * (isRemoval?-1:1) * deltaPalaceLevel
   },
   'add-element': (targetKey, thingKey, genElement) => (x, thing, isRemoval) => {
     if (isRemoval) {//entfernt alle, bei 5x selbes item später mal nur 1 entfernen?
       return x[targetKey].filter(a => !a.hasOwnProperty('d_add_source') || a.d_add_source !== thing.GUID)
     }
-    return thing[thingKey].reduce((data, a) =>
-      [...data, {...genElement(a), d_add_source: thing.GUID}],
+
+    return thing[thingKey].reduce((data, a) => {
+        if (a.Product === 'OutputProduct') {
+          a = {...a} // work with a copy! do not modify the boost definition!
+          const producer = producers.find(p => p.GUID === x.GUID)
+          a.Product = producer.OutputProduct
+        }
+
+        return [...data, {...genElement(a), d_add_source: thing.GUID}]
+      },
       x[targetKey] // alles bisherige (als Kopie!)
     )
   },
@@ -215,6 +245,12 @@ export const supportedEffects = [
     thingKey: 'Productivity',
     targetKey: 'Productivity',
     apply: effectApplyer['plus-minus']('Productivity', 'Productivity')
+  },
+  {/*quich&dirty, but works*/
+    thingKey: 'ProductivityPerPalaceLevel',
+    targetKey: 'Productivity',
+    perPalaceLevel: true,
+    apply: effectApplyer['plus-minus-times']('Productivity', 'ProductivityPerPalaceLevel')
   },
 /*
   {
@@ -312,14 +348,17 @@ export const supportedEffects = [
   // {thingKey: 'Workforce_Contained',   targetKey: '',                mechanism: ''},
   // {thingKey: 'Einwohner_Max',         targetKey: '',                mechanism: ''},
 ]
-export const applyEffects = (state, findTarget, relevantEffects, effOrItem, isRemoval) => {
+const applyEffects = (state, findTarget, relevantEffects, effOrItem, isRemoval, deltaPalaceLevel) => {
   // noinspection UnnecessaryLocalVariableJS
   const newState = state.map(x => {
     if (findTarget(x)) {
       let newData = {}
 
       relevantEffects.forEach(re => {
-        newData[re.targetKey] = re.apply( {...x, ...newData}, effOrItem, isRemoval)
+        if ((deltaPalaceLevel !== undefined && re.perPalaceLevel !== undefined)
+         || (deltaPalaceLevel === undefined && re.perPalaceLevel === undefined)) {
+          newData[re.targetKey] = re.apply( {...x, ...newData}, effOrItem, isRemoval, deltaPalaceLevel)
+        }
       })
 
       return obj.update(x, {...newData})

@@ -187,6 +187,7 @@ export const zoo = [
   {
     GUID: 191115,
     name: "Taigawald",//
+    FileName: "3dicons/animals/icon_moose_0.png",
     effectsToResidences: [
       {
         targetGUIDs: [190762],
@@ -199,6 +200,7 @@ export const zoo = [
           {ProvidedNeed: 1010258, AmountInPercent: -5}, // Schokolade
           {ProvidedNeed:  120033, AmountInPercent: -5}, // Gebackene Bananen
           {ProvidedNeed:  120035, AmountInPercent: -5}, // Tortillas
+          {ProvidedNeed:  114471, AmountInPercent: -5}, // Wat-Küche
         ],
       },
     ],
@@ -206,6 +208,7 @@ export const zoo = [
   {
     GUID: 191122,
     name: "Räuber der Meere",//
+    FileName: "3dicons/animals/icon_swordfish_0.png",
     effectsToProducers: [
       {
         targetGUIDs: [190779, 1010339, 101262],
@@ -226,6 +229,7 @@ export const zoo = [
   {
     GUID: 191121,
     name: "Nutztiere",//
+    FileName: "3dicons/animals/icon_sheep_0.png",
     effectsToProducers: [
       {
         targetGUIDs: [190872],
@@ -297,11 +301,24 @@ export const zoo = [
   {
     GUID: 191119,
     name: "Polarkreis",//
+    FileName: "3dicons/animals/icon_polar_bear_0.png",
     effectsToProducers: [
       {
-        targetGUIDs: [1010325, 1010315, 101273, 101266],
+        targetGUIDs: [1010325, 1010315, 101273, 101266, 118734],
         Productivity: +25,
         Maintenance: -25,
+      },
+    ],
+  },
+  //DLC Land der Löwen
+  {
+    GUID: 124197,
+    name: "Wilde Seen",//
+    FileName: "3dicons/animals/icon_flamingo_0.png",
+    effectsToProducers: [
+      {
+        targetGUIDs: [193400],
+        Productivity: +20,
       },
     ],
   },
@@ -331,6 +348,7 @@ export const museum = [
   {
     GUID: 191129,
     name: "Ursprung der Menschheit",
+    FileName: "3dicons/museum/icon_museum_neanderthaler_0.png",
     effectsToProducers: [
       {
         targetGUIDs: [190779, 190865, 190872, 1010558], //Fischereien, Getreidefarmen, Tierhöfe und Jagdhütten
@@ -456,29 +474,31 @@ export const botanica = [
   {
     GUID: 193665,
     name: "Anden",
+    FileName: "3dicons/plants/icon_frailejones_0.png",
     effectsToProducers: [
       {
         targetGUIDs: [1010262, 101251],// Getreide, Kaffee
         Productivity: +25,
-        Fertility: true//todo
       },
     ],
+    AddedFertility: 1010571,
   },
   {
     GUID: 193662,
     name: "Subalpin",
+    FileName: "3dicons/plants/icon_rocky_mountain_fir_0.png",
     effectsToProducers: [
       {
-        targetGUIDs: [1010558,116034, 1010333],// Furs x2?, Coutchouc
+        targetGUIDs: [1010558, 1010333],// Furs x2?, Coutchouc
         Productivity: +25,
-        Fertility: true
       },
     ],
-    fertility: [""],
+    AddedFertility: 1010581,
   },
   {
     GUID: 193657,
     name: "Sumpfgebiet",
+    FileName: "3dicons/plants/icon_lilies_0.png",
     effects: [
 
     ],
@@ -488,6 +508,7 @@ export const botanica = [
   {
     GUID: 193670,
     name: "Heilend", //Kräutergarten
+    FileName: "3dicons/plants/icon_dandelion_0.png",
     // Krankenhäuser:
     // einheitenbewegungsrate +15%
     // ärzte +2
@@ -498,6 +519,7 @@ export const botanica = [
   {
     GUID: 193653,
     name: "Amazonas",
+    FileName: "3dicons/plants/icon_lianas_0.png",
     effectsToProducers: [
       {
         targetGUIDs: [100655, 101263],// Grapes, Bananen
@@ -505,10 +527,13 @@ export const botanica = [
         Fertility: true
       },
     ],
+    "AddedFertility_eu": 120013,
+    "AddedFertility_sa": 120040
   },
   {
     GUID: 193655,
     name: "Sargassosee",
+    FileName: "3dicons/plants/icon_great_star_coral_0.png",
     effects: [
 
     ],
@@ -519,6 +544,7 @@ export const botanica = [
   {
     GUID: 193660,
     name: "Heilig",
+    FileName: "3dicons/plants/icon_sacred_lotus_0.png",
     effects: [
 
     ],
@@ -529,6 +555,7 @@ export const botanica = [
   {
     GUID: 193658,
     name: "Nahost",
+    FileName: "3dicons/plants/icon_blue_lotus_0.png",
     effectsToProducers: [
       {
         targetGUIDs: [100654, 1010329],// Red_peppers, Sugar_cane
@@ -541,6 +568,7 @@ export const botanica = [
   {
     GUID: 193672,
     name: "Verwunschen",
+    FileName: "3dicons/plants/icon_jujube_0.png",
     effectsToProducers: [
       {
         targetGUIDs: [1010264, 1010330],// Hops, Tabbaco

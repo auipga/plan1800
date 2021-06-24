@@ -23,6 +23,7 @@ const PopulationTownhallItems = (props) => {
   const itemTargetGUIDs = targetPools.residenceItemTargetGUIDs(world.worldTypeId)
 
   const manuallyHidden1_2 = [
+    //  TODO: double-check !
     /*z.B. Bedürfnisbonus Markt, Variete*/
     190726, 191466,
     191738, 191739, 191740,
@@ -31,6 +32,7 @@ const PopulationTownhallItems = (props) => {
     190635, 190963
   ]
   const manuallyHidden2 = [
+  //  TODO: double-check !
     191470, 191564, 191569, 191575,
     190672, 190673, 190674,
     190717, 190719,
@@ -45,8 +47,11 @@ const PopulationTownhallItems = (props) => {
       (world.worldTypeId === 2 && !manuallyHidden1_2.includes(i.GUID) && !manuallyHidden2.includes(i.GUID)
         && (i.Type === "TownhallItem" || (i.Type === "GuildhouseItem" && i.Allocation === "TownHall")))
       ||
-      (world.worldTypeId === 3 && i.GUID > 116040
+      (world.worldTypeId === 3 && /*todo: check | performance only??: */i.GUID > 116040
         && i.Type === "GuildhouseItem" && i.Allocation === "Lodge")
+      ||
+      (world.worldTypeId === 4 && i.GUID > 116040 // todo: check assetviewer, welche items gehen in Enbesa?
+        && (i.Type === "TownhallItem" || (i.Type === "GuildhouseItem" && i.Allocation === "TownHall")))
     )
     && i.hasOwnProperty('EffectTargets')
     && i.EffectTargets.some(it => itemTargetGUIDs.includes(it.GUID))

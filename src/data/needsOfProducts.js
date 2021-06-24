@@ -132,6 +132,54 @@ const needsOfProducts = [
       {GUID: 120032,  Amount: 0.0004, influx: 0},
     ]
   },
+  {
+    GUID: 114436,
+    tierId: 10, // Shepherd
+    Inputs: [
+      {GUID: 114371,  Amount: 0.0005, influx: 3},
+      {GUID: 114401,  Amount: 0.00025, influx: 2},
+      {GUID: 114359,  Amount: 0.00035, influx: 2},
+      {GUID: 114390,  Amount: 0.0002, influx: 0},
+    ]
+  },
+  {
+    GUID: 114437,
+    tierId: 11, // Elder
+    Inputs: [
+      {GUID: 114371,  Amount: 0.0010, influx: 3},
+      {GUID: 114401,  Amount: 0.0005, influx: 2},
+      {GUID: 114359,  Amount: 0.0007, influx: 2},
+      {GUID: 114390,  Amount: 0.0004, influx: 0},
+      {GUID: 118724,  Amount: 0.0004, influx: 2},
+      {GUID: 114404,  Amount: 0.00035, influx: 0},
+      {GUID: 114410,  Amount: 0.00037, influx: 3},
+      {GUID: 114414,  Amount: 0.00015, influx: 0},
+      {GUID: 117698,  Amount: 0.00018, influx: 2},
+      {GUID: 120030,  Amount: 0.00012, influx: 0},
+      {GUID: 117699,  Amount: 0.0003, influx: 3},
+    ]
+  },
+  {
+    GUID: 114445,
+    tierId: 12, // Scholars
+    Inputs: [
+      {GUID: 1010353, Amount: 0.0, influx: 12},     // University
+      {GUID: 1010217, Amount: 0.001, influx: 19},   // Canned Food
+      {GUID: 114428,  Amount: 0.002, influx: 0},    // Leather Boots
+      {GUID: 1010257, Amount: 0.0008, influx: 0},   // Rum
+      {GUID: 114430,  Amount: 0.00275, influx: 23}, // Tailored Suits
+      {GUID: 120037,  Amount: 0.0008, influx: 0},   // Bowler Hats
+      {GUID: 1010354, Amount: 0.0, influx: 12},     // Electricity
+      {GUID: 114390,  Amount: 0.00175, influx: 0},  // Hibiscus Tea
+      {GUID: 114410,  Amount: 0.0015, influx: 22},  // Seafood Stew
+      {GUID: 114404,  Amount: 0.00125, influx: 0},  // Tapestries
+      {GUID: 114431,  Amount: 0.0015, influx: 20},  // Telephones
+      {GUID: 114414,  Amount: 0.00075, influx: 0},  // Clay Pipes
+      /*todo: which GUID is correct? I think, it's the first one*/
+      {GUID: 114425-118736,  Amount: 0.0, influx: 12},     // Radio Tower
+      {GUID: 1010248, Amount: 0.0007, influx: 0},   // Gramophones
+    ]
+  },
 
 ]
 

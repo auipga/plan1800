@@ -1,14 +1,14 @@
 export const other_producers = [
-  null,
-  {
+/*0*/  null,
+/*1*/  {
     Name: "Kraftwerk",
     GUID: 100780,
     Type: "PowerplantBuilding",
     FileName: "3dicons/icon_electric_works_oil_0.png",
     type: "Konsumgüter",//todo
     worldTypeIds: [1],
+    sharingDisabled: true,
     InfoDescription: 10946,
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 400},
       {Product: 1010117, Amount: 150}
@@ -26,15 +26,15 @@ export const other_producers = [
       {Ingredient: 1010202, Amount: 25}
     ]
   },
-  {
+/*2*/  {
     Name: "Kohlekraftwerk",
     GUID: 100779,
     Type: "PowerplantBuilding",
     FileName: "3dicons/icon_electric_works_coal_0.png",
     type: "Konsumgüter",//todo
     worldTypeIds: [1],// nirgends? mod?
+    sharingDisabled: true,
     InfoDescription: 10945,
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 150},
       {Product: 1010117, Amount: 150}
@@ -52,15 +52,15 @@ export const other_producers = [
       {Ingredient: 1010202, Amount: 25}
     ]
   },
-  {
+/*3*/  {
     Name: "Gasbetriebenes Kraftwerk",
     GUID: 117547,
     Type: "PowerplantBuilding",
     FileName: "3dicons/icon_electric_works_gas_0.png",
     type: "Konsumgüter",//todo
     worldTypeIds: [1],
+    sharingDisabled: true,
     InfoDescription: 117550,
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 1200},
       {Product: 1010117, Amount: 250}
@@ -78,15 +78,15 @@ export const other_producers = [
       {Ingredient: 1010202, Amount: 40}
     ]
   },
-  {
+/*4*/  {
     Name: "Heizofen",
     GUID: 114751,
     Type: "Heater_Arctic",
     FileName: "3dicons/icon_heating_center_0.png",
     type: "Konsumgüter",//todo
     worldTypeIds: [3],
+    sharingDisabled: true,
     InfoDescription: 114290,
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 50}
     ],
@@ -98,18 +98,272 @@ export const other_producers = [
       {Ingredient: 1010196, Amount: 5}
     ]
   },
+/*5*/  {
+    Name: "Wasserpumpe",
+    GUID: 114544,
+    Type: "IrrigationPropagationSource",
+    FileName: "3dicons/icon_water_pump_0.png",
+    type: "Baumaterial",//todo
+    worldTypeIds: [4],
+    sharingDisabled: true,
+    PipeFillCapacity: 250,
+    Maintenance: [
+      {Product: 1010017, Amount: 25}
+    ],
+    InputProducts: [],
+    OutputProduct: null,
+    Costs: [
+      {Ingredient: 1010017, Amount: 1000},
+      {Ingredient: 114356, Amount: 5}
+    ]
+  },
+/*6*/  {
+    Name: "Silo",
+    GUID: 269957,
+    Type: "BuffFactory",
+    FileName: "3dicons/icon_silo_0.png",
+    type: "Baumaterial",
+    worldTypeIds: [1],
+    inputDisabled: true,
+    itemsDisabled: true,
+    sharingDisabled: true,
+    Maintenance: [],
+    InputProducts: [1010192],
+    OutputProduct: null,
+    CycleTime: 300,
+    // ProductionBuff: 269978,
+    Costs: [
+      {Ingredient: 1010017, Amount: 1000},
+      {Ingredient: 1010196, Amount: 20},
+      {Ingredient: 1010205, Amount: 10}
+    ]
+  },
+/*7*/  {
+    Name: "Silo",//manually changed from "269958"
+    GUID: 269958,
+    Type: "BuffFactory",
+    FileName: "3dicons/icon_silo_0.png",
+    type: "Baumaterial",
+    worldTypeIds: [2],
+    inputDisabled: true,
+    itemsDisabled: true,
+    sharingDisabled: true,
+    Maintenance: [],
+    InputProducts: [120034],
+    OutputProduct: null,
+    CycleTime: 300,
+    // ProductionBuff: 269978,
+    Costs: [
+      {Ingredient: 1010017, Amount: 1000},
+      {Ingredient: 1010196, Amount: 20},
+      {Ingredient: 1010205, Amount: 10}
+    ]
+  },
+/*8*/  {
+    Name: "Silo",
+    GUID: 119025,
+    Type: "BuffFactory",
+    FileName: "3dicons/icon_silo_0.png",
+    type: "Baumaterial",
+    worldTypeIds: [4],
+    inputDisabled: true,
+    itemsDisabled: true,
+    sharingDisabled: true,
+    Maintenance: [],
+    InputProducts: [114367],
+    OutputProduct: null,
+    CycleTime: 300,
+    // ProductionBuff: todo,
+    Costs: [
+      {Ingredient: 1010017, Amount: 1000},
+      {Ingredient: 1010196, Amount: 20},
+      {Ingredient: 1010205, Amount: 10}
+    ]
+  },
+/*9*/  {
+    Name: "Tankhof",
+    GUID: 118571,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/icon_gasoline_0.png",
+    type: "Baumaterial",
+    worldTypeIds: [1],
+    itemsDisabled: true,
+    sharingDisabled: true,
+    Maintenance: [
+      {Product: 1010017, Amount: 350},
+      {Product: 1010115, Amount: 75}
+    ],
+    InputProducts: [1010566],
+    OutputProduct: 270042,
+    CycleTime: 15,
+    Costs: [
+      {Ingredient: 1010017, Amount: 25000},
+      {Ingredient: 1010196, Amount: 30},
+      {Ingredient: 1010205, Amount: 50},
+      {Ingredient: 1010218, Amount: 40},
+      {Ingredient: 1010207, Amount: 10},
+      {Ingredient: 1010202, Amount: 10}
+    ]
+  },
+/*10*/  {
+    Name: "Tankhof",
+    GUID: 269840,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/icon_gasoline_0.png",
+    type: "Baumaterial",
+    worldTypeIds: [2],
+    itemsDisabled: true,
+    sharingDisabled: true,
+    Maintenance: [
+      {Product: 1010017, Amount: 350},
+      {Product: 1010367, Amount: 75}
+    ],
+    InputProducts: [1010566],
+    OutputProduct: 270042,
+    CycleTime: 15,
+    Costs: [
+      {Ingredient: 1010017, Amount: 25000},
+      {Ingredient: 1010196, Amount: 30},
+      {Ingredient: 1010205, Amount: 50},
+      {Ingredient: 1010218, Amount: 40},
+      {Ingredient: 1010207, Amount: 10},
+      {Ingredient: 1010202, Amount: 10}
+    ]
+  },
+/*11*/  {
+    Name: "Tankhof",
+    GUID: 119028,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/icon_gasoline_0.png",
+    type: "Baumaterial",
+    worldTypeIds: [4],
+    itemsDisabled: true,
+    sharingDisabled: true,
+    Maintenance: [
+      {Product: 1010017, Amount: 350},
+      {Product: 114341, Amount: 75}
+    ],
+    InputProducts: [1010566],
+    OutputProduct: 270042,
+    CycleTime: 15,
+    Costs: [
+      {Ingredient: 1010017, Amount: 25000},
+      {Ingredient: 1010196, Amount: 30},
+      {Ingredient: 1010205, Amount: 50},
+      {Ingredient: 1010218, Amount: 40},
+      {Ingredient: 1010207, Amount: 10},
+      {Ingredient: 1010202, Amount: 10}
+    ]
+  },
+/*12*/  {
+    Name: "Traktorscheune",
+    GUID: 269839,// doppelt, identisch als 269837
+    Type: "BuffFactory",
+    FileName: "3dicons/icon_tractor_0.png",
+    type: "Baumaterial",
+    worldTypeIds: [1],
+    inputDisabled: true,
+    itemsDisabled: true,
+    sharingDisabled: true,
+    Maintenance: [],
+    InputProducts: [270042],
+    OutputProduct: null,
+    CycleTime: 300,
+    // ProductionBuff: 269979,
+    Costs: [
+      {Ingredient: 1010017, Amount: 5000},
+      {Ingredient: 1010218, Amount: 20},
+      {Ingredient: 1010224, Amount: 10}
+    ]
+  },
+/*13*/  {
+    Name: "Traktorscheune",
+    GUID: 269849,// doppelt, identisch als 269848
+    Type: "BuffFactory",
+    FileName: "3dicons/icon_tractor_0.png",
+    type: "Baumaterial",
+    worldTypeIds: [2],
+    inputDisabled: true,
+    itemsDisabled: true,
+    sharingDisabled: true,
+    Maintenance: [],
+    InputProducts: [270042],
+    OutputProduct: null,
+    CycleTime: 300,
+    // ProductionBuff: 269979,
+    Costs: [
+      {Ingredient: 1010017, Amount: 5000},
+      {Ingredient: 1010218, Amount: 20},
+      {Ingredient: 1010224, Amount: 10}
+    ]
+  },
+/*14*/  {
+    Name: "Traktorscheune",
+    GUID: 119026,// doppelt, identisch als 119027
+    Type: "BuffFactory",
+    FileName: "3dicons/icon_tractor_0.png",
+    type: "Baumaterial",
+    worldTypeIds: [4],
+    inputDisabled: true,
+    itemsDisabled: true,
+    sharingDisabled: true,
+    Maintenance: [],
+    InputProducts: [270042],
+    OutputProduct: null,
+    CycleTime: 300,
+    // ProductionBuff: 269979,
+    Costs: [
+      {Ingredient: 1010017, Amount: 5000},
+      {Ingredient: 1010218, Amount: 20},
+      {Ingredient: 1010224, Amount: 10}
+    ]
+  },
 ]
 /*
     tierId: 8,
     requirement: 300,
     fehlt noch aus producers_old.js
 
+Source: http://annolayouts.de/data/buildings.json
+- search  `"(.*)": `
+- replace `$1: `
 
-targetPool: 193875 = all production boosted by electricity
-// Electricity:
-  -1:  "None"
-   1: "Optional"
-   2: "Required"
+- search  `\{\n        Product\: (\d+)\,\n        Amount\: (\d+)\n      \}`
+- replace `{Product: $1, Amount: $2}`
+
+- search  `\{\n        Product\: (\d+)\,\n        Amount\: (\d+)\,\n        StorageAmount\: (\d+)\n      \}`
+- replace `{Product: $1, Amount: $2, StorageAmount: $3}`
+
+- search  `\{\n        Ingredient\: (\d+)\,\n        Amount\: (\d+)\n      \}`
+- replace `{Ingredient: $1, Amount: $2}`
+
+- sort keys original: GUID, Type, Name, FileName,
+- sort keys "needed": Name, GUID, Type, FileName, type, worldTypeIds, (the rest)
+  - the first 4 are rearranged
+  - type (lowercase) is one of the following:
+      "Konsumgüter", // Consumer Goods
+      "Baumaterial", // Construction Materials
+      "Rohmaterial", //// Basic Resources
+      "Landwirtschaftliche Produkte", //// Basic Resources
+      "Zwischenprodukte", // Intermediate Goods
+  - worldTypeIds: array of integers. See src/data/worldTypes.js
+
+- remove keys: InfoDescription, AssociatedRegions
+
+- search  `AssociatedRegions: "Moderate"`
+- replace `worldTypeIds: [1]`
+
+- search  `AssociatedRegions: "Colony01"`
+- replace `worldTypeIds: [2]`
+
+- search  `AssociatedRegions: "Arctic"`
+- replace `worldTypeIds: [3]`
+
+- search  `AssociatedRegions: "Africa"`
+- replace `worldTypeIds: [4]`
+
+- convert key Inputs to `InputProducts: [<GUID>, <GUID>]`
+
 */
 export const producers = [
   {
@@ -119,7 +373,6 @@ export const producers = [
     FileName: "3dicons/icon_wood_log_0.png",
     type: "Rohmaterial",
     worldTypeIds: [1,2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 10},
       {Product: 1010052, Amount: 5}
@@ -138,7 +391,7 @@ export const producers = [
     FileName: "3dicons/icon_wooden_planks_0.png",
     type: "Baumaterial",
     worldTypeIds: [1,2],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 10},
       {Product: 1010052, Amount: 10}
@@ -157,7 +410,6 @@ export const producers = [
     FileName: "3dicons/icon_fish_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 40},
       {Product: 1010052, Amount: 25}
@@ -177,8 +429,8 @@ export const producers = [
     FileName: "3dicons/icon_potatoes_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [1],
-    // Electricity: -1,
     ModuleLimit: 72,
+    MotorizableType: "Tractor",
     Maintenance: [
       {Product: 1010017, Amount: 20},
       {Product: 1010052, Amount: 20}
@@ -198,7 +450,7 @@ export const producers = [
     FileName: "3dicons/icon_schnapps_4_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 40},
       {Product: 1010052, Amount: 50}
@@ -218,8 +470,8 @@ export const producers = [
     FileName: "3dicons/icon_wool_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [1],
-    // Electricity: -1,
     ModuleLimit: 3,
+    MotorizableType: "Silo",
     Maintenance: [
       {Product: 1010017, Amount: 20},
       {Product: 1010052, Amount: 10}
@@ -239,7 +491,7 @@ export const producers = [
     FileName: "3dicons/icon_working_cloth_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 50},
       {Product: 1010052, Amount: 50}
@@ -260,7 +512,7 @@ export const producers = [
     FileName: "3dicons/icon_clay_0.png",
     type: "Rohmaterial",
     worldTypeIds: [1,2],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 10},
       {Product: 1010115, Amount: 50}
@@ -280,7 +532,7 @@ export const producers = [
     FileName: "3dicons/icon_bricks_0.png",
     type: "Baumaterial",
     worldTypeIds: [1,2],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 20},
       {Product: 1010115, Amount: 25}
@@ -300,8 +552,8 @@ export const producers = [
     FileName: "3dicons/icon_pigs_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [1],
-    // Electricity: -1,
     ModuleLimit: 5,
+    MotorizableType: "Silo",
     Maintenance: [
       {Product: 1010017, Amount: 40},
       {Product: 1010052, Amount: 30}
@@ -321,7 +573,7 @@ export const producers = [
     FileName: "3dicons/icon_meat_sausage_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 80},
       {Product: 1010115, Amount: 50}
@@ -342,7 +594,7 @@ export const producers = [
     FileName: "3dicons/icon_sail_0.png",
     type: "Baumaterial",
     worldTypeIds: [1,2],// oder eigene? im _prod nachgucken
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 75},
       {Product: 1010115, Amount: 50}
@@ -363,8 +615,8 @@ export const producers = [
     FileName: "3dicons/icon_cereals_2_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [1],
-    // Electricity: -1,
     ModuleLimit: 144,
+    MotorizableType: "Tractor",
     Maintenance: [
       {Product: 1010017, Amount: 20},
       {Product: 1010052, Amount: 20}
@@ -384,7 +636,7 @@ export const producers = [
     FileName: "3dicons/icon_flour_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 50},
       {Product: 1010052, Amount: 10}
@@ -405,7 +657,7 @@ export const producers = [
     FileName: "3dicons/icon_bread_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 60},
       {Product: 1010115, Amount: 50}
@@ -427,7 +679,7 @@ export const producers = [
     FileName: "3dicons/icon_iron_0.png",
     type: "Rohmaterial",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 50},
       {Product: 1010115, Amount: 50}
@@ -448,7 +700,7 @@ export const producers = [
     FileName: "3dicons/icon_coal_burn_0.png",
     type: "Rohmaterial",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 20},
       {Product: 1010115, Amount: 10}
@@ -469,7 +721,7 @@ export const producers = [
     FileName: "3dicons/icon_steel_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 100},
       {Product: 1010115, Amount: 100}
@@ -490,7 +742,7 @@ export const producers = [
     FileName: "3dicons/icon_beams_0.png",
     type: "Baumaterial",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 200},
       {Product: 1010115, Amount: 200}
@@ -511,7 +763,7 @@ export const producers = [
     FileName: "3dicons/icon_weapons_0.png",
     type: "Baumaterial",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 150},
       {Product: 1010115, Amount: 50}
@@ -526,6 +778,7 @@ export const producers = [
       {Ingredient: 1010218, Amount: 8}
     ]
   },
+  other_producers[6], // Silo
   {
     Name: "Wasenmeisterei",
     GUID: 1010312,
@@ -533,7 +786,7 @@ export const producers = [
     FileName: "3dicons/icon_tallow_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 40},
       {Product: 1010115, Amount: 40}
@@ -555,7 +808,7 @@ export const producers = [
     FileName: "3dicons/icon_soap_2_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 50},
       {Product: 1010115, Amount: 50}
@@ -577,8 +830,8 @@ export const producers = [
     FileName: "3dicons/icon_hops_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [1],
-    // Electricity: -1,
     ModuleLimit: 96,
+    MotorizableType: "Tractor",
     Maintenance: [
       {Product: 1010017, Amount: 20},
       {Product: 1010052, Amount: 20}
@@ -598,7 +851,7 @@ export const producers = [
     FileName: "3dicons/icon_malt_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 150},
       {Product: 1010115, Amount: 25}
@@ -620,7 +873,7 @@ export const producers = [
     FileName: "3dicons/icon_beer_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 200},
       {Product: 1010115, Amount: 75}
@@ -643,7 +896,7 @@ export const producers = [
     FileName: "3dicons/icon_quartz_sand_0.png",
     type: "Rohmaterial",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 120},
       {Product: 1010115, Amount: 25}
@@ -664,7 +917,7 @@ export const producers = [
     FileName: "3dicons/icon_glass_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 100},
       {Product: 1010116, Amount: 100}
@@ -686,7 +939,7 @@ export const producers = [
     FileName: "3dicons/icon_glass_window_3_0.png",
     type: "Baumaterial",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 200},
       {Product: 1010116, Amount: 100}
@@ -708,8 +961,8 @@ export const producers = [
     FileName: "3dicons/icon_meat_raw_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [1],
-    // Electricity: -1,
     ModuleLimit: 4,
+    MotorizableType: "Silo",
     Maintenance: [
       {Product: 1010017, Amount: 50},
       {Product: 1010052, Amount: 20}
@@ -729,8 +982,8 @@ export const producers = [
     FileName: "3dicons/icon_pepper_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [1],
-    // Electricity: -1,
     ModuleLimit: 108,
+    MotorizableType: "Tractor",
     Maintenance: [
       {Product: 1010017, Amount: 100},
       {Product: 1010052, Amount: 10}
@@ -750,7 +1003,7 @@ export const producers = [
     FileName: "3dicons/icon_goulash_01_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 100},
       {Product: 1010116, Amount: 75}
@@ -773,7 +1026,7 @@ export const producers = [
     FileName: "3dicons/icon_canned_goulash_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 100},
       {Product: 1010116, Amount: 75}
@@ -796,7 +1049,7 @@ export const producers = [
     FileName: "3dicons/icon_coal_2_0.png",
     type: "Rohmaterial",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 50},
       {Product: 1010115, Amount: 50}
@@ -817,7 +1070,7 @@ export const producers = [
     FileName: "3dicons/icon_sewing_machine_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 500},
       {Product: 1010116, Amount: 150}
@@ -840,7 +1093,6 @@ export const producers = [
     FileName: "3dicons/icon_rum_barrel_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: -1,
     Maintenance: [],
     InputProducts: [],
     OutputProduct: 1010257,
@@ -855,7 +1107,6 @@ export const producers = [
     FileName: "3dicons/icon_fur_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [1],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 50},
       {Product: 1010052, Amount: 10}
@@ -875,7 +1126,6 @@ export const producers = [
     FileName: "3dicons/icon_cotton_fur_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [1],
-    // Electricity: -1,
     Maintenance: [],
     InputProducts: [],
     OutputProduct: 1010240,
@@ -890,7 +1140,7 @@ export const producers = [
     FileName: "3dicons/icon_fur_coats_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 500},
       {Product: 1010116, Amount: 200}
@@ -914,7 +1164,7 @@ export const producers = [
     FileName: "3dicons/icon_cement_0.png",
     type: "Rohmaterial",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 250},
       {Product: 1010115, Amount: 25}
@@ -937,7 +1187,7 @@ export const producers = [
     FileName: "3dicons/icon_reinforced_concrete_0.png",
     type: "Baumaterial",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 400},
       {Product: 1010117, Amount: 75}
@@ -960,7 +1210,6 @@ export const producers = [
     FileName: "3dicons/icon_oil_0.png",
     type: "Rohmaterial",
     worldTypeIds: [1],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 250},
       {Product: 1010115, Amount: 100}
@@ -977,6 +1226,29 @@ export const producers = [
       {Ingredient: 1010202, Amount: 10}
     ]
   },
+/*
+  {
+    Name: "Bohrturm",
+    GUID: 101332,
+    Type: "FarmBuilding",
+    FileName: "3dicons/icon_oil_rig_0.png",
+    type: "Rohmaterial",
+    worldTypeIds: [1],
+    Maintenance: [
+      {Product: 1010017, Amount: 250},
+      {Product: 1010367, Amount: 100}
+    ],
+    InputProducts: [],
+    OutputProduct: 1010566,
+    CycleTime: 15,
+    Costs: [
+      {Ingredient: 1010017, Amount: 4000},
+      {Ingredient: 1010196, Amount: 6},
+      {Ingredient: 1010205, Amount: 10},
+      {Ingredient: 1010218, Amount: 8}
+    ]
+  },
+*/
   other_producers[1],
   // other_producers[2],
   other_producers[3],
@@ -987,7 +1259,7 @@ export const producers = [
     FileName: "3dicons/icon_copper_0.png",
     type: "Rohmaterial",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 250},
       {Product: 1010115, Amount: 25}
@@ -1011,7 +1283,7 @@ export const producers = [
     FileName: "3dicons/icon_tin_ore_0.png",
     type: "Rohmaterial",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 250},
       {Product: 1010115, Amount: 25}
@@ -1035,7 +1307,7 @@ export const producers = [
     FileName: "3dicons/icon_brass_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 250},
       {Product: 1010115, Amount: 25}
@@ -1059,7 +1331,7 @@ export const producers = [
     FileName: "3dicons/icon_glasses_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 1000},
       {Product: 1010117, Amount: 100}
@@ -1083,7 +1355,7 @@ export const producers = [
     FileName: "3dicons/icon_steam_machine_0.png",
     type: "Baumaterial",
     worldTypeIds: [1],
-    // Electricity: 2,
+    Electricity: "Required",
     Maintenance: [
       {Product: 1010017, Amount: 1800},
       {Product: 1010117, Amount: 250}
@@ -1107,7 +1379,7 @@ export const producers = [
     FileName: "3dicons/icon_niter_0.png",
     type: "Rohmaterial",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 500},
       {Product: 1010115, Amount: 25}
@@ -1129,7 +1401,7 @@ export const producers = [
     FileName: "3dicons/icon_dynamite_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 1000},
       {Product: 1010117, Amount: 250}
@@ -1153,7 +1425,7 @@ export const producers = [
     FileName: "3dicons/icon_advanced_weaponry_0.png",
     type: "Baumaterial",
     worldTypeIds: [1],
-    // Electricity: 2,
+    Electricity: "Required",
     Maintenance: [
       {Product: 1010017, Amount: 2200},
       {Product: 1010117, Amount: 250}
@@ -1177,7 +1449,6 @@ export const producers = [
     FileName: "3dicons/icon_caoutchouc_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [1],
-    // Electricity: -1,
     ModuleLimit: 144,
     Maintenance: [],
     InputProducts: [],
@@ -1186,6 +1457,8 @@ export const producers = [
     disabled: true,
     Costs: []
   },
+  other_producers[9],  // Tankhof
+  other_producers[12], // Traktorscheune
   {
     Name: "Hochrad-Werkhalle",
     GUID: 1010323,
@@ -1193,7 +1466,7 @@ export const producers = [
     FileName: "3dicons/icon_high_wheeler_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 2,
+    Electricity: "Required",
     Maintenance: [
       {Product: 1010017, Amount: 1200},
       {Product: 1010117, Amount: 150}
@@ -1217,7 +1490,6 @@ export const producers = [
     FileName: "3dicons/icon_coffe_cup_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: -1,
     Maintenance: [],
     InputProducts: [],
     OutputProduct: 120032,
@@ -1232,7 +1504,6 @@ export const producers = [
     FileName: "3dicons/icon_gold_ore_0.png",
     type: "Rohmaterial",
     worldTypeIds: [1],
-    // Electricity: -1,
     Maintenance: [],
     InputProducts: [],
     OutputProduct: 1010233,
@@ -1247,7 +1518,7 @@ export const producers = [
     FileName: "3dicons/icon_gold_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 750},
       {Product: 1010117, Amount: 125}
@@ -1271,7 +1542,7 @@ export const producers = [
     FileName: "3dicons/icon_pocket_watch_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 2,
+    Electricity: "Required",
     Maintenance: [
       {Product: 1010017, Amount: 1400},
       {Product: 1010117, Amount: 150}
@@ -1295,7 +1566,7 @@ export const producers = [
     FileName: "3dicons/icon_carbon_filament_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 725},
       {Product: 1010117, Amount: 150}
@@ -1319,7 +1590,7 @@ export const producers = [
     FileName: "3dicons/icon_light_bulb_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 1000},
       {Product: 1010117, Amount: 150}
@@ -1343,8 +1614,8 @@ export const producers = [
     FileName: "3dicons/icon_grapes_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [1],
-    // Electricity: -1,
     ModuleLimit: 128,
+    MotorizableType: "Tractor",
     Maintenance: [
       {Product: 1010017, Amount: 200},
       {Product: 1010052, Amount: 10}
@@ -1364,7 +1635,7 @@ export const producers = [
     FileName: "3dicons/icon_champagne_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 1000},
       {Product: 1010116, Amount: 150}
@@ -1388,7 +1659,7 @@ export const producers = [
     FileName: "3dicons/icon_inlay_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 750},
       {Product: 1010117, Amount: 150}
@@ -1412,7 +1683,6 @@ export const producers = [
     FileName: "3dicons/icon_cigars_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: -1,
     Maintenance: [],
     InputProducts: [],
     OutputProduct: 1010259,
@@ -1427,7 +1697,6 @@ export const producers = [
     FileName: "3dicons/icon_chocolate_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: -1,
     Maintenance: [],
     InputProducts: [],
     OutputProduct: 1010258,
@@ -1442,7 +1711,6 @@ export const producers = [
     FileName: "3dicons/icon_pearls_0.png",
     type: "Rohmaterial",
     worldTypeIds: [1],
-    // Electricity: -1,
     Maintenance: [],
     InputProducts: [],
     OutputProduct: 1010256,
@@ -1457,7 +1725,7 @@ export const producers = [
     FileName: "3dicons/icon_jewelry_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 2500},
       {Product: 1010116, Amount: 150}
@@ -1481,7 +1749,7 @@ export const producers = [
     FileName: "3dicons/icon_phonographs_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 2,
+    Electricity: "Required",
     Maintenance: [
       {Product: 1010017, Amount: 1600},
       {Product: 1010117, Amount: 150}
@@ -1505,7 +1773,7 @@ export const producers = [
     FileName: "3dicons/icon_chassis_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [1],
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 1200},
       {Product: 1010117, Amount: 150}
@@ -1530,7 +1798,7 @@ export const producers = [
     FileName: "3dicons/icon_steam_carriage_0.png",
     type: "Konsumgüter",
     worldTypeIds: [1],
-    // Electricity: 2,
+    Electricity: "Required",
     Maintenance: [
       {Product: 1010017, Amount: 3000},
       {Product: 1010117, Amount: 500}
@@ -1548,6 +1816,248 @@ export const producers = [
     ]
   },
 
+  // Canned Food
+  {
+    Name: "Sanga-Farm",
+    GUID: "114439_1",
+    Type: "FarmBuilding",
+    FileName: "3dicons/goods_africa/icon_watusi_0.png",
+    type: "Landwirtschaftliche Produkte",//todo x2
+    worldTypeIds: [1],
+    Maintenance: [],
+    InputProducts: [],
+    OutputProduct: 114357,
+    CycleTime: 60,
+    disabled: true,
+    Costs: []
+  },
+  {
+    Name: "Schuster",
+    GUID: 118733,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_leather_shoes_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [1],
+    Electricity: "Optional",
+    Maintenance: [
+      {Product: 1010017, Amount: 350},
+      {Product: 1010116, Amount: 150}
+    ],
+    InputProducts: [114357],
+    OutputProduct: 114428,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 4000},
+      {Ingredient: 1010196, Amount: 6},
+      {Ingredient: 1010205, Amount: 10},
+      {Ingredient: 1010218, Amount: 8},
+      {Ingredient: 1010207, Amount: 5}
+    ]
+  },
+  // Rum
+  {
+    Name: "Leinenweberei",
+    GUID: "114441_1",
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_linen_fabric_0.png",
+    type: "Zwischenprodukte",
+    worldTypeIds: [1],
+    Maintenance: [],
+    InputProducts: [/*114365*/],
+    OutputProduct: 114391,
+    CycleTime: 30,
+    disabled: true,
+    Costs: []
+  },
+  {
+    Name: "Schneidergeschäft",
+    GUID: 118734,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_suits_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [1],
+    Electricity: "Optional",
+    Maintenance: [
+      {Product: 1010017, Amount: 450},
+      {Product: 1010116, Amount: 200}
+    ],
+    InputProducts: [114391, 1010240],
+    OutputProduct: 114430,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 9000},
+      {Ingredient: 1010196, Amount: 6},
+      {Ingredient: 1010205, Amount: 10},
+      {Ingredient: 1010218, Amount: 8},
+      {Ingredient: 1010207, Amount: 8}
+    ]
+  },
+  {
+    Name: "Hutmacherei",
+    GUID: "101273_1",
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/icon_bowler_hat_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [1],
+    Maintenance: [],
+    InputProducts: [/*1010240, 120044*/],
+    OutputProduct: 120037,
+    CycleTime: 30,
+    disabled: true,
+    Costs: []
+  },
+  {
+    Name: "Teewürzerei",
+    GUID: "114468_1",
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_hibiscus_tea_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [1],
+    Maintenance: [],
+    InputProducts: [/*114364*/],
+    OutputProduct: 114390,
+    CycleTime: 90,
+    disabled: true,
+    Costs: []
+  },
+  {
+    Name: "Wat-Küche",
+    GUID: "114471_1",
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_wat_stew_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [1],
+    Maintenance: [],
+    InputProducts: [/*114408, 118728*/],
+    OutputProduct: 114410,
+    CycleTime: 60,
+    disabled: true,
+    Costs: []
+  },
+  {
+    Name: "Teppichknüpferei",
+    GUID: "114469_1",
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_tapestries_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [1],
+    Maintenance: [],
+    InputProducts: [/*114368, 114391*/],
+    OutputProduct: 114404,
+    CycleTime: 30,
+    disabled: true,
+    Costs: []
+  },
+  {
+    Name: "Telefonfabrik",
+    GUID: 118735,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_telephones_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [1],
+    Electricity: "Required",
+    Maintenance: [
+      {Product: 1010017, Amount: 1200},
+      {Product: 1010117, Amount: 150}
+    ],
+    InputProducts: [1010243, 1010242],
+    OutputProduct: 114431,
+    CycleTime: 90,
+    Costs: [
+      {Ingredient: 1010017, Amount: 38000},
+      {Ingredient: 1010196, Amount: 8},
+      {Ingredient: 1010205, Amount: 15},
+      {Ingredient: 1010218, Amount: 12},
+      {Ingredient: 1010207, Amount: 10},
+      {Ingredient: 1010202, Amount: 10}
+    ]
+  },
+  {
+    Name: "Pfeifenmacherei",
+    GUID: "114472_1",
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_tobacco_pipes_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [1],
+    Maintenance: [],
+    InputProducts: [/*1010201, 1010252*/],
+    OutputProduct: 114414,
+    CycleTime: 90,
+    disabled: true,
+    Costs: []
+  },
+  // Gramophones
+  {
+    Name: "Fortschrittliche Baumwollweberei",
+    GUID: 124739,
+    Type: "FactoryBuilding7_BuildPermit",
+    FileName: "3dicons/icon_cotton_fur_0.png",
+    type: "Zwischenprodukte",
+    worldTypeIds: [1],
+    Electricity: "Required",
+    Maintenance: [
+      {Product: 1010017, Amount: 3300},
+      {Product: 1010117, Amount: 140}
+    ],
+    InputProducts: [1010197, 120008],
+    OutputProduct: 1010240,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 12000},
+      {Ingredient: 1010196, Amount: 45},
+      {Ingredient: 1010205, Amount: 30},
+      {Ingredient: 1010218, Amount: 10},
+      {Ingredient: 1010207, Amount: 10},
+      {Ingredient: 1010202, Amount: 5}
+    ]
+  },
+  {
+    Name: "Fortschrittliche Rumbrennerei",
+    GUID: 124737,
+    Type: "FactoryBuilding7_BuildPermit",
+    FileName: "3dicons/icon_rum_barrel_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [1],
+    Electricity: "Required",
+    Maintenance: [
+      {Product: 1010017, Amount: 3000},
+      {Product: 1010117, Amount: 130}
+    ],
+    InputProducts: [1010226, 1010195],
+    OutputProduct: 1010257,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 12000},
+      {Ingredient: 1010196, Amount: 30},
+      {Ingredient: 1010205, Amount: 10},
+      {Ingredient: 1010218, Amount: 30},
+      {Ingredient: 1010202, Amount: 10}
+    ]
+  },
+  {
+    Name: "Fortschrittliche Kaffeerösterei",
+    GUID: 124738,
+    Type: "FactoryBuilding7_BuildPermit",
+    FileName: "3dicons/icon_coffe_cup_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [1],
+    Electricity: "Required",
+    Maintenance: [
+      {Product: 1010017, Amount: 3500},
+      {Product: 1010117, Amount: 150}
+    ],
+    InputProducts: [1010236],
+    OutputProduct: 120032,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 12000},
+      {Ingredient: 1010196, Amount: 20},
+      {Ingredient: 1010205, Amount: 10},
+      {Ingredient: 1010218, Amount: 20},
+      {Ingredient: 1010207, Amount: 5},
+      {Ingredient: 1010202, Amount: 10}
+    ]
+  },
 
   //holz
   //bretter
@@ -1558,8 +2068,8 @@ export const producers = [
     FileName: "3dicons/icon_banana_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [2],
-    // Electricity: -1,
     ModuleLimit: 128,
+    MotorizableType: "Tractor",
     Maintenance: [
       {Product: 1010017, Amount: 5},
       {Product: 1010366, Amount: 10}
@@ -1579,7 +2089,6 @@ export const producers = [
     FileName: "3dicons/icon_fishoil_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 5},
       {Product: 1010366, Amount: 15}
@@ -1599,7 +2108,6 @@ export const producers = [
     FileName: "3dicons/icon_fried_bananas_0.png",
     type: "Konsumgüter",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 15},
       {Product: 1010366, Amount: 25}
@@ -1619,8 +2127,8 @@ export const producers = [
     FileName: "3dicons/icon_cotton_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [2],
-    // Electricity: -1,
     ModuleLimit: 144,
+    MotorizableType: "Tractor",
     Maintenance: [
       {Product: 1010017, Amount: 5},
       {Product: 1010366, Amount: 10}
@@ -1640,7 +2148,6 @@ export const producers = [
     FileName: "3dicons/icon_cotton_fur_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 10},
       {Product: 1010366, Amount: 10}
@@ -1661,8 +2168,8 @@ export const producers = [
     FileName: "3dicons/icon_cane_sugar_1_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [2],
-    // Electricity: -1,
     ModuleLimit: 128,
+    MotorizableType: "Tractor",
     Maintenance: [
       {Product: 1010017, Amount: 5},
       {Product: 1010366, Amount: 10}
@@ -1682,7 +2189,6 @@ export const producers = [
     FileName: "3dicons/icon_rum_barrel_0.png",
     type: "Konsumgüter",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 50},
       {Product: 1010366, Amount: 30}
@@ -1702,8 +2208,8 @@ export const producers = [
     FileName: "3dicons/icon_alpaca_wool_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [2],
-    // Electricity: -1,
     ModuleLimit: 4,
+    MotorizableType: "Silo",
     Maintenance: [
       {Product: 1010017, Amount: 5},
       {Product: 1010366, Amount: 10}
@@ -1723,7 +2229,6 @@ export const producers = [
     FileName: "3dicons/icon_poncho_0.png",
     type: "Konsumgüter",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 15},
       {Product: 1010366, Amount: 30}
@@ -1743,8 +2248,8 @@ export const producers = [
     FileName: "3dicons/icon_caoutchouc_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [2],
-    // Electricity: -1,
     ModuleLimit: 144,
+    MotorizableType: "Tractor",
     Maintenance: [
       {Product: 1010017, Amount: 25},
       {Product: 1010366, Amount: 10}
@@ -1764,7 +2269,6 @@ export const producers = [
     FileName: "3dicons/icon_pearls_0.png",
     type: "Rohmaterial",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 25},
       {Product: 1010366, Amount: 50}
@@ -1780,6 +2284,7 @@ export const producers = [
 
   //lehm
   //ziegel
+  other_producers[7], // Silo
   {//händisch von https://anno1800.fandom.com/wiki/Cattle_Farm
     Name: "Rinderfarm",
     GUID: 101269,
@@ -1787,8 +2292,8 @@ export const producers = [
     FileName: "3dicons/icon_meat_raw_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [2],
-    // Electricity: -1,
     ModuleLimit: 6,
+    MotorizableType: "Silo",
     Maintenance: [
       {Product: 1010017, Amount: 25},
       {Product: 1010366, Amount: 20}
@@ -1808,8 +2313,8 @@ export const producers = [
     FileName: "3dicons/icon_corn_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [2],
-    // Electricity: -1,
     ModuleLimit: 168,
+    MotorizableType: "Tractor",
     Maintenance: [
       {Product: 1010017, Amount: 25},
       {Product: 1010366, Amount: 10}
@@ -1829,7 +2334,6 @@ export const producers = [
     FileName: "3dicons/icon_burrito_0.png",
     type: "Konsumgüter",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 100},
       {Product: 1010367, Amount: 100}
@@ -1850,8 +2354,8 @@ export const producers = [
     FileName: "3dicons/icon_coffee_beans_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [2],
-    // Electricity: -1,
     ModuleLimit: 168,
+    MotorizableType: "Tractor",
     Maintenance: [
       {Product: 1010017, Amount: 25},
       {Product: 1010366, Amount: 10}
@@ -1871,7 +2375,6 @@ export const producers = [
     FileName: "3dicons/icon_coffe_cup_0.png",
     type: "Konsumgüter",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 150},
       {Product: 1010367, Amount: 150}
@@ -1892,7 +2395,6 @@ export const producers = [
     FileName: "3dicons/icon_gold_ore_0.png",
     type: "Rohmaterial",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 250},
       // {Product: 1010115, Amount: 25}
@@ -1910,14 +2412,13 @@ export const producers = [
       {Ingredient: 1010202, Amount: 10}
     ]
   },
-  {// händisch von https://anno1800.fandom.com/wiki/Oil_Refinery
+  {
     Name: "Ölraffinerie",
     GUID: 1010561,
     Type: "FarmBuilding",
     FileName: "3dicons/icon_oil_0.png",
     type: "Rohmaterial",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 250},
       {Product: 1010367, Amount: 100}
@@ -1926,7 +2427,7 @@ export const producers = [
     OutputProduct: 1010566,
     CycleTime: 15,
     Costs: [
-      {Ingredient: 1010017, Amount: 2500},//
+      {Ingredient: 1010017, Amount: 25000},
       {Ingredient: 1010196, Amount: 8},
       {Ingredient: 1010205, Amount: 15},
       {Ingredient: 1010218, Amount: 12},
@@ -1934,6 +2435,29 @@ export const producers = [
       {Ingredient: 1010202, Amount: 10}
     ]
   },
+/*
+  {
+    Name: "Bohrturm",
+    GUID: 100524,
+    Type: "FarmBuilding",
+    FileName: "3dicons/icon_oil_rig_0.png",
+    type: "Rohmaterial",
+    worldTypeIds: [2],
+    Maintenance: [
+      {Product: 1010017, Amount: 250},
+      {Product: 1010367, Amount: 100}
+    ],
+    InputProducts: [],
+    OutputProduct: 1010566,
+    CycleTime: 15,
+    Costs: [
+      {Ingredient: 1010017, Amount: 4000},
+      {Ingredient: 1010196, Amount: 6},
+      {Ingredient: 1010205, Amount: 10},
+      {Ingredient: 1010218, Amount: 8}
+    ]
+  },
+*/
   {
     Name: "Filzfabrik",
     GUID: 101415,
@@ -1941,7 +2465,6 @@ export const producers = [
     FileName: "3dicons/icon_felt_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 10},
       {Product: 1010366, Amount: 10}
@@ -1955,6 +2478,8 @@ export const producers = [
       {Ingredient: 1010205, Amount: 2}
     ]
   },
+  other_producers[10], // Tankhof
+  other_producers[13], // Traktorscheune
   {
     Name: "Hutmacherei",
     GUID: 101273,
@@ -1962,7 +2487,6 @@ export const producers = [
     FileName: "3dicons/icon_bowler_hat_0.png",
     type: "Konsumgüter",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 50},
       {Product: 1010367, Amount: 20}
@@ -1983,7 +2507,6 @@ export const producers = [
     FileName: "3dicons/icon_beer_0.png",
     type: "Konsumgüter",
     worldTypeIds: [2],
-    // Electricity: 1,
     Maintenance: [],
     InputProducts: [],
     OutputProduct: 1010214,
@@ -1998,8 +2521,8 @@ export const producers = [
     FileName: "3dicons/icon_tobacco_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [2],
-    // Electricity: -1,
     ModuleLimit: 192,
+    MotorizableType: "Tractor",
     Maintenance: [
       {Product: 1010017, Amount: 25},
       {Product: 1010366, Amount: 10}
@@ -2019,7 +2542,6 @@ export const producers = [
     FileName: "3dicons/icon_inlay_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 100},
       {Product: 1010367, Amount: 100}
@@ -2040,7 +2562,6 @@ export const producers = [
     FileName: "3dicons/icon_cigars_0.png",
     type: "Konsumgüter",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 250},
       {Product: 1010367, Amount: 175}
@@ -2061,7 +2582,6 @@ export const producers = [
     FileName: "3dicons/icon_sewing_machine_0.png",
     type: "Konsumgüter",
     worldTypeIds: [2],
-    // Electricity: 1,
     Maintenance: [],
     InputProducts: [],
     OutputProduct: 1010206,
@@ -2073,10 +2593,9 @@ export const producers = [
     Name: "Zuckerraffinerie",
     GUID: 1010317,
     Type: "FactoryBuilding7",
-    FileName: "3dicons/icon_salt_0.png",
+    FileName: "3dicons/icon_sugar_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 10},
       {Product: 1010367, Amount: 50}
@@ -2096,8 +2615,8 @@ export const producers = [
     FileName: "3dicons/icon_cocoa_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [2],
-    // Electricity: -1,
     ModuleLimit: 128,
+    MotorizableType: "Tractor",
     Maintenance: [
       {Product: 1010017, Amount: 5},
       {Product: 1010366, Amount: 10}
@@ -2117,7 +2636,6 @@ export const producers = [
     FileName: "3dicons/icon_chocolate_0.png",
     type: "Konsumgüter",
     worldTypeIds: [2],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 50},
       {Product: 1010367, Amount: 100}
@@ -2130,6 +2648,7 @@ export const producers = [
       {Ingredient: 1010196, Amount: 6}
     ]
   },
+
   {
     Name: "Gasförderstätte",
     GUID: "112690_1",
@@ -2137,7 +2656,6 @@ export const producers = [
     FileName: "3dicons/icon_gas_red_0.png",
     type: "Baumaterial",
     worldTypeIds: [1],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [],
     InputProducts: [],
@@ -2146,7 +2664,6 @@ export const producers = [
     disabled: true,
     Costs: []
   },
-
   other_producers[4],
   {
     Name: "Holzfällerhütte",
@@ -2155,7 +2672,6 @@ export const producers = [
     FileName: "3dicons/icon_wood_log_0.png",
     type: "Rohmaterial",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 20},
@@ -2175,7 +2691,6 @@ export const producers = [
     FileName: "3dicons/icon_wooden_planks_0.png",
     type: "Baumaterial",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 20},
@@ -2195,7 +2710,6 @@ export const producers = [
     FileName: "3dicons/icon_coal_burn_0.png",
     type: "Rohmaterial",
     worldTypeIds: [3],
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 20},
       {Product: 112653, Amount: 10}
@@ -2215,7 +2729,6 @@ export const producers = [
     FileName: "3dicons/icon_whale_oil_2_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 75},
@@ -2236,7 +2749,6 @@ export const producers = [
     FileName: "3dicons/icon_reindeer_meat_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 40},
@@ -2257,7 +2769,6 @@ export const producers = [
     FileName: "3dicons/icon_pemmican_0.png",
     type: "Konsumgüter",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 60},
@@ -2278,7 +2789,6 @@ export const producers = [
     FileName: "3dicons/icon_goose_feathers_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 70},
@@ -2299,7 +2809,6 @@ export const producers = [
     FileName: "3dicons/icon_seal_skin_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 50},
@@ -2320,7 +2829,6 @@ export const producers = [
     FileName: "3dicons/icon_sleeping_bags_0.png",
     type: "Konsumgüter",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 120},
@@ -2336,12 +2844,11 @@ export const producers = [
   },
   {
     Name: "Messinghütte",
-    GUID: 1010282,
+    GUID: "1010282_1",
     Type: "HeavyFactoryBuilding",
     FileName: "3dicons/icon_brass_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [3],
-    // Electricity: 1,
     Maintenance: [],
     InputProducts: [],
     OutputProduct: 1010204,
@@ -2356,7 +2863,6 @@ export const producers = [
     FileName: "3dicons/icon_oil_lamps_0.png",
     type: "Konsumgüter",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 200},
@@ -2377,7 +2883,6 @@ export const producers = [
     FileName: "3dicons/icon_schnapps_4_0.png",
     type: "Konsumgüter",
     worldTypeIds: [3],
-    // Electricity: 1,
     Maintenance: [],
     InputProducts: [],
     OutputProduct: 1010216,
@@ -2393,7 +2898,6 @@ export const producers = [
     FileName: "3dicons/icon_canned_goulash_0.png",
     type: "Konsumgüter",
     worldTypeIds: [3],
-    // Electricity: 1,
     Maintenance: [],
     InputProducts: [],
     OutputProduct: 1010217,
@@ -2408,7 +2912,6 @@ export const producers = [
     FileName: "3dicons/icon_bear_fur_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 90},
@@ -2429,7 +2932,6 @@ export const producers = [
     FileName: "3dicons/icon_fur_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 50},
@@ -2450,7 +2952,6 @@ export const producers = [
     FileName: "3dicons/icon_fur_parka_0.png",
     type: "Konsumgüter",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 350},
@@ -2472,7 +2973,6 @@ export const producers = [
     FileName: "3dicons/animals/icon_husky_0.png",
     type: "Landwirtschaftliche Produkte",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 150},
@@ -2493,7 +2993,6 @@ export const producers = [
     FileName: "3dicons/icon_sled_frame_0.png",
     type: "Zwischenprodukte",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 450},
@@ -2515,7 +3014,6 @@ export const producers = [
     FileName: "3dicons/icon_sled_0.png",
     type: "Konsumgüter",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 650},
@@ -2537,7 +3035,6 @@ export const producers = [
     FileName: "3dicons/icon_coffe_cup_0.png",
     type: "Konsumgüter",
     worldTypeIds: [3],
-    // Electricity: -1,
     Maintenance: [],
     InputProducts: [],
     OutputProduct: 120032,
@@ -2552,7 +3049,6 @@ export const producers = [
     FileName: "3dicons/icon_gold_ore_0.png",
     type: "Rohmaterial",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 400},
@@ -2574,7 +3070,6 @@ export const producers = [
     FileName: "3dicons/icon_gas_red_0.png",
     type: "Baumaterial",
     worldTypeIds: [3],
-    // Electricity: -1,
     Heated: 1,
     Maintenance: [
       {Product: 1010017, Amount: 1000},
@@ -2587,6 +3082,616 @@ export const producers = [
       {Ingredient: 1010017, Amount: 8000},
       {Ingredient: 1010196, Amount: 20},
       {Ingredient: 1010218, Amount: 5}
+    ]
+  },
+
+  {
+    Name: "Wanza-Holzfällerhütte",
+    GUID: 122963,
+    Type: "FreeAreaBuilding",
+    FileName: "3dicons/goods_africa/icon_wansa_wood_0.png",
+    type: "Baumaterial",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 15},
+      {Product: 114340, Amount: 15}
+    ],
+    InputProducts: [],
+    OutputProduct: 114356,
+    CycleTime: 15,
+    Costs: [
+      {Ingredient: 1010017, Amount: 500}
+    ]
+  },
+  other_producers[5], // Wasserpumpe
+  {
+    Name: "Ziegenfarm",
+    GUID: 114456,
+    Type: "FarmBuilding",
+    FileName: "3dicons/goods_africa/icon_goat_milk_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [4],
+    ModuleLimit: 4,
+    MotorizableType: "Silo",
+    Maintenance: [
+      {Product: 1010017, Amount: 5},
+      {Product: 114340, Amount: 30}
+    ],
+    InputProducts: [],
+    OutputProduct: 114371,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 500},
+      {Ingredient: 114356, Amount: 5}
+    ]
+  },
+  {
+    Name: "Flachsfarm",
+    GUID: 114448,
+    Type: "FarmBuilding",
+    FileName: "3dicons/goods_africa/icon_linen_farm_0.png",
+    type: "Landwirtschaftliche Produkte",
+    worldTypeIds: [4],
+    Electricity: "None",
+    ModuleLimit: 96,
+    MotorizableType: "Tractor",
+    Maintenance: [
+      {Product: 1010017, Amount: 10},
+      {Product: 114340, Amount: 5}
+    ],
+    InputProducts: [],
+    OutputProduct: 114365,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 500},
+      {Ingredient: 114356, Amount: 2}
+    ]
+  },
+  {
+    Name: "Leinenweberei",
+    GUID: 114441,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_linen_fabric_0.png",
+    type: "Zwischenprodukte",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 20},
+      {Product: 114340, Amount: 25}
+    ],
+    InputProducts: [114365],
+    OutputProduct: 114391,
+    CycleTime: 30,
+    Costs: [
+      {Ingredient: 1010017, Amount: 500},
+      {Ingredient: 114356, Amount: 6}
+    ]
+  },
+  {
+    Name: "Stickerei",
+    GUID: 114466,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_traditional_clothing_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 20},
+      {Product: 114340, Amount: 40}
+    ],
+    InputProducts: [114391],
+    OutputProduct: 114401,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 1250},
+      {Ingredient: 114356, Amount: 8}
+    ]
+  },
+  {
+    Name: "Saline",
+    GUID: 114440,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_salt_0.png",
+    type: "Rohmaterial",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 15},
+      {Product: 114340, Amount: 15}
+    ],
+    InputProducts: [],
+    OutputProduct: 114358,
+    CycleTime: 30,
+    Costs: [
+      {Ingredient: 1010017, Amount: 750},
+      {Ingredient: 114356, Amount: 8}
+    ]
+  },
+  {
+    Name: "Sanga-Farm",
+    GUID: 114439,
+    Type: "FarmBuilding",
+    FileName: "3dicons/goods_africa/icon_watusi_0.png",
+    type: "Landwirtschaftliche Produkte",//todo x2
+    worldTypeIds: [4],
+    ModuleLimit: 5,
+    MotorizableType: "Silo",
+    Maintenance: [
+      {Product: 1010017, Amount: 10},
+      {Product: 114340, Amount: 20}
+    ],
+    InputProducts: [],
+    OutputProduct: 114357,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 750},
+      {Ingredient: 114356, Amount: 4}
+    ]
+  },
+  {
+    Name: "Trockenhaus",
+    GUID: 114444,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_dried_meat_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 25},
+      {Product: 114340, Amount: 50}
+    ],
+    InputProducts: [114357, 114358],
+    OutputProduct: 114359,
+    CycleTime: 30,
+    Costs: [
+      {Ingredient: 1010017, Amount: 750},
+      {Ingredient: 114356, Amount: 6}
+    ]
+  },
+  {
+    Name: "Hibiskusfarm",
+    GUID: 114447,
+    Type: "FarmBuilding",
+    FileName: "3dicons/goods_africa/icon_hibiscus_farm_0.png",
+    type: "Landwirtschaftliche Produkte",
+    worldTypeIds: [4],
+    ModuleLimit: 144,
+    MotorizableType: "Tractor",
+    Maintenance: [
+      {Product: 1010017, Amount: 15},
+      {Product: 114340, Amount: 15}
+    ],
+    InputProducts: [],
+    OutputProduct: 114364,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 1250},
+      {Ingredient: 114356, Amount: 6}
+    ]
+  },
+  {
+    Name: "Teewürzerei",
+    GUID: 114468,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_hibiscus_tea_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 60},
+      {Product: 114340, Amount: 35}
+    ],
+    InputProducts: [114364],
+    OutputProduct: 114390,
+    CycleTime: 90,
+    Costs: [
+      {Ingredient: 1010017, Amount: 2500},
+      {Ingredient: 114356, Amount: 10}
+    ]
+  },
+
+  {
+    Name: "Lehmschöpferei",
+    GUID: 117743,
+    Type: "SlotFactoryBuilding7",
+    FileName: "3dicons/icon_clay_0.png",
+    type: "Rohmaterial",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 20},
+      {Product: 114340, Amount: 35}
+    ],
+    InputProducts: [],
+    OutputProduct: 1010201,
+    CycleTime: 15,
+    Costs: [
+      {Ingredient: 1010017, Amount: 2500},
+      {Ingredient: 114356, Amount: 6}
+    ]
+  },
+  {
+    Name: "Tef-Farm",
+    GUID: 114450,
+    Type: "FarmBuilding",
+    FileName: "3dicons/goods_africa/icon_teff_grass_0.png",
+    type: "Landwirtschaftliche Produkte",
+    worldTypeIds: [4],
+    ModuleLimit: 168,
+    MotorizableType: "Tractor",
+    Maintenance: [
+      {Product: 1010017, Amount: 20},
+      {Product: 114340, Amount: 20}
+    ],
+    InputProducts: [],
+    OutputProduct: 114367,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 1500},
+      {Ingredient: 114356, Amount: 5}
+    ]
+  },
+  {
+    Name: "Lehmziegelei",
+    GUID: 114467,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_mud_bricks_0.png",
+    type: "Baumaterial",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 40},
+      {Product: 114341, Amount: 100}
+    ],
+    InputProducts: [1010201, 114367],
+    OutputProduct: 114402,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 2500},
+      {Ingredient: 114356, Amount: 8}
+    ]
+  },
+  other_producers[8], // Silo
+  {
+    Name: "Indigofarm",
+    GUID: 114451,
+    Type: "FarmBuilding",
+    FileName: "3dicons/goods_africa/icon_indigo_0.png",
+    type: "Landwirtschaftliche Produkte",
+    worldTypeIds: [4],
+    ModuleLimit: 144,
+    MotorizableType: "Tractor",
+    Maintenance: [
+      {Product: 1010017, Amount: 25},
+      {Product: 114340, Amount: 20}
+    ],
+    InputProducts: [],
+    OutputProduct: 114368,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 2000},
+      {Ingredient: 114356, Amount: 5}
+    ]
+  },
+  {
+    Name: "Keramikwerkstatt",
+    GUID: 118725,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_ceramics_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 100},
+      {Product: 114341, Amount: 100}
+    ],
+    InputProducts: [114368, 1010201],
+    OutputProduct: 118724,
+    CycleTime: 30,
+    Costs: [
+      {Ingredient: 1010017, Amount: 4000},
+      {Ingredient: 114356, Amount: 12},
+      {Ingredient: 114402, Amount: 3}
+    ]
+  },
+  {
+    Name: "Teppichknüpferei",
+    GUID: 114469,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_tapestries_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 190},
+      {Product: 114341, Amount: 90}
+    ],
+    InputProducts: [114368, 114391],
+    OutputProduct: 114404,
+    CycleTime: 30,
+    Costs: [
+      {Ingredient: 1010017, Amount: 5000},
+      {Ingredient: 114356, Amount: 10},
+      {Ingredient: 114402, Amount: 7}
+    ]
+  },
+  {
+    Name: "Gewürzfarm",
+    GUID: 114452,
+    Type: "FarmBuilding",
+    FileName: "3dicons/goods_africa/icon_spices_0.png",
+    type: "Landwirtschaftliche Produkte",
+    worldTypeIds: [4],
+    ModuleLimit: 128,
+    MotorizableType: "Tractor",
+    Maintenance: [
+      {Product: 1010017, Amount: 25},
+      {Product: 114340, Amount: 15}
+    ],
+    InputProducts: [],
+    OutputProduct: 114369,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 2500},
+      {Ingredient: 114356, Amount: 10}
+    ]
+  },
+  {
+    Name: "Tef-Mühle",
+    GUID: 114459,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_teff_flour_0.png",
+    type: "Zwischenprodukte",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 75},
+      {Product: 114341, Amount: 50}
+    ],
+    InputProducts: [114367, 114369],
+    OutputProduct: 114408,
+    CycleTime: 30,
+    Costs: [
+      {Ingredient: 1010017, Amount: 2500},
+      {Ingredient: 114356, Amount: 10},
+      {Ingredient: 114402, Amount: 5}
+    ]
+  },
+  {
+    Name: "Zuchtbecken",
+    GUID: 118729,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_seafood_0.png",
+    type: "Landwirtschaftliche Produkte",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 40},
+      {Product: 114340, Amount: 35}
+    ],
+    InputProducts: [],
+    OutputProduct: 118728,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 3000},
+      {Ingredient: 114356, Amount: 12},
+      {Ingredient: 114402, Amount: 8}
+    ]
+  },
+  {
+    Name: "Wat-Küche",
+    GUID: 114471,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_wat_stew_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 150},
+      {Product: 114341, Amount: 70}
+    ],
+    InputProducts: [114408, 118728],
+    OutputProduct: 114410,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 4500},
+      {Ingredient: 114356, Amount: 15},
+      {Ingredient: 114402, Amount: 10}
+    ]
+  },
+  {
+    Name: "Tabakplantage",
+    GUID: "1010330_4",
+    Type: "FarmBuilding",
+    FileName: "3dicons/icon_tobacco_0.png",
+    type: "Landwirtschaftliche Produkte",
+    worldTypeIds: [4],
+    Maintenance: [],
+    InputProducts: [],
+    OutputProduct: 1010252,
+    CycleTime: 120,
+    disabled: true,
+    Costs: []
+  },
+  {
+    Name: "Pfeifenmacherei",
+    GUID: 114472,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_tobacco_pipes_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 180},
+      {Product: 114341, Amount: 75}
+    ],
+    InputProducts: [1010201, 1010252],
+    OutputProduct: 114414,
+    CycleTime: 90,
+    Costs: [
+      {Ingredient: 1010017, Amount: 9000},
+      {Ingredient: 114356, Amount: 10},
+      {Ingredient: 114402, Amount: 15}
+    ]
+  },
+  {
+    Name: "Ölraffinerie",
+    GUID: "101331_4",
+    Type: "FarmBuilding",
+    FileName: "3dicons/icon_oil_0.png",
+    type: "Rohmaterial",
+    worldTypeIds: [4],
+    Maintenance: [],
+    InputProducts: [],
+    OutputProduct: 1010566,
+    CycleTime: 15,
+    disabled: true,
+    Costs: []
+  },
+  other_producers[11], // Tankhof
+  other_producers[14], // Traktorscheune
+  {
+    Name: "Holzfällerhütte",
+    GUID: "1010266_4",
+    Type: "FreeAreaBuilding",
+    FileName: "3dicons/icon_wood_log_0.png",
+    type: "Rohmaterial",
+    worldTypeIds: [4],
+    Maintenance: [],
+    InputProducts: [],
+    OutputProduct: 120008,
+    CycleTime: 15,
+    disabled: true,
+    Costs: []
+  },
+  {
+    Name: "Papiermühle",
+    GUID: 117744,
+    Type: "SlotFactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_paper_0.png",
+    type: "Zwischenprodukte",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 55},
+      {Product: 114341, Amount: 85}
+    ],
+    InputProducts: [120008],
+    OutputProduct: 117702,
+    CycleTime: 15,
+    Costs: [
+      {Ingredient: 1010017, Amount: 6500},
+      {Ingredient: 114356, Amount: 10},
+      {Ingredient: 114402, Amount: 15}
+    ]
+  },
+  {
+    Name: "Buchmalerei",
+    GUID: 114470,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_scriptures_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 250},
+      {Product: 114341, Amount: 100}
+    ],
+    InputProducts: [114368, 117702],
+    OutputProduct: 117698,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 12000},
+      {Ingredient: 114356, Amount: 15},
+      {Ingredient: 114402, Amount: 20}
+    ]
+  },
+  {
+    Name: "Brillenfabrik",
+    GUID: "101250_4",
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/icon_glasses_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [4],
+    Maintenance: [],
+    InputProducts: [/*1010241, 1010204*/],
+    OutputProduct: 120030,
+    CycleTime: 90,
+    disabled: true,
+    Costs: []
+  },
+  {
+    Name: "Glashütte",
+    GUID: "1010319_4",
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/icon_glass_0.png",
+    type: "Zwischenprodukte",
+    worldTypeIds: [4],
+    Maintenance: [],
+    InputProducts: [/*1010228*/],
+    OutputProduct: 1010241,
+    CycleTime: 30,
+    disabled: true,
+    Costs: []
+  },
+  {
+    Name: "Baumwollplantage",
+    GUID: "1010331_4",
+    Type: "FarmBuilding",
+    FileName: "3dicons/icon_cotton_0.png",
+    type: "Landwirtschaftliche Produkte",
+    worldTypeIds: [4],
+    Maintenance: [],
+    InputProducts: [],
+    OutputProduct: 1010253,
+    CycleTime: 60,
+    disabled: true,
+    Costs: []
+  },
+  {
+    Name: "Imkerei",
+    GUID: 114453,
+    Type: "FarmBuilding",
+    FileName: "3dicons/goods_africa/icon_beeswax_0.png",
+    type: "Landwirtschaftliche Produkte",//todo
+    worldTypeIds: [4],
+    ModuleLimit: 192,
+    MotorizableType: "Tractor",
+    Maintenance: [
+      {Product: 1010017, Amount: 70},
+      {Product: 114340, Amount: 30}
+    ],
+    InputProducts: [],
+    OutputProduct: 114370,
+    CycleTime: 30,
+    Costs: [
+      {Ingredient: 1010017, Amount: 9000},
+      {Ingredient: 114356, Amount: 15}
+    ]
+  },
+  {
+    Name: "Kerzenzieherei",
+    GUID: 114461,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_candles_0.png",
+    type: "Zwischenprodukte",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 120},
+      {Product: 114341, Amount: 30}
+    ],
+    InputProducts: [114370, 1010253],
+    OutputProduct: 117701,
+    CycleTime: 30,
+    Costs: [
+      {Ingredient: 1010017, Amount: 7000},
+      {Ingredient: 114356, Amount: 15},
+      {Ingredient: 114402, Amount: 10}
+    ]
+  },
+  {
+    Name: "Laternenmacher",
+    GUID: 114464,
+    Type: "FactoryBuilding7",
+    FileName: "3dicons/goods_africa/icon_lanterns_0.png",
+    type: "Konsumgüter",
+    worldTypeIds: [4],
+    Maintenance: [
+      {Product: 1010017, Amount: 300},
+      {Product: 114341, Amount: 75}
+    ],
+    InputProducts: [1010241, 117701],
+    OutputProduct: 117699,
+    CycleTime: 60,
+    Costs: [
+      {Ingredient: 1010017, Amount: 18000},
+      {Ingredient: 114356, Amount: 20},
+      {Ingredient: 114402, Amount: 20}
     ]
   },
 ]
@@ -2604,7 +3709,6 @@ export const non = [
     FileName: "3dicons/icon_market_0.png",
     worldTypeIds: [1,2],
     InfoDescription: 2976,
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 20}
     ],
@@ -2619,7 +3723,6 @@ export const non = [
     Type: "PublicServiceBuilding",
     FileName: "3dicons/icon_church_0.png",
     worldTypeIds: [2],
-    // Electricity: 1,
     Maintenance: [],
     Costs: [
       {Ingredient: 1010017, Amount: 500},
@@ -2634,7 +3737,6 @@ export const non = [
     FileName: "3dicons/icon_fire_house_0.png",
     worldTypeIds: [1,2],
     InfoDescription: 118032,
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 25}
     ],
@@ -2649,7 +3751,6 @@ export const non = [
     Type: "PublicServiceBuilding",
     FileName: "3dicons/icon_pub_0.png",
     worldTypeIds: [1],
-    // Electricity: 1,
     Maintenance: [
       {Product: 1010017, Amount: 20}
     ],
@@ -2664,7 +3765,6 @@ export const non = [
     Type: "PublicServiceBuilding",
     FileName: "3dicons/icon_church_0.png",
     worldTypeIds: [1],
-    // Electricity: 1,
     Maintenance: [
       {Product: 1010017, Amount: 50}
     ],
@@ -2680,7 +3780,6 @@ export const non = [
     Type: "PublicServiceBuilding",
     FileName: "3dicons/icon_school_0.png",
     worldTypeIds: [1],
-    // Electricity: 1,
     Maintenance: [
       {Product: 1010017, Amount: 50}
     ],
@@ -2698,7 +3797,6 @@ export const non = [
     FileName: "3dicons/icon_police_0.png",
     worldTypeIds: [1,2],
     InfoDescription: 3788,
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 50}
     ],
@@ -2714,7 +3812,6 @@ export const non = [
     Type: "PublicServiceBuilding",
     FileName: "3dicons/icon_cabaret_0.png",
     worldTypeIds: [1],
-    // Electricity: 1,
     Maintenance: [
       {Product: 1010017, Amount: 100}
     ],
@@ -2732,7 +3829,6 @@ export const non = [
     Type: "PublicServiceBuilding",
     FileName: "3dicons/icon_university_0.png",
     worldTypeIds: [1],
-    // Electricity: 1,
     Maintenance: [
       {Product: 1010017, Amount: 400}
     ],
@@ -2751,7 +3847,6 @@ export const non = [
     FileName: "3dicons/icon_hospital_0.png",
     worldTypeIds: [1,2],
     InfoDescription: 3789,
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 100}
     ],
@@ -2769,7 +3864,6 @@ export const non = [
     Type: "PublicServiceBuilding",
     FileName: "3dicons/icon_bank_0.png",
     worldTypeIds: [1],
-    // Electricity: 1,
     Maintenance: [
       {Product: 1010017, Amount: 1000}
     ],
@@ -2788,7 +3882,6 @@ export const non = [
     Type: "PublicServiceBuilding",
     FileName: "3dicons/icon_club_house_0.png",
     worldTypeIds: [1],
-    // Electricity: 1,
     Maintenance: [
       {Product: 1010017, Amount: 350}
     ],
@@ -2809,7 +3902,6 @@ export const non = [
     FileName: "3dicons/icon_canteen_0.png",
     worldTypeIds: [3],
     InfoDescription: 11144,
-    // Electricity: -1,
     Maintenance: [
       {Product: 1010017, Amount: 100}
     ],
@@ -2824,7 +3916,6 @@ export const non = [
     Type: "PublicServiceBuilding",
     FileName: "3dicons/icon_post_office_0.png",
     worldTypeIds: [3],
-    // Electricity: 1,
     Maintenance: [
       {Product: 1010017, Amount: 75}
     ],
@@ -2840,12 +3931,12 @@ export const non = [
 export const builders = [
   {
     GUID: 1010520,
-    Type: "Shipyard",
     Name: "Segelschiffswerft",
+    Type: "Shipyard",
     FileName: "3dicons/icon_sail_shipyard_0.png",
     worldTypeIds: [1],//auch 2?
     InfoDescription: 1090,
-    // Electricity: 1,
+    Electricity: "Optional",
     Maintenance: [
       {Product: 1010017, Amount: 100},
       {Product: 1010115, Amount: 100}
@@ -2858,12 +3949,12 @@ export const builders = [
   },
   {
     GUID: 1010521,
-    Type: "Shipyard",
     Name: "Dampfschiffswerft",
+    Type: "Shipyard",
     FileName: "3dicons/icon_steam_shipyard_0.png",
     worldTypeIds: [1],
     InfoDescription: 1091,
-    // Electricity: 2,
+    Electricity: "Required",
     Maintenance: [
       {Product: 1010017, Amount: 400},
       {Product: 1010117, Amount: 200}

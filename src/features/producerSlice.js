@@ -8,6 +8,7 @@ import * as obj from "../functions/obj";
 
 import worldTypes from "../data/worldTypes";
 import {ensureMinMax} from "../functions/helpers";
+import boosts from "../data/effects/boosts";
 
 
 const genIO = (good, Cycle) => ({good, Cycle})
@@ -28,7 +29,6 @@ const genProducerCount = (area, producer, pState, isDefault) => {
     // .filter(n => n.charCodeAt(0) < 91)
     newObj.CycleTime = producer.CycleTime
     newObj.Productivity = 100
-    newObj.e = []
   }
   return {...newObj, isDefault}
 }
@@ -58,10 +58,10 @@ const producerSlice = createSlice({
   initialState: [],
   reducers: {
     create: (state, action) => {
-      const {area, GUID, isDefault=false} = action.payload
+      const {area, GUID, isDefault=false, copyExistingEffects} = action.payload
 
-      // effects anwenden, die es vorher schon gab: insel-fest
-
+      // effects anwenden, die es vorher schon gab: insel-fest, Palast
+      if (copyExistingEffects) {
       // Idee 1: böse kopieren:
       // // mögl. Fehlerquelle, multi player richtig doof
       // const areaIdToCopy = state.find(p => p.key === key && p.islandId === area.islandId).areaId
@@ -84,9 +84,10 @@ const producerSlice = createSlice({
       // console.log(allPossibleTargetGUIDs);
       //
       // action.asyncDispatch({ type: "effects/copy", payload: {area, producer} })
-      action.asyncDispatch({ type: "productivity/copyToProducer", payload: {area, GUID} })
-      action.asyncDispatch({ type: "culture/copyToProducer", payload: {area, GUID} })
-
+        action.asyncDispatch({type: "productivity/copyToProducer", payload: {area, GUID}})
+        action.asyncDispatch({type: "culture/copyToProducer", payload: {area, GUID}})
+        action.asyncDispatch({type: "islands/copyToProducer_palace", payload: {area, GUID}})
+      }
       const producer = producers.find(p => p.GUID === GUID)
       return [...state, ...producerStates.map(pState => genProducerCount(area, producer, pState, isDefault))]
     },
@@ -149,6 +150,14 @@ const producerSlice = createSlice({
 
       action.asyncDispatch({type: "producerSums/change", payload: {islandId, GUID, delta: number - X.number}})
 
+      // silo, tractor
+      if (X.boosts !== undefined && X.boosts.length) {
+        const provider = boosts.find(b => b.key === X.boosts[0])?.provider.find(pr => pr.worldId === X.worldId)?.GUID
+        if (provider !== undefined) {
+          action.asyncDispatch({type: 'producers/change', payload: {islandId: X.islandId, GUID: provider, pState: 'running', delta: number - X.number}})
+        }
+      }
+
       // const newX = newState.find(findTarget)
       // recalcTroughput(newX, action)
 
@@ -169,6 +178,14 @@ const producerSlice = createSlice({
 
       const newNumber = ensureMinMax(X.number + delta, 0, 999)
       const newDelta = newNumber - X.number
+
+      // silo, tractor
+      if (X.boosts !== undefined && X.boosts.length) {
+        const provider = boosts.find(b => b.key === X.boosts[0])?.provider.find(pr => pr.worldId === X.worldId)?.GUID
+        if (provider !== undefined) {
+          action.asyncDispatch({type: 'producers/change', payload: {islandId: X.islandId, GUID: provider, pState: 'running', delta: newDelta}})
+        }
+      }
 
       if (!newDelta) {
         // action.asyncDispatch({type: "highlight/todo", payload: {X (ist nicht mehr da)}})
@@ -258,6 +275,49 @@ const producerSlice = createSlice({
       return state.map(x => findTarget(x) ? obj.update(x, changeE(x)) : x)
       //recalcTroughput(newX, action)
     },
+    changeByBoost: slice.changeByBoost,
+    toggleBoost: (state, action) => {
+      // const {islandId, areaId} = action.payload // wahlweise
+      // const {GUID, boostId} = action.payload
+      const {areaId, GUID, boost} = action.payload
+      const boostId = 'boost_by_'+boost
+
+      // const findTarget = x =>
+      //   (islandId === undefined ^ x.islandId === islandId) &&
+      //   (areaId === undefined ^ x.areaId === areaId)
+      const findTarget = x => x.areaId === areaId && x.GUID === GUID
+
+      const X = state.find(findTarget)
+      if (!X) return
+
+      const applyBoost = (x) => {
+        let active_boosts = x.boosts || []
+        const existing = active_boosts.find(b => b === boost) !== undefined
+        const newX = {boosts: x.boosts}
+
+        if (existing) {
+          newX.boosts = active_boosts.filter(e => e !== boost)
+        } else {
+          newX.boosts = [...active_boosts, boost]
+        }
+
+        // handle silo and tractor
+        const provider = boosts.find(b => b.GUID === boostId)?.provider.find(pr => pr.worldId === x.worldId)?.GUID
+        // Silo/Traktorscheune bauen/abreißen
+        if (provider !== undefined) {
+          action.asyncDispatch({type: 'producers/change', payload: {
+            islandId: x.islandId, /*areaId,*/GUID: provider, pState: 'running', delta: (existing?-1:1) * x.number
+          }})
+        }
+
+        // apply boost
+        action.asyncDispatch({type: 'producers/changeByBoost', payload: {areaId, boostId, isRemoval: existing}})
+
+        return newX
+      }
+
+      return state.map(x => x === X  ? obj.update(x, applyBoost(x)) : x)
+    },
     pasteProductivityToArea_: (state, action) => {
       const {GUID, area, number} = action.payload
 
@@ -322,6 +382,6 @@ const producerSlice = createSlice({
   }
 })
 
-export const {create, destroy, setNumber, move, changeState, toggleElectricity, setDefault, change, update} = producerSlice.actions
+export const {create, destroy, setNumber, move, changeState, toggleElectricity, toggleBoost, setDefault, change, update} = producerSlice.actions
 
 export default producerSlice

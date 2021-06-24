@@ -8,6 +8,7 @@ import UpgradeButton from "./UpgradeButton";
 import {ensureMinMax} from "../../../functions/helpers";
 import {text_anno} from "../../../data/translation/texts";
 import * as residenceSlice from "../../../features/residenceSlice";
+import PalaceConnectButton from "./PalaceConnectButton";
 
 
 const PopulationInput = (props) => {
@@ -57,12 +58,18 @@ const PopulationInput = (props) => {
         disabled={props.moveTo === x.areaId}
         title={text_anno(tierGUID)}
       />
+    {(
+        <PalaceConnectButton
+          area={x}
+          connectTo={'__connectTo__'}
+        />
+    )}
     </div>
     {!props.isLast && (
       <div className='d-table-cell'>
         <UpgradeButton
           applyMove={applyMove}
-          disabled={props.moveTo !== false}
+          disabled={props.moveTo !== false || props.tierId === 5/*disable move/upgrade for Investors->Scholars*/}
         />
       </div>
     )}

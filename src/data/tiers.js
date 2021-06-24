@@ -8,6 +8,7 @@ export default [
     i10n: {"en": "Farmers", "de": "Bauern"},
     worldTypeId: 1,
     maxInhabitants: 10,
+    FileName: "" // todo see ProductionHeader: 74
   },
   {
     id: 2,
@@ -88,5 +89,35 @@ export default [
     i10n: {"en": "Technicians", "de": "Techniker"},
     worldTypeId: 3,
     maxInhabitants: 20,
+  },
+  {
+    id: 10,//Hirtenhaus
+    populationGUID: 114329,
+    residenceGUID: 114436,
+    workforceGUID: 114340,
+    key: "Shepherds",
+    i10n: {"en": "Shepherd", "de": "Hirten"},
+    worldTypeId: 4,
+    maxInhabitants: 10,
+  },
+  {
+    id: 11,//Ältestenhaus
+    populationGUID: 114330,
+    residenceGUID: 114437,
+    workforceGUID: 114341,
+    key: "Elders",
+    i10n: {"en": "Elder", "de": "Älteste"},
+    worldTypeId: 4,
+    maxInhabitants: 20,
+  },
+  {
+    id: 12,//Gelehrtenhaus
+    populationGUID: 118745,
+    residenceGUID: 114445,
+    workforceGUID: 124478,
+    key: "Scholars",
+    i10n: {"en": "Scholars", "de": "Gelehrte"},
+    worldTypeId: 1,
+    maxInhabitants: 120,
   },
 ]

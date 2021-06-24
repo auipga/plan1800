@@ -1,5 +1,7 @@
 just to copy actions to the redux console
 
+{ type: 'producers/change', payload: { islandId: activeIslandId, areaId, GUID, pState: 'running', delta } }
+{ type: 'producers/change', payload: { islandId: 1, areaId: 10, GUID: 269839, pState: 'running', delta: 3 } }
 
 { type: 'IO_CONNECT', payload:{token:'abc'} }
 

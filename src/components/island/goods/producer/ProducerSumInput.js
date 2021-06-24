@@ -31,7 +31,8 @@ const ProducerSumInput = (props) => {
     {disabled ?
       <DataInput
         className='ProducerInput'
-        presentValue='&#10005;'
+        presentValue={x.number > 0 ? x.number : '✕'}
+        // '&#10005;'
         disabled={disabled}
       />
       :

@@ -16,6 +16,7 @@ import {blur, forceSign} from "../../../../functions/helpers";
 import {supportedEffects} from "../../../../functions/slice";
 import * as targetPools from "../../../../data/effects/targetPools";
 import * as areaSlice from "../../../../features/areaSlice";
+import {isInPool} from "../../../../data/effects/targetPools";
 
 
 const ProducerArea = props => {
@@ -58,10 +59,12 @@ const ProducerArea = props => {
   // .sort(sortByNumberField('Productivity' || 'GUID', true))//Productivity
   // .sort(sortByNumberField('Name'))
 
+  const boost = producer.hasOwnProperty('MotorizableType') ? producer.MotorizableType.toLowerCase()
+      : (isInPool(GUID, 193875) ? 'electricity' : null)
 
 
   return (<div className='ProducerArea'>
-    <ProducerInput GUID={GUID} areaId={areaId} isNoArea={props.isNoArea} />
+    <ProducerInput GUID={GUID} areaId={areaId} isNoArea={props.isNoArea} boost={boost} />
 
     {props.isNoArea ? (<>
       <ProductivityInput GUID={GUID}/>

@@ -5,6 +5,7 @@ export default {
   'session2': './allicons/Icons/icon_session_southamerica_white_0.png',
   'session3': './allicons/Icons/icon_session_sunken_treasure_white_0.png',
   'session4': './allicons/Icons/icon_session_passage_white_0.png',
+  'session5': './allicons/Icons/icon_session_landoflions_0.png',
 
   // Filter / .buildingtype
   // "0": './allicons/Icons/icon_marketplace_2d_0.png',
@@ -22,6 +23,12 @@ export default {
 
   // ?
   'Culture': './allicons/Icons/achievement/icon_achievement_category_culture_0.png',
+  'Prestige1': './allicons/Icons/icon_prestige_0.png',
+  'Prestige': './allicons/assets/baseeffect_overdrive_prestige_0.png',
+  'Palace': './allicons/Icons/icon_palace_2d_0.png',
+  'Palace-Building': './allicons/3dicons/palace/icon_palace_0.png', // 249947
+  'Ministry-Building': './allicons/3dicons/palace/icon_local_department_0.png', // 269602
+  'connect': './allicons/Icons/icon_connect_0.png',
   'Heating': './allicons/Icons/icon_heating_center_2d_0.png',
   'Electricity': './allicons/Icons/icon_electric_works_2d_0.png',
 
@@ -33,6 +40,7 @@ export default {
 
   // Buttons
   'trash': './allicons/Icons/icon_trash_0.png',
+  'demolish': './allicons/Icons/icon_demolish_0.png',
   'plus': './allicons/Icons/icon_plus_0.png',
   'daynight': './allicons/Icons/icon_daynight_0.png',
   'day': './allicons/Icons/icon_day_0.png',
@@ -60,7 +68,7 @@ export const otherIcons = {
   ],
   'Buttons': [
     './allicons/Icons/icon_save_0.png',
-    './allicons/Icons/icon_connect_0.png',
+    // './allicons/Icons/icon_connect_0.png',
     './allicons/Icons/icon_influence2d_0.png',
     // './allicons/Icons/icon_trash_dark_0.png',
     './allicons/Icons/icon_common_0.png',
