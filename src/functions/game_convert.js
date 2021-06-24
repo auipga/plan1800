@@ -15,7 +15,7 @@ import * as productivitySlice from "../features/productivitySlice";
 import * as sharingSlice from "../features/sharingSlice";
 
 
-export const rebuildGameFromStable = (store, dispatch, data, callback) => {
+export const rebuildGameFromVeryOld = (store, dispatch, data, callback) => {
   track.disable()
 
   const oldMapping = [

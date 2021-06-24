@@ -7,7 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import track from "../../functions/tracking";
 import {blur} from "../../functions/helpers";
 import {text_plan_ucf} from "../../data/translation/texts";
-import {rebuildGameFromStable} from "../../functions/game_convert";
+import {rebuildGameFromVeryOld} from "../../functions/game_convert";
 
 
 const ConvertButton = (props) => {
@@ -45,7 +45,7 @@ const ConvertButton = (props) => {
     // dispatch({type:"STATE_RESET"})
     track.data('Convert requested')
 
-    rebuildGameFromStable(store, dispatch, oldData, () => {
+    rebuildGameFromVeryOld(store, dispatch, oldData, () => {
       track.data('Convert succeeded')
     })
   }

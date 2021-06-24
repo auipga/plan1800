@@ -7,7 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {blur} from "../../functions/helpers";
 import {text_plan_ucf} from "../../data/translation/texts";
 import * as game from "../../functions/game";
-import {rebuildGameFromStable} from "../../functions/game_convert";
+import {rebuildGameFromVeryOld} from "../../functions/game_convert";
 import track from "../../functions/tracking";
 
 
@@ -23,7 +23,7 @@ const ImportButton = (props) => {
       const jsonAsObject = JSON.parse(fileContent)
 
       if (jsonAsObject.hasOwnProperty('unlockedWorlds')) {
-        rebuildGameFromStable(store, dispatch, jsonAsObject, () => {
+        rebuildGameFromVeryOld(store, dispatch, jsonAsObject, () => {
           track.data('Import / Convert succeeded')
         })
       } else {

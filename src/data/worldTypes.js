@@ -1,7 +1,7 @@
 export default [
   {
     id: 1,
-    key: "europa",
+    key: "Moderate",
     worldIDs: [1, 3],
     socialClassIDs: [1, 2, 3, 4, 5],
     popResGUIDs: [1010343, 1010344, 1010345, 1010346, 1010347],
@@ -13,7 +13,7 @@ export default [
   },
   {
     id: 2,
-    key: "south",
+    key: "Colony01",
     worldIDs: [2],
     socialClassIDs: [6, 7],
     popResGUIDs: [101254, 101255],
@@ -25,7 +25,7 @@ export default [
   },
   {
     id: 3,
-    key: "north",
+    key: "Arctic",
     worldIDs: [4],
     socialClassIDs: [8, 9],
     popResGUIDs: [112091, 112652],

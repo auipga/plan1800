@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 
-import {addID} from "../functions/obj";
+import {addID, timestamp/*todo: uncomment line 16*/} from "../functions/obj";
 import {autoincrement} from "../functions/obj";
 
 import * as obj from '../functions/obj'
