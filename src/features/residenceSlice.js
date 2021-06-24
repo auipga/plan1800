@@ -94,13 +94,7 @@ const residenceSlice = createSlice({
       */
 
       // inject new values to new state object
-      return state.map(x => {
-        const isTarget = x === X;
-        if (isTarget) {
-          return obj.update(x, {number: newValue})
-        }
-        return x
-      })
+      return state.map(x => x === X ? obj.update(x, {number: newValue}) : x)
     },
     move: (state, action) => {
       const p = action.payload
@@ -137,14 +131,9 @@ const residenceSlice = createSlice({
       targetCount += numberValidated
 
       // inject new values to new state object
-      return state.map(x => {
-        if (x === source) {
-          return obj.update(x, {number: sourceCount})
-        } else if (x === target) {
-          return obj.update(x, {number: targetCount})
-        }
-        return x
-      })
+      return state.map(x => x === source ? obj.update(x, {number: sourceCount})
+        : (x === target ? obj.update(x, {number: targetCount}) : x)
+      )
     },
 
     changeByItem: slice.changeByItem,

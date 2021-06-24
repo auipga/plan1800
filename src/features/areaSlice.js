@@ -14,7 +14,6 @@ const genArea = (worldId, islandId, usage) => {
     usage, /* Handelskammer || Rathaus  || Hafenmeisterei || Quartier   */
            /* TradeUnion    || TownHall || HarbourMasters || ArticLodge */
     // z_created: timestamp()
-    hasElectricity: false
   }
 }
 

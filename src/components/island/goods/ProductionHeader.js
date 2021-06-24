@@ -11,7 +11,7 @@ import Icon from "../../Icon";
 // import worlds from "../../../data/worlds";
 import worldTypes from "../../../data/worldTypes";
 import {producers} from "../../../data/worldGeneration/buildings";
-import {text_anno, text_plan, text_plan_ucf} from "../../../data/translation/texts";
+import {text_anno, text_plan_ucf} from "../../../data/translation/texts";
 import {blur} from "../../../functions/helpers";
 import * as personalSlice from "../../../features/personalSlice";
 import needsOfProducts from "../../../data/needsOfProducts";
