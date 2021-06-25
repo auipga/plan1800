@@ -28,6 +28,15 @@ Ctrl-Alt-L (reformat code)
 
 data/ui/2kimages/main/
 
+,\n *LastChange: ".*"
+
+
+,\n *ExclusiveGroup: ".*"
+
+
+,\n *RarityValue: \d+
+
+remove all items with Type=ItemWithUI, ActiveItem
 
 remove or comment out: 190654 (seems untrue)
 */

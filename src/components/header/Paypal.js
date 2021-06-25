@@ -10,7 +10,7 @@ import * as debugSlice from "../../features/debugSlice";
 import track from "../../functions/tracking";
 
 
-const hours = sum([/*ab 1.5.20:*/5, /*ab 1.4.20:*/23+41/60, 497+0/60, 15+20/60, 12+8/60, 4+16/60])
+const hours = sum([/*ab 1.4.20:*/23+41/60, 497+0/60, 15+20/60, 12+8/60, 4+16/60])
 
 const paypalLink = (amount, text) => (<li>
   <ReactGA.OutboundLink

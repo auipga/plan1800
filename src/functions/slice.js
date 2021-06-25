@@ -164,7 +164,7 @@ const effectApplyer = {
     return x[targetKey] + thing[thingKey] * (isRemoval?-1:1)
   },
   'add-element': (targetKey, thingKey, genElement) => (x, thing, isRemoval) => {
-    if (isRemoval) {
+    if (isRemoval) {//entfernt alle, bei 5x selbes item später mal nur 1 entfernen?
       return x[targetKey].filter(a => !a.hasOwnProperty('d_add_source') || a.d_add_source !== thing.GUID)
     }
     return thing[thingKey].reduce((data, a) =>
