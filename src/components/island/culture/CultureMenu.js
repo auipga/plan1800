@@ -56,10 +56,7 @@ const CultureMenu = () => {
     </Button>
     <PopoverWithTabs id={id} tabs={tabs} placement='bottom-start'>
       <TabPane tabId="all">
-        <div className='description'>{text_plan('culture-festivals')}</div>
-        <CultureSelect type='festivals'/>
-
-        <div className='description mt-3'>{text_plan('culture-zoo')}</div>
+        <div className='description'>{text_plan('culture-zoo')}</div>
         <CultureSelect type='zoo'/>
 
         <div className='description mt-3'>{text_plan('culture-museum')}</div>
@@ -67,6 +64,9 @@ const CultureMenu = () => {
 
         <div className='description mt-3'>{text_plan('culture-botanica')}</div>
         <CultureSelect type='botanica'/>
+
+        {/*<div className='description mt-3'>{text_plan('culture-festivals')}</div>*/}
+        {/*<CultureSelect type='festivals'/>*/}
       </TabPane>
     </PopoverWithTabs>
   </div>)

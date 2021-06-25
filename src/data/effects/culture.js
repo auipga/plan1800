@@ -533,9 +533,10 @@ export const botanica = [
       {
         targetGUIDs: [100654, 1010329],// Red_peppers, Sugar_cane
         Productivity: +25,
-        Fertility: true
       },
     ],
+    "AddedFertility_eu": 1010570,
+    "AddedFertility_sa": 1010573
   },
   {
     GUID: 193672,
@@ -544,9 +545,10 @@ export const botanica = [
       {
         targetGUIDs: [1010264, 1010330],// Hops, Tabbaco
         Productivity: +25,
-        Fertility: true
       },
     ],
+    "AddedFertility_eu": 1010572,
+    "AddedFertility_sa": 1010577
   },
 ];
 

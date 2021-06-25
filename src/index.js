@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App'
+// import AppOld from './AppOld'
 import {Provider} from 'react-redux'
 import {PersistGate} from "redux-persist/lib/integration/react"
 import configureStore from './redux/configureStore'
@@ -55,6 +56,7 @@ ReactDOM.render(
       <App/>
     </PersistGate>
   </Provider>
+  {/*<div className="AppOld"><AppOld/></div>*/}
   </>
   ,
   document.getElementById('root')
