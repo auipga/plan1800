@@ -1,4 +1,4 @@
-import uuid from "uuid";
+import { v4 as uuid } from "uuid";
 
 export const autoincrement = (arr) => arr.length ? Math.max(...arr.map(item => item.id))+1 : 1
 export const addID = (obj, id) => ({id, ...obj})

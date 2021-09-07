@@ -40,19 +40,26 @@ const Todo = () => {
         <div className='description'>Updates (changelog):</div>
 
         <div>
-          <div className='text-underline'>28.12.20:</div>
-          <ul>
-            <li>DLC: Reiche Ernte</li>
-            <li>DLC: Land der Löwen</li>
-            <li>DLC: Paläste der Macht (WIP)</li>
-            <li>Fix: <i>Das Fest der Vernunft</i> berechnet jetzt die richtige Menge an Zusatzwaren</li>
-            <li>Fix: Neu gebaute Rathäuser berechnen bereits aktivierte Kultur-Sets (Rückwirkend gefixt)
-            <br/>newState = applyEffects(newState,
-            <br/></li>
-          </ul>
-        </div>
-
-        <div className='altes'>
+          <div>
+            <div className='text-underline'>07.09.21:</div>
+            <ul>
+              <li>Bitte entschuldigt die Downtime der letzten 6 Wochen.</li>
+              <li>Die <a href="//manueltransfeld.de/public/projects/plan1800/">Startseite</a> ist leider verloren gegangen. Ich hab notdürftig einen Ersatz zusammengeschustert.</li>
+              <li>Es gibt keine expliziten Änderungen. (Alle minimalen, optischen Veränderungen kommen durch das aktualisierte Bootstrap.)</li>
+              <li>Alle Abhängigkeiten aktualisiert (unter der Haube).</li>
+              <li>Anmerkungen, Ideen, Fehlermeldungen etc. könnt ihr mir gerne auf Telegram zukommen lassen: <a href="https://t.me/plan1800">https://t.me/plan1800</a></li>
+            </ul>
+          </div>
+          <div>
+            <div className='text-underline'>28.12.20:</div>
+            <ul>
+              <li>DLC: Reiche Ernte</li>
+              <li>DLC: Land der Löwen</li>
+              <li>DLC: Paläste der Macht (WIP)</li>
+              <li>Fix: <i>Das Fest der Vernunft</i> berechnet jetzt die richtige Menge an Zusatzwaren</li>
+              <li>Fix: Neu gebaute Rathäuser berechnen bereits aktivierte Kultur-Sets (Rückwirkend gefixt)</li>
+            </ul>
+          </div>
           <div>
             <div className='text-underline'>24.04.20:</div>
             <ul>
@@ -70,12 +77,12 @@ const Todo = () => {
               </li>
             </ul>
           </div>
-        <div>
-          <div className='text-underline'>11.04.20:</div>
-          <ul>
-            <li>Fix Erz-Erzbischof Archibald</li>
-          </ul>
-        </div>
+          <div>
+            <div className='text-underline'>11.04.20:</div>
+            <ul>
+              <li>Fix Erz-Erzbischof Archibald</li>
+            </ul>
+          </div>
           <div>
             <div className='text-underline'>08.04.20:</div>
             <ul>
@@ -83,29 +90,29 @@ const Todo = () => {
               <li>Startseite weiter angepasst</li>
             </ul>
           </div>
-        <div>
-          <div className='text-underline'>05.04.20:</div>
-          <ul>
-            <li>Neue Startseite</li>
-            <li>Import von Spielständen aus der alten ("stable") Version</li>
-          </ul>
-        </div>
-        <div>
-          <div className='text-underline'>03.04.20:</div>
-          <ul>
-            <li>Kraftwerke, Heizöfen (vorläufig)</li>
-            <li>Kultur-Menü übersetzt und (vorläufig) vereinfacht</li>
-            <li>Aktive Insel erkennbarer (unterstrichen) <span className='text-primary'>@Dirk</span></li>
-            <li>Koop: Verbindungsaufbau vereinfacht + Hinweistexte</li>
-          </ul>
-        </div>
-        <div>
-          <div className='text-underline'>31.03.20:</div>
-          <ul>
-            <li>Arktis: Quartier und Items</li>
-            <li>Alle Sessions: Nur noch die Items anzeigen, die einen Einfluss auf die Berechnung haben</li>
-          </ul>
-        </div>
+          <div>
+            <div className='text-underline'>05.04.20:</div>
+            <ul>
+              <li>Neue Startseite</li>
+              <li>Import von Spielständen aus der alten ("stable") Version</li>
+            </ul>
+          </div>
+          <div>
+            <div className='text-underline'>03.04.20:</div>
+            <ul>
+              <li>Kraftwerke, Heizöfen (vorläufig)</li>
+              <li>Kultur-Menü übersetzt und (vorläufig) vereinfacht</li>
+              <li>Aktive Insel erkennbarer (unterstrichen) <span className='text-primary'>@Dirk</span></li>
+              <li>Koop: Verbindungsaufbau vereinfacht + Hinweistexte</li>
+            </ul>
+          </div>
+          <div>
+            <div className='text-underline'>31.03.20:</div>
+            <ul>
+              <li>Arktis: Quartier und Items</li>
+              <li>Alle Sessions: Nur noch die Items anzeigen, die einen Einfluss auf die Berechnung haben</li>
+            </ul>
+          </div>
           <div>
             <div className='text-underline'>30.03.20:</div>
             <ul>

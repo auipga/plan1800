@@ -36,3 +36,5 @@ $displays: none, inline, inline-block, block, table, table-row, table-cell, flex
 $displays: append($displays, inherit);
 
 $popover-max-width:                 100%; //276px !default;
+
+$enable-negative-margins: true;

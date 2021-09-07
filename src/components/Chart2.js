@@ -1,6 +1,6 @@
 import React, {} from 'react';
 import PropTypes from 'prop-types';
-import ReactMinimalPieChart from "react-minimal-pie-chart";
+import {PieChart as ReactMinimalPieChart} from "react-minimal-pie-chart";
 import {sumBy} from "../functions/helpers";
 
 const Chart2 = (props) => {
@@ -30,7 +30,7 @@ const Chart2 = (props) => {
     if (labelProps.dataIndex > 0) {
       return null
     }
-    const balance = sumBy(labelProps.data, 'value')
+    const balance = value1 + value2;
     const much = Math.abs(balance) >=10;
     return balance.toFixed(much ? 0 : 1)
   }

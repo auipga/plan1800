@@ -1,0 +1,49 @@
+:root {
+    --red: var(--bs-red);
+    --yellow: var(--bs-yellow);
+    --success: #28a745;
+    --white: var(--bs-white);
+    --light: var(--bs-light);
+    --secondary: var(--bs-secondary);
+    --dark: #343a40;
+}
+
+.font-italic       {   @extend .fst-italic;       }
+
+.pl-0              {   @extend .ps-0;             }
+.pl-1              {   @extend .ps-1;             }
+.pl-2              {   @extend .ps-2;             }
+.pl-3              {   @extend .ps-3;             }
+.pl-4              {   @extend .ps-4;             }
+.pr-0              {   @extend .pe-0;             }
+.pr-1              {   @extend .pe-1;             }
+.pr-2              {   @extend .pe-2;             }
+.pr-3              {   @extend .pe-3;             }
+.pr-4              {   @extend .pe-4;             }
+.ml-0              {   @extend .ms-0;             }
+.ml-1              {   @extend .ms-1;             }
+.ml-2              {   @extend .ms-2;             }
+.ml-3              {   @extend .ms-3;             }
+.ml-4              {   @extend .ms-4;             }
+.mr-0              {   @extend .me-0;             }
+.mr-1              {   @extend .me-1;             }
+.mr-2              {   @extend .me-2;             }
+.mr-3              {   @extend .me-3;             }
+.mr-4              {   @extend .me-4;             }
+.mr-n2             {   @extend .me-n2;            }
+
+.float-left        {   @extend .float-start;      }
+.float-right       {   @extend .float-end;        }
+.text-right        {   @extend .text-end;         }
+
+.border-left-0     {   @extend .border-start-0;   }
+.badge-pill        {   @extend .rounded-pill;     }
+.badge-secondary   {   @extend .bg-secondary;     }
+.font-weight-bold  {   @extend .fw-bold;          }
+
+.form-inline   {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+
