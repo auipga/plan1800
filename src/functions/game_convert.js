@@ -402,7 +402,6 @@ export const update2020_12_27_2 = (state) => {
   console.log('Done.')
 }
 
-
 export const update2020_12_28 = (state) => {
   console.log('Running update 2020-12-28')
 
