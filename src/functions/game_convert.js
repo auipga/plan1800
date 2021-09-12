@@ -2,7 +2,7 @@ import worlds from "../data/worlds";
 import {producers} from "../data/worldGeneration/buildings";
 import {autoincrement, push} from "./obj";
 
-import {delay} from "./helpers";
+import {delay, sumBy} from "./helpers";
 import track from "./tracking";
 
 import * as personalSlice from "../features/personalSlice";
@@ -14,6 +14,7 @@ import * as areaSlice from "../features/areaSlice";
 import * as productivitySlice from "../features/productivitySlice";
 import * as sharingSlice from "../features/sharingSlice";
 import tiers from "../data/tiers";
+import boosts from "../data/effects/boosts";
 import {genResidenceCount} from "../features/residenceSlice";
 
 const log = (msg) => {
@@ -412,5 +413,40 @@ export const update2020_12_28 = (state) => {
     console.log(' - Removing obsolete area.hasElectricity world '+area.worldId+', island '+area.islandId+', area '+area.id)
   })
 
+  console.log('Done.')
+}
+
+export const update2021_09_12 = (state, action) => {
+  console.log('Running update 2021-09-12')
+
+  boosts.forEach(boost => {
+    state.islands.forEach(island => {
+      const producersInAreaWithBoost = state.producers
+      .filter(p => p.islandId === island.id)
+      .filter(p => p.hasOwnProperty('boosts') && p.boosts.includes(boost.key))
+
+      if (producersInAreaWithBoost.length > 1) {
+      const sum = sumBy(producersInAreaWithBoost, 'number')
+      // if (sum > 0) {
+        const provider = boost.provider.find(pr => pr.worldId === island.worldId)
+
+        if (!state.producerSums.find(pS => pS.islandId === island.id && pS.GUID === provider.GUID)) {
+          action.asyncDispatch({type: 'producerSums/create', payload: {islandId: island.id, GUID: provider.GUID}})
+        }
+
+        if (!state.producers.find(p => p.islandId === island.id && p.GUID === provider.GUID)) {
+          const firstArea = state.areas.find(a => a.usage === 'TradeUnion' && a.islandId === island.id)
+          action.asyncDispatch({type: 'producers/create', payload: {area: firstArea, GUID: provider.GUID, copyExistingEffects: true, isDefault: true}})
+        }
+
+        if (provider.requirement === 'each') {
+          action.asyncDispatch({type: 'producers/setNumber', payload: {islandId: island.id, /*areaId,*/GUID: provider.GUID, pState: 'running', number: sum}})
+          console.log(` - Adding ${sum}x ${boost.key} on island #${island.id} '${island.name}'`)
+        }
+      }
+    })
+  })
+
+  state.personal.version = {GU: 9.2, date: "2021-09-12"}
   console.log('Done.')
 }

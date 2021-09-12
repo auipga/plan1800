@@ -41,6 +41,14 @@ const Todo = () => {
 
         <div>
           <div>
+            <div className='text-underline'>12.09.21:</div>
+            <ul>
+              <li>Reiche Ernte: Silos und Traktoren werden jetzt automatisch angezeigt sobald sie verwendet werden.</li>
+              <li>Verbrauch von Silos und Traktoren stimmt jetzt. Alte Spielstände werden gepatched, wenn man sie schließt und neu lädt.</li>
+              <li>Silos und Traktoren funktionieren jetzt auch in Enbesa.</li>
+            </ul>
+          </div>
+          <div>
             <div className='text-underline'>07.09.21:</div>
             <ul>
               <li>Bitte entschuldigt die Downtime der letzten 6 Wochen.</li>

@@ -136,12 +136,12 @@ const producerSlice = createSlice({
       const {areaId, GUID, pState, number} = action.payload
       const {islandId} = action.payload // nur für producerSums/change
 
-      const findTarget = x => (
-        x.areaId === areaId &&
-        x.GUID === GUID &&
-        x.pState === pState
-        // && x.number !== number
-      )
+      let findTarget
+      if (areaId !== undefined) {
+        findTarget = x => x.areaId   === areaId   && x.GUID === GUID && x.pState === pState
+      } else {
+        findTarget = x => x.islandId === islandId && x.GUID === GUID && x.pState === pState && x.isDefault === true
+      }
 
       const X = state.find(findTarget)
       if (!X) return /*state*/
@@ -152,9 +152,11 @@ const producerSlice = createSlice({
 
       // silo, tractor
       if (X.boosts !== undefined && X.boosts.length) {
-        const provider = boosts.find(b => b.key === X.boosts[0])?.provider.find(pr => pr.worldId === X.worldId)?.GUID
-        if (provider !== undefined) {
-          action.asyncDispatch({type: 'producers/change', payload: {islandId: X.islandId, GUID: provider, pState: 'running', delta: number - X.number}})
+        const provider = boosts.find(b => b.key === X.boosts[0])?.provider.find(pr => pr.worldId === X.worldId)
+        if (provider?.GUID !== undefined) {
+          if (provider.requirement === 'each') {
+            action.asyncDispatch({type: 'producers/change', payload: {islandId: X.islandId, GUID: provider.GUID, pState: 'running', delta: number - X.number}})
+          }
         }
       }
 
@@ -181,9 +183,16 @@ const producerSlice = createSlice({
 
       // silo, tractor
       if (X.boosts !== undefined && X.boosts.length) {
-        const provider = boosts.find(b => b.key === X.boosts[0])?.provider.find(pr => pr.worldId === X.worldId)?.GUID
-        if (provider !== undefined) {
-          action.asyncDispatch({type: 'producers/change', payload: {islandId: X.islandId, GUID: provider, pState: 'running', delta: newDelta}})
+        const provider = boosts.find(b => b.key === X.boosts[0])?.provider.find(pr => pr.worldId === X.worldId)
+        if (provider?.GUID !== undefined) {
+          if (provider.requirement === 'each') {
+            action.asyncDispatch({type: 'producers/change', payload: {islandId: X.islandId, /*areaId,*/GUID: provider.GUID, pState: 'running', delta: newDelta}})
+          }
+          // else if (provider.requirement === 'atLeastOne' && newDelta > 0) {
+          //   // ensure at least 1: subtract 1, add 1
+          //   action.asyncDispatch({type: 'producers/change', payload: {islandId: X.islandId, /*areaId,*/GUID: provider.GUID, pState: 'running', delta: -1}})
+          //   action.asyncDispatch({type: 'producers/change', payload: {islandId: X.islandId, /*areaId,*/GUID: provider.GUID, pState: 'running', delta: 1}})
+          // }
         }
       }
 
@@ -302,12 +311,17 @@ const producerSlice = createSlice({
         }
 
         // handle silo and tractor
-        const provider = boosts.find(b => b.GUID === boostId)?.provider.find(pr => pr.worldId === x.worldId)?.GUID
+        const provider = boosts.find(b => b.GUID === boostId)?.provider.find(pr => pr.worldId === x.worldId)
         // Silo/Traktorscheune bauen/abreißen
-        if (provider !== undefined) {
-          action.asyncDispatch({type: 'producers/change', payload: {
-            islandId: x.islandId, /*areaId,*/GUID: provider, pState: 'running', delta: (existing?-1:1) * x.number
-          }})
+        if (provider?.GUID !== undefined) {
+          if (provider.requirement === 'each') {
+            action.asyncDispatch({type: 'producers/change', payload: {islandId: x.islandId, /*areaId,*/GUID: provider.GUID, pState: 'running', delta: (existing?-1:1) * x.number}})
+          }
+          // else if (provider.requirement === 'atLeastOne' && !existing) {
+          //   // ensure at least 1: subtract 1, add 1
+          //   action.asyncDispatch({type: 'producers/change', payload: {islandId: x.islandId, /*areaId,*/GUID: provider.GUID, pState: 'running', delta: -1}})
+          //   action.asyncDispatch({type: 'producers/change', payload: {islandId: x.islandId, /*areaId,*/GUID: provider.GUID, pState: 'running', delta: 1}})
+          // }
         }
 
         // apply boost

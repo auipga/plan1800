@@ -18,7 +18,13 @@ import routesSlice from "../features/routesSlice";
 import sharingSlice from "../features/sharingSlice";
 
 import track from "../functions/tracking";
-import {update2020_12_26, update2020_12_27, update2020_12_27_2, update2020_12_28} from "../functions/game_convert";
+import {
+  update2020_12_26,
+  update2020_12_27,
+  update2020_12_27_2,
+  update2020_12_28,
+  update2021_09_12
+} from "../functions/game_convert";
 
 const persistConfig = {
   key: "root",
@@ -99,6 +105,9 @@ const wrappedRootReducer = (state, action) => {
     }
     if (state.personal.version.date === "2020-12-27_2") {
       update2020_12_28(state)
+    }
+    if (state.personal.version.date === "2020-12-28") {
+      update2021_09_12(state, action)
     }
 
   }

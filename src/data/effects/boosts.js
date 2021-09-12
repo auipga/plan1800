@@ -5,8 +5,8 @@ export default [
     icon: 'plug',
     provider: [
       // todo: wenn producerSum < 1, dann producer.change( ohne areaId, delta: 1) oder producer.setNumber?
-      // {worldId: 1, GUID: 100780, requireAtLeastOne: true},
-      // {worldId: 3, GUID: 100780, requireAtLeastOne: true},
+      {worldId: 1, GUID: 100780, requirement: 'atLeastOne'},
+      {worldId: 3, GUID: 100780, requirement: 'atLeastOne'},
     ],
     Productivity: 100,
   },
@@ -22,10 +22,10 @@ export default [
     key: 'silo',
     icon: 'database',
     provider: [
-      {worldId: 1, GUID: 269957},
-      {worldId: 2, GUID: 269958},
-      {worldId: 3, GUID: 269957},
-      {worldId: 5, GUID: "269957_4"},
+      {worldId: 1, GUID: 269957, requirement: 'each'},
+      {worldId: 2, GUID: 269958, requirement: 'each'},
+      {worldId: 3, GUID: 269957, requirement: 'each'},
+      {worldId: 5, GUID: 119025, requirement: 'each'},
     ],
     Productivity: 100,
     Maintenance: -50,
@@ -38,10 +38,10 @@ export default [
     key: 'tractor',
     icon: 'tractor',
     provider: [
-      {worldId: 1, GUID: 269839},
-      {worldId: 2, GUID: 269849},
-      {worldId: 3, GUID: 269839},
-      {worldId: 5, GUID: "269839_4"},
+      {worldId: 1, GUID: 269839, requirement: 'each'},
+      {worldId: 2, GUID: 269849, requirement: 'each'},
+      {worldId: 3, GUID: 269839, requirement: 'each'},
+      {worldId: 5, GUID: 119026, requirement: 'each'},
     ],
     Productivity: 200,
     Maintenance: -50,
@@ -54,7 +54,7 @@ export default [
     key: 'water',
     icon: 'faucet',
     provider: [
-      // {worldId: 5, GUID: 114544, requireAtLeastOne: true}, todo
+      // {worldId: 5, GUID: 114544, requirement: 'atLeastOne'}, todo
     ],
     Productivity: 50,
   },

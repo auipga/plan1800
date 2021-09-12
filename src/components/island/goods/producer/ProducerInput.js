@@ -8,6 +8,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import DataInput from "../../../global/DataInput";
 
 import * as producerSlice from "../../../../features/producerSlice";
+import * as producerSumSlice from "../../../../features/producerSumSlice";
 import {blur, ensureMinMax} from "../../../../functions/helpers";
 import {text_plan} from "../../../../data/translation/texts";
 import boosts from "../../../../data/effects/boosts";
@@ -51,8 +52,16 @@ const ProducerInput = (props) => {
     dispatch(producerSlice.setDefault({islandId: activeIslandId, GUID, areaId}))
   }
   const boostEnabled = x.boosts?.includes(boost)
+  const firstArea = useSelector(state => state.areas.find(a => a.usage === 'TradeUnion' && a.islandId === activeIslandId))
   const handleToggleBoost = e => {
     blur(e)
+    const provider = boosts.find(b => b.GUID === boostId)?.provider.find(pr => pr.worldId === activeWorldId)
+    // create silo or traktor if missing
+    if (!boostEnabled && provider !== undefined && document.querySelectorAll(`#prod${provider.GUID}.BuildingButton`).length) {
+      dispatch(producerSumSlice.create({islandId: activeIslandId, GUID: provider?.GUID}))
+      dispatch(producerSlice.create({area: firstArea, GUID: provider?.GUID, copyExistingEffects: true, isDefault: true}))
+    }
+
     dispatch(producerSlice.toggleBoost({areaId, GUID, boost}))
   }
 
