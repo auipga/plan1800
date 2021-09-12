@@ -22,13 +22,13 @@ function App() {
   const appliedTheme = useSelector(state => state.personal.theme) || 'theme-auto'
   useBodyClass(appliedTheme)
 
-  // useEffect(() => {
-  //   initGA('UA-12630660-4')
-  //   console.log('initGA')
-  //   return () => {
-  //     console.log('initGA - remove')
-  //   };
-  // }, []);
+  useEffect(() => {
+    initGA('UA-12630660-4')
+    console.log('initGA')
+    return () => {
+      console.log('initGA - remove')
+    };
+  }, []);
 
 
   return (

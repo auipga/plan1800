@@ -176,8 +176,8 @@ export const other_producers = [
     // ProductionBuff: todo,
     Costs: [
       {Ingredient: 1010017, Amount: 1000},
-      {Ingredient: 1010196, Amount: 20},
-      {Ingredient: 1010205, Amount: 10}
+      {Ingredient: 114356, Amount: 20},
+      {Ingredient: 114402, Amount: 10}
     ]
   },
 /*9*/  {
